@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="444px" height="106px" viewBox="0 0 444 106" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>Artboard</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-4" transform="translate(5.000000, 6.000000)">
+            <g id="Group" transform="translate(0.000000, 29.000000)">
+                <rect id="Rectangle" fill="#FFADC1" x="0" y="0" width="99" height="15"></rect>
+                <line x1="0" y1="0.5" x2="99" y2="0.5" id="Path-4" stroke="#AC0030" stroke-width="3"></line>
+            </g>
+            <text id="Emissions" font-family="IBMPlexSans-Medium, IBM Plex Sans Medium" font-size="14" font-weight="normal" letter-spacing="0.0781249" fill="#000000">
+                <tspan x="17" y="14">Emissions</tspan>
+            </text>
+        </g>
+        <g id="Group-7" transform="translate(191.000000, 6.000000)">
+            <g id="Group-5">
+                <g id="Group-2" transform="translate(0.000000, 29.000000)">
+                    <rect id="Rectangle-Copy" fill="#FFE3BA" x="0" y="0" width="99" height="15"></rect>
+                    <line x1="0" y1="0.5" x2="99" y2="0.5" id="Path-4-Copy" stroke="#D09236" stroke-width="3"></line>
+                </g>
+                <text id="Electrification" font-family="IBMPlexSans-Medium, IBM Plex Sans Medium" font-size="14" font-weight="normal" letter-spacing="0.0781249" fill="#000000">
+                    <tspan x="4" y="14">Electrification</tspan>
+                </text>
+            </g>
+            <g id="Group-6" transform="translate(138.000000, 0.000000)">
+                <g id="Group-3" transform="translate(4.000000, 29.000000)">
+                    <rect id="Rectangle-Copy-2" fill="#A9CDD5" x="0" y="0" width="99" height="15"></rect>
+                    <line x1="0" y1="0.5" x2="99" y2="0.5" id="Path-4-Copy-2" stroke="#2C889D" stroke-width="3"></line>
+                </g>
+                <text id="Decarbonization" font-family="IBMPlexSans-Medium, IBM Plex Sans Medium" font-size="14" font-weight="normal" letter-spacing="0.0781249" fill="#000000">
+                    <tspan x="0" y="14">Decarbonization</tspan>
+                </text>
+            </g>
+        </g>
+        <line x1="196" y1="72.5" x2="430.5" y2="73" id="Path-5" stroke="#644FFF"></line>
+        <line x1="4.75" y1="72.5" x2="103.75" y2="72.5" id="Path-5-Copy" stroke="#644FFF"></line>
+        <text id="Mitigation" font-family="IBMPlexSans-Medium, IBM Plex Sans Medium" font-size="14" font-weight="normal" letter-spacing="0.0781249" fill="#000000">
+            <tspan x="281" y="95">Mitigation</tspan>
+        </text>
+        <text id="Future" font-family="IBMPlexSans-Medium, IBM Plex Sans Medium" font-size="14" font-weight="normal" letter-spacing="0.0781249" fill="#000000">
+            <tspan x="33" y="95">Future</tspan>
+        </text>
+    </g>
+</svg>
