@@ -1,38 +1,18 @@
 <template>
-  <div class="global-strategy">
-    <div class="selector">
-      <div id="select">
-        Select a scenario:
-       <SensesSelect
-          id="scenario"
-         :options="scenariosArray"
-         v-model="scenariosSelected"
-       />
-     </div>
-       <img id="colorslegend" src="../assets/legend/colors-coding.svg" />
-    </div>
-    <svg class="glob_strat" :width="innerWidth" :height="innerHeight" :transform="`translate(${margin.left / 2},0)`">
-      <g :transform="`translate(${margin.left + 10},${this.innerHeight / 8.5})`">
-        <YAxis
-        :scale='scales.y'
-        :width='chartWidth - margin.left'
-        :height= 'innerHeight - (innerHeight / 5)'
-        />
-        <path
-          v-for="(chunk, i) in stackData"
-          v-bind:key="i"
-          :d="chunk.d"
-          :fill="chunk.color"
-          :stroke="chunk.stroke"
-          :id="chunk.id"
-          class="emission__chunks"
-        />
-        <XAxis
-        :scale='scales.x'
-        :x='innerHeight - (innerHeight / 5)'
-        :width='chartWidth - margin.left'
-        />
-      </g>
+  <div class="global-strategy" ref="vis">
+    <svg class="glob_strat"
+    :class="scenario"
+    :data="logSome"
+    v-for="(scenario, i) in scenarios" v-bind:key="scenario"
+    :width="innerWidth"
+    :height="groupHeight"
+    >
+    <path v-for="(path, p) in paths[i]" v-bind:key="p + 'path'"
+    :class="path.klass[p]"
+    :d="path.d"
+    :fill="path.color[p]"
+    :stroke="path.stroke[p]"
+    />
     </svg>
   </div>
 </template>
@@ -40,16 +20,11 @@
 <script>
 // Libraries
 import * as d3 from 'd3'
-// import { group, groups, rollup, rollups } from 'd3-array'
+// import { group } from 'd3-array'
 import _ from 'lodash'
 
 // Data
 import DecarbonStrategy from '../assets/data/waterfall-toydata.json'
-
-// Components
-import YAxis from './subcomponents/YAxis.vue'
-import XAxis from './subcomponents/XAxis.vue'
-import SensesSelect from 'library/src/components/SensesSelect.vue'
 
 export default {
   name: 'GlobalStrategy',
@@ -63,33 +38,34 @@ export default {
       required: true
     }
   },
-  components: {
-    XAxis,
-    YAxis,
-    SensesSelect
-  },
   data () {
     return {
       DecarbonStrategy,
-      modelSelected: 'REMIND',
-      scenariosSelected: 'IC_80_noCDR',
+      scenarios: _.uniq(_.map(DecarbonStrategy, (s) => s.Scenario)),
+      years: _.uniq(_.map(DecarbonStrategy, (s) => s.Year)),
       margin: {
         left: 150,
         top: 30,
         bottom: 30,
         right: 30
-      }
+      },
+      innerWidth: 0,
+      innerHeight: 0
     }
   },
   computed: {
-    innerWidth () {
-      return this.width - this.margin.left
+    logSome () {
+      // console.log(this.innerHeight)
+      console.log('hello stranger!')
+      // console.log(this.scenarios.length)
+      // console.log(this.years)
+      // console.log(this.filterData)
+      // console.log('stack', this.paths)
+      // console.log('lines', this.lines)
+      return 0
     },
-    chartWidth () {
-      return this.innerWidth - this.margin.left - 30
-    },
-    innerHeight () {
-      return this.height - this.margin.top
+    groupHeight () {
+      return this.innerHeight / this.scenarios.length
     },
     strategies: function () {
       return [
@@ -106,47 +82,68 @@ export default {
         x: d3
           .scaleLinear()
           .domain([2015, 2050])
-          .rangeRound([0, this.chartWidth - this.margin.left]),
+          .rangeRound([0, this.innerWidth]),
         y: d3
           .scaleLinear()
           .domain([0, 65000])
-          .rangeRound([this.innerHeight - (this.innerHeight / 4.5), 0])
+          .rangeRound([this.groupHeight, 0])
       }
     },
     areaGenerator: function () {
       const { x, y } = this.scales
+      const years = this.years
       return d3
         .area()
-        .x(d => x(d.data.Year))
-        .curve(d3.curveCardinal)
+        .x((d, i) => x(years[i]))
+        .curve(d3.curveLinear)
         .y0(d => y(d[0]))
         .y1(d => y(d[1]))
     },
-    scenariosArray () {
-      const data = this.DecarbonStrategy
-      const scenarios = []
-      _.map(data, (l) => {
-        scenarios.push(l.Scenario)
-      })
-      return _.uniq(scenarios)
+    lineGenerator: function () {
+      const { x, y } = this.scales
+      const years = this.years
+      return d3
+        .line()
+        .x((d, i) => x(years[i]))
+        .curve(d3.curveLinear)
+        .y(d => y(d[1]))
     },
     filterData () {
-      const newData = this.DecarbonStrategy
-      const scenario = this.scenariosSelected
-      const selectData = _.filter(newData, { Scenario: scenario })
-      return selectData
+      return _.map(this.scenarios, (s) => { return _.filter(this.DecarbonStrategy, d => d.Scenario === s) })
     },
-    stackData () {
-      const newData = this.filterData
-      const stacked = d3.stack().keys(this.strategies.map(d => d.key))(newData)
-      const paths = stacked.map((d, i) => ({
-        d: this.areaGenerator(d),
-        id: this.strategies[i].key,
-        color: this.strategies[i].color,
-        stroke: this.strategies[i].stroke
-      }))
-      return paths
+    paths () {
+      return _.map(this.filterData, (d, i) => {
+        const stacked = d3.stack().keys(this.strategies.map(d => d.key))(d)
+        const path = _.map(stacked, (path, p) => {
+          return {
+            d: this.areaGenerator(path),
+            klass: _.map(this.strategies, e => e.key),
+            color: _.map(this.strategies, e => e.color),
+            stroke: _.map(this.strategies, e => e.stroke)
+          }
+        })
+        return path
+      })
     }
+  },
+  methods: {
+    innerSizes () {
+      const { vis: el } = this.$refs
+      const totalWidth = el.clientWidth
+      const totalHeight = el.clientHeight || el.parentNode.clientHeight
+      this.innerWidth = Math.max(totalWidth, 500)
+      this.innerHeight = Math.max(totalHeight, 500)
+    }
+  },
+  mounted () {
+    this.innerSizes()
+    window.addEventListener('resize', this.innerSizes, false)
+  },
+  updated () {
+    this.innerSizes()
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.innerSizes, false)
   }
 }
 </script>
@@ -155,35 +152,13 @@ export default {
 <style scoped lang="scss">
 @import "library/src/style/variables.scss";
 
-.selector {
-  margin: 100px auto  10px auto;
-  max-width: 860px;
-  padding-top: 30px;
-
-  #selector-position {
-    margin: 0 auto;
-  }
-
-  #scenario {
-    margin-left: 5px;
-  }
-
-  #select {
-    position: absolute;
-  }
-
-  #colorslegend {
-    margin-left: 330px;
-  }
-}
-
 .global-strategy {
-  height: 100vh;
+  height: 200vh;
   margin: 0 auto;
 }
 
 svg {
-  margin: 0 auto;
+  margin: 20px auto;
   text {
     font-family: $font-mono;
   }
@@ -202,24 +177,4 @@ path {
 text {
   transition: y 1s;
 }
-
-/*Media queries*/
-
-@media screen and (min-width: 1600px)  {
-    .global-strategy {
-      width: 55%;
-      height: 90%;
-      margin: 0 auto;
-    }
-
-    svg {
-      margin-top: 150px;
-    }
-
-    .scenarioselect {
-      margin-top: 150px;
-    }
-
-}
-
 </style>

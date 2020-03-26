@@ -14,7 +14,7 @@
     "Model": "REMIND",
     "Scenario": "B1300",
     "Year": 2020,
-    "Emi|CO2|Policy": 38837,
+    "Emi|CO2|Policy": 4837,
     "Abatement|Energy Demand Reduction": 500,
     "Abatement|Electricity Decarbonization": 2600,
     "Abatement|Electrification": 600,
@@ -115,7 +115,7 @@
     "Year": 2025,
     "Emi|CO2|Policy": 37476,
     "Abatement|Energy Demand Reduction": 700,
-    "Abatement|Electricity Decarbonization": 5200,
+    "Abatement|Electricity Decarbonization": 200,
     "Abatement|Electrification": 2000,
     "Abatement|Fuel Decarbonization": 583,
     "Abatement|CDR": 0
@@ -260,7 +260,7 @@
     "Abatement|Energy Demand Reduction": 3300,
     "Abatement|Electricity Decarbonization": 14300,
     "Abatement|Electrification": 13100,
-    "Abatement|Fuel Decarbonization": 11200,
+    "Abatement|Fuel Decarbonization": 1100,
     "Abatement|CDR": 8524
   },
   {
@@ -315,7 +315,7 @@
     "Abatement|Energy Demand Reduction": 1500,
     "Abatement|Electricity Decarbonization": 14800,
     "Abatement|Electrification": 6500,
-    "Abatement|Fuel Decarbonization": 3100,
+    "Abatement|Fuel Decarbonization": 100,
     "Abatement|CDR": 1316
   },
   {
@@ -359,7 +359,7 @@
     "Abatement|Energy Demand Reduction": 0,
     "Abatement|Electricity Decarbonization": 0,
     "Abatement|Electrification": 0,
-    "Abatement|Fuel Decarbonization": 0,
+    "Abatement|Fuel Decarbonization": 32,
     "Abatement|CDR": 0
   },
   {
@@ -412,7 +412,7 @@
     "Year": 2040,
     "Emi|CO2|Policy": 21008,
     "Abatement|Energy Demand Reduction": 2100,
-    "Abatement|Electricity Decarbonization": 16800,
+    "Abatement|Electricity Decarbonization": 1800,
     "Abatement|Electrification": 7700,
     "Abatement|Fuel Decarbonization": 4500,
     "Abatement|CDR": 5669
