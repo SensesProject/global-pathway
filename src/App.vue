@@ -13,10 +13,15 @@
         </p>
       </div>
       <div class="selector">
-         <img id="colorslegend" src="./assets/legend/colors-coding.svg" />
+        <div class="legend-row">
+          <p>Next {{ element }}</p>
+          <span class="glyph-angle-left" v-on:click="element > 1 ? element -= 1 : element = 1"/>
+          <span class="glyph-angle-right" v-on:click="element < 3 ? element += 1 : element = 1"/>
+        </div>
+         <img class="legend-row" id="colorslegend" src="./assets/legend/colors-coding.svg" />
       </div>
       <div class="vis-container">
-        <GlobalStrategy :width="width" :height="height" />
+        <GlobalStrategy :width="width" :height="height" :element="element"/>
       </div>
     </div>
   </div>
@@ -33,7 +38,8 @@ export default {
   data () {
     return {
       width: 0,
-      height: 0
+      height: 0,
+      element: 1
     }
   },
   methods: {
@@ -76,7 +82,21 @@ export default {
         }
       }
     .selector {
-      margin: $spacing auto;
+      margin: $spacing * 2 auto;
+      background-color: white;
+      display: flex;
+      padding: $spacing 0;
+      top: 0px;
+      position: sticky;
+
+      .legend-row {
+        flex: 40%;
+        margin-right: $spacing;
+
+        .glyph-angle-left, .glyph-angle-right {
+          font-size: 2em;
+        }
+      }
     }
   }
 }

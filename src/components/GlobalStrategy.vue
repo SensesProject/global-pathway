@@ -1,26 +1,23 @@
 <template>
   <div class="global-strategy" ref="vis">
-    <div v-for="(scenario, i) in scenarios" v-bind:key="scenario +'label'">
-      <div class="label"><div class="highlight">{{ scenario }}</div></div>
-      <svg class="glob_strat"
-        :class="scenario"
-        :data="logSome"
-        :width="innerWidth"
-        :height="groupHeight"
-      >
+    <div v-for="(region, i) in regions" v-bind:key="region + i +'label'">
+      <div class="label">
+        <div class="highlight">{{ region }}</div>
+        <p class="description">{{ Descriptions[i][element] }}</p>
+      </div>
+      <svg class="glob_strat" :class="region" :width="innerWidth" :height="groupHeight">
       <g :transform="`translate(${margin.left}, 0)`">
-        <path v-for="(path, p) in paths[i]" v-bind:key="p + 'path'"
-          class="chunks"
-          :class="path.klass[p]"
-          :d="path.d"
-          :fill="path.color[p]"
-        />
-        <path v-for="(line, l) in lines[i]" v-bind:key="l + 'line'"
-          class="graphic-line"
-          :d="line"
-          fill="none"
-          :stroke="strokes[l]"
-        />
+        <transition name="component-fade" mode="out-in">
+          <Strategy v-show="element > 2" :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years"/>
+        </transition>
+        <transition name="component-fade" mode="out-in">
+        <g v-show="element > 1">
+          <path class="reference_lines gross_emi" :d="reference[i].GrossEmi"/>
+          <path class="reference_lines pol_emi" :d="reference[i].PolEmi"/>
+          <path class="reference_lines ref_emi" :d="reference[i].RefEmi"/>
+        </g>
+      </transition>
+        <Bars v-show="element >= 1" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight"/>
         <XAxis :years="years" :height="groupHeight" :margin="margin" :scale="scales.x"/>
         <YAxis max="75000" :width="innerWidth" :margin="margin" :scale="scales.y"/>
       </g>
@@ -35,16 +32,20 @@ import * as d3 from 'd3'
 import _ from 'lodash'
 
 // Data
-import DecarbonStrategy from '../assets/data/waterfall-toydata.json'
-
+import DecarbonStrategy from '../assets/data/GlobalStrategy.json'
+import Descriptions from '../assets/data/descriptions.json'
 import XAxis from './subcomponents/XAxis.vue'
 import YAxis from './subcomponents/YAxis.vue'
+import Strategy from './Strategies.vue'
+import Bars from './Bars.vue'
 
 export default {
   name: 'GlobalStrategy',
   components: {
     XAxis,
-    YAxis
+    YAxis,
+    Strategy,
+    Bars
   },
   props: {
     width: {
@@ -54,13 +55,18 @@ export default {
     height: {
       type: Number,
       required: true
+    },
+    element: {
+      type: Number,
+      required: false
     }
   },
   data () {
     return {
       DecarbonStrategy,
-      scenarios: _.uniq(_.map(DecarbonStrategy, (s) => s.Scenario)),
-      years: _.uniq(_.map(DecarbonStrategy, (s) => s.Year)),
+      Descriptions,
+      regions: _.uniq(_.map(DecarbonStrategy, (s) => s.region)),
+      years: _.uniq(_.map(DecarbonStrategy, (s) => s.period)),
       margin: {
         left: 15,
         top: 10,
@@ -72,25 +78,24 @@ export default {
     }
   },
   computed: {
-    logSome () {
-      console.log('hello stranger!')
-      console.log(this.lines)
-      console.log(this.strokes)
-      return 0
-    },
     groupHeight () {
-      return this.innerHeight / this.scenarios.length
+      return this.innerHeight / this.regions.length
     },
-    strategies: function () {
-      return [
-        { key: 'Emi|CO2|Policy', color: '#FFADC1', stroke: '#AC0030' },
-        { key: 'Abatement|Electrification', color: '#FFE3BA', stroke: '#D09236' },
-        { key: 'Abatement|CDR', color: '#A9CDD5', stroke: '#2C889D' },
-        { key: 'Abatement|Energy Demand Reduction', color: '#A9CDD5', stroke: '#2C889D' },
-        { key: 'Abatement|Fuel Decarbonization', color: '#A9CDD5', stroke: '#2C889D' },
-        { key: 'Abatement|Electricity Decarbonization', color: '#A9CDD5', stroke: '#2C889D' }
-      ]
+    regionFilter () {
+      const reference = _.map(this.regions, r => { return _.filter(this.referenceFilter, (data, d) => { return data.region === r }) })
+      const sector = _.map(this.regions, r => { return _.filter(this.sectorFilter, (data, d) => { return data.region === r }) })
+      const strategy = _.map(this.regions, r => { return _.filter(this.strategyFilter, (data, d) => { return data.region === r }) })
+
+      return {
+        references: reference,
+        sectors: sector,
+        strategies: strategy
+      }
     },
+    referenceFilter () { return _.filter(this.DecarbonStrategy, (ref, r) => ref.parent === 'reference') },
+    strategyFilter () { return _.filter(this.DecarbonStrategy, (ref, r) => ref.parent === 'strategy') },
+    sectorFilter () { return _.filter(this.DecarbonStrategy, (ref, r) => ref.parent === 'sector') },
+    referenceVariables () { return _.uniq(_.map(this.referenceFilter, (s) => s.variable)) },
     scales () {
       return {
         x: d3
@@ -99,56 +104,32 @@ export default {
           .rangeRound([0, this.innerWidth - (this.margin.left + this.margin.right)]),
         y: d3
           .scaleLinear()
-          .domain([0, 75000])
+          .domain([-0.5, 1.5])
           .rangeRound([this.groupHeight - this.margin.bottom, 0])
       }
     },
-    areaGenerator: function () {
-      const { x, y } = this.scales
-      const years = this.years
-      return d3
-        .area()
-        .x((d, i) => x(years[i]))
-        .curve(d3.curveLinear)
-        .y0(d => y(d[0]))
-        .y1(d => y(d[1]))
-    },
-    lineGenerator: function () {
+    linegenerator: function () {
       const { x, y } = this.scales
       const years = this.years
       return d3
         .line()
         .x((d, i) => x(years[i]))
         .curve(d3.curveLinear)
-        .y(d => y(d[1]))
+        .y(d => (y(d)))
     },
-    filterData () {
-      return _.map(this.scenarios, (s) => { return _.filter(this.DecarbonStrategy, d => d.Scenario === s) })
-    },
-    paths () {
-      return _.map(this.filterData, (d, i) => {
-        const stacked = d3.stack().keys(this.strategies.map(d => d.key))(d)
-        const path = _.map(stacked, (path, p) => {
-          return {
-            d: this.areaGenerator(path),
-            klass: _.map(this.strategies, e => e.key),
-            color: _.map(this.strategies, e => e.color)
-          }
-        })
-        return path
+    reference () {
+      const { references } = this.regionFilter
+      const variables = this.referenceVariables
+
+      return _.map(references, (data, d) => {
+        const line = _.map(variables, v => { return _.filter(data, vari => { return vari.variable === v }) })
+        return {
+          variable: variables,
+          GrossEmi: this.linegenerator(_.map(line[0], l => l.value)),
+          PolEmi: this.linegenerator(_.map(line[1], l => l.value)),
+          RefEmi: this.linegenerator(_.map(line[2], l => l.value))
+        }
       })
-    },
-    lines () {
-      return _.map(this.filterData, (d, i) => {
-        const stacked = d3.stack().keys(this.strategies.map(d => d.key))(d)
-        const lines = _.map(stacked, (line, l) => {
-          return this.lineGenerator(line)
-        })
-        return lines
-      })
-    },
-    strokes () {
-      return _.map(this.strategies, e => e.stroke)
     }
   },
   methods: {
@@ -185,6 +166,10 @@ export default {
     border-bottom: 1px solid $color-violet;
     padding: 10px;
   }
+
+  .description {
+    margin-top: 10px;
+  }
 }
 
 svg {
@@ -194,17 +179,27 @@ svg {
   }
 
   .graphic-line {
+    stroke-width: 1px;
+  }
+
+  .reference_lines {
+    fill: none;
+    stroke: black;
     stroke-width: 1.5px;
+
+  &.gross_emi {
+    stroke: getColor(green, 40);
+    stroke-dasharray: 4 2;
   }
 
-  .chunks {
-    fill-opacity: 0.5;
+  &.pol_emi {
+    stroke: getColor(green, 20);
   }
-}
 
-path {
-  stroke-width: 1;
-  fill-opacity: 0.7;
+  &.ref_emi {
+    stroke: $color-violet;
+  }
+  }
 }
 
 .inactive {
@@ -212,7 +207,11 @@ path {
   fill-opacity: 0.5;
 }
 
-text {
-  transition: y 1s;
+.component-fade-enter-active, .component-fade-leave-active {
+  transition: opacity .3s ease;
+}
+.component-fade-enter, .component-fade-leave-to
+/* .component-fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

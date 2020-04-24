@@ -1,0 +1,26 @@
+[
+  {
+    "Region": "Australia",
+    "1": "Australia - Something about sectors",
+    "2": "Australia - Something about trendlines",
+    "3": "Australia - Something about chunks"
+  },
+  {
+    "Region": "EU28",
+    "1": "EU28 - Something about sectors",
+    "2": "EU28 - Something about trendlines",
+    "3": "EU28 - Something about chunks"
+  },
+  {
+    "Region": "Japan",
+    "1": "Japan - Something about sectors",
+    "2": "Japan - Something about trendlines",
+    "3": "Japan - Something about chunks"
+  },
+  {
+  "Region": "USA",
+  "1": "USA - Something about sectors",
+  "2": "USA - Something about trendlines",
+  "3": "USA - Something about chunks"
+  }
+]

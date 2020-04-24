@@ -36,10 +36,10 @@
         <line x1="196" y1="72.5" x2="430.5" y2="73" id="Path-5" stroke="#644FFF"></line>
         <line x1="4.75" y1="72.5" x2="103.75" y2="72.5" id="Path-5-Copy" stroke="#644FFF"></line>
         <text id="Mitigation" font-family="IBMPlexSans-Medium, IBM Plex Sans Medium" font-size="14" font-weight="normal" letter-spacing="0.0781249" fill="#000000">
-            <tspan x="281" y="95">Mitigation</tspan>
+            <tspan x="281" y="95">Removed</tspan>
         </text>
         <text id="Future" font-family="IBMPlexSans-Medium, IBM Plex Sans Medium" font-size="14" font-weight="normal" letter-spacing="0.0781249" fill="#000000">
-            <tspan x="33" y="95">Future</tspan>
+            <tspan x="25" y="95">Residual</tspan>
         </text>
     </g>
 </svg>
