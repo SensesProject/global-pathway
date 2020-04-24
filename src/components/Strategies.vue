@@ -89,7 +89,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 path {
-  fill-opacity: 0.3;
+  fill-opacity: 0.2;
 
   &.PolicyEmissions {
     fill: #dd5f84;

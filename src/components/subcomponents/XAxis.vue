@@ -1,8 +1,8 @@
 <template>
   <g class="x-axis">
     <!-- <line x1="0" :x2="scale(2050)" :y1="height - margin.bottom" :y2="height - margin.bottom" /> -->
-    <rect v-for="year in yearsTicks" v-bind:key="year" :y="height - (margin.bottom + 6)" :x="scale(year)" width="2px" height="6px"/>
-    <text v-for="year in yearsTicks" v-bind:key="year + 'text'" :y="height" :x="scale(year)">{{year}}</text>
+    <rect v-for="year in yearsTicks" v-bind:key="year" :y="height - (margin.bottom * 8)" :x="scale(year)" width="2px" height="6px"/>
+    <text v-for="year in yearsTicks" v-bind:key="year + 'text'" :y="height - (margin.bottom * 6)" :x="scale(year)">{{year}}</text>
   </g>
 </template>
 

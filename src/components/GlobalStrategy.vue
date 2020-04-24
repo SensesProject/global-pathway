@@ -12,9 +12,9 @@
         </transition>
         <transition name="component-fade" mode="out-in">
         <g v-show="element > 1">
-          <path class="reference_lines gross_emi" :d="reference[i].GrossEmi"/>
           <path class="reference_lines pol_emi" :d="reference[i].PolEmi"/>
           <path class="reference_lines ref_emi" :d="reference[i].RefEmi"/>
+          <path class="reference_lines gross_emi" :d="reference[i].GrossEmi"/>
         </g>
       </transition>
         <Bars v-show="element >= 1" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight"/>
@@ -79,7 +79,7 @@ export default {
   },
   computed: {
     groupHeight () {
-      return this.innerHeight / this.regions.length
+      return this.innerHeight / (this.regions.length - 1)
     },
     regionFilter () {
       const reference = _.map(this.regions, r => { return _.filter(this.referenceFilter, (data, d) => { return data.region === r }) })
@@ -104,7 +104,7 @@ export default {
           .rangeRound([0, this.innerWidth - (this.margin.left + this.margin.right)]),
         y: d3
           .scaleLinear()
-          .domain([-0.5, 1.5])
+          .domain([-1.5, 1.5])
           .rangeRound([this.groupHeight - this.margin.bottom, 0])
       }
     },
@@ -184,20 +184,20 @@ svg {
 
   .reference_lines {
     fill: none;
-    stroke: black;
+    stroke: $color-violet;
     stroke-width: 1.5px;
 
   &.gross_emi {
-    stroke: getColor(green, 40);
+    stroke: getColor(blue, 40);
     stroke-dasharray: 4 2;
   }
 
   &.pol_emi {
-    stroke: getColor(green, 20);
+    stroke: getColor(blue, 60);
   }
 
   &.ref_emi {
-    stroke: $color-violet;
+    stroke: $color-red;
   }
   }
 }

@@ -14,11 +14,15 @@
       </div>
       <div class="selector">
         <div class="legend-row">
-          <p>Next {{ element }}</p>
           <span class="glyph-angle-left" v-on:click="element > 1 ? element -= 1 : element = 1"/>
-          <span class="glyph-angle-right" v-on:click="element < 3 ? element += 1 : element = 1"/>
+          <p class="build">Build {{ element }}</p>
         </div>
-         <img class="legend-row" id="colorslegend" src="./assets/legend/colors-coding.svg" />
+        <div class="legend-row">
+         <!-- <Legend class="legend-row" id="colorslegend" /> -->
+       </div>
+       <div class="legend-row">
+         <span class="glyph-angle-right" v-on:click="element < 3 ? element += 1 : element = 1"/>
+       </div>
       </div>
       <div class="vis-container">
         <GlobalStrategy :width="width" :height="height" :element="element"/>
@@ -29,11 +33,13 @@
 
 <script>
 import GlobalStrategy from './components/GlobalStrategy.vue'
+// import Legend from './components/Legend.vue'
 
 export default {
   name: 'App',
   components: {
     GlobalStrategy
+    // Legend
   },
   data () {
     return {
@@ -83,7 +89,7 @@ export default {
       }
     .selector {
       margin: $spacing * 2 auto;
-      background-color: white;
+      background-color: rgba(255, 255, 255, 0.8);
       display: flex;
       padding: $spacing 0;
       top: 0px;
@@ -92,6 +98,11 @@ export default {
       .legend-row {
         flex: 40%;
         margin-right: $spacing;
+        align-content: center;
+
+        .build {
+          display: inline;
+        }
 
         .glyph-angle-left, .glyph-angle-right {
           font-size: 2em;

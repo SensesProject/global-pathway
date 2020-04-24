@@ -5,7 +5,7 @@
       :class="el.variable"
       width="10"
       :height="el.height"
-      :x="x(el.period)"
+      :x="el.period === 2050 ? x(el.period) : x(el.period) - 10"
       :y="el.position"
       />
     </g>
@@ -56,18 +56,22 @@ export default {
       return d3.nest()
         .key(d => d.period)
         .rollup(function (d) {
-          const sortedData = d.sort((a, b) => b.key - a.key).reverse()
+          const sortedData = d.sort((a, b) => b.key - a.key)
           const sortedValues = sortedData.map(d => d.value)
           return sortedData.map(function (row, i) {
-            const floor = i === 0 ? 0 : sortedValues.slice(0, i).reduce((a, b) => a + b)
-            const ceiling = sortedValues.slice(0, i + 1).reduce((a, b) => a + b)
+            const diff = sortedValues.filter(v => v < 0).reduce((a, b) => a + b, 0)
+            const floor = (i === 0 ? 0 : sortedValues.slice(0, i).reduce((a, b) => Math.abs(a) + Math.abs(b))) + diff
+            const ceiling = sortedValues.slice(0, i + 1).reduce((a, b) => Math.abs(a) + Math.abs(b)) + diff
+
+            // const floorH = i === 0 ? 0 : sortedValues.slice(0, i).reduce((a, b) => a + b)
+            // const ceilingH = sortedValues.slice(0, i + 1).reduce((a, b) => a + b)
             return {
               variable: row.variable,
               value: row.value,
               period: row.period,
               floor: floor,
               ceiling: ceiling,
-              position: row.value < 0 ? y(Math.min(0, floor)) : y(Math.max(floor, ceiling)),
+              position: y(ceiling),
               height: Math.abs(y(ceiling) - y(floor))
             }
           })
@@ -75,19 +79,51 @@ export default {
         .entries(this.data)
     },
     ungroup () { return map(this.stackData, kv => kv.value).reduce((x, y) => x.concat(y)) }
-
-  },
-  mounted () {
-    console.log('here I am!')
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+@import "library/src/style/variables.scss";
+
 rect {
   fill-opacity: 0.4;
-  fill: blue;
-  stroke: blue;
+
+  &.Change {
+    stroke: getColor(green, 20);
+    fill: getColor(green, 40);
+  }
+
+  &.BECCS {
+    stroke: getColor(green, 40);
+    fill: getColor(green, 80);
+  }
+
+  &.Transport {
+    stroke: getColor(orange, 0);
+    fill: getColor(orange, 20);
+  }
+
+  &.Industry {
+    stroke: getColor(orange, 60);
+    fill: getColor(orange, 80);
+  }
+
+  &.Electricity {
+    stroke: $color-yellow;
+    fill: #ffd89a;
+  }
+
+  &.Buildings {
+    stroke: getColor(orange, 20);
+    fill: getColor(orange, 40);
+  }
+
+  &.Non-electric {
+    stroke: getColor(orange, 40);
+    fill: getColor(orange, 60);
+  }
+
 }
 </style>

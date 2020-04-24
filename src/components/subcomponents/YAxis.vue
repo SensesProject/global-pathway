@@ -1,12 +1,12 @@
 <template>
   <g class="y-axis">
-    <line v-for="value in valueTicks" v-bind:key="value" :y1="scale(value)" :y2="scale(value)" x1="0" :x2="width - (margin.right * 2)" />
-    <text v-for="value in valueTicks" v-bind:key="value + 'text'" :y="scale(value) - 10" x="10">{{value}}% CO2/yr</text>
+    <line v-for="(value, i) in valueTicks" :key="`${i}lines`" :y1="scale(value.value)" :y2="scale(value.value)" x1="0" :x2="width - (margin.right * 2)" />
+    <text v-for="(value, i) in valueTicks" :key="`${i}text`" :y="scale(value.value) - 10" x="10">{{value.label}}% CO2/yr</text>
   </g>
 </template>
 
 <script>
-
+import { map } from 'lodash'
 export default {
   name: 'YAxis',
   props: {
@@ -26,7 +26,13 @@ export default {
   },
   computed: {
     valueTicks () {
-      return [0, this.max]
+      const rangeNum = [-2, -0.5, -1, 0, 1, 0.5, 2]
+      return map(rangeNum, r => {
+        return {
+          label: r * 100,
+          value: r
+        }
+      })
     }
   }
 }
