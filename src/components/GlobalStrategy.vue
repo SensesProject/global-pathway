@@ -1,27 +1,33 @@
 <template>
   <div class="global-strategy" ref="vis">
-    <div v-for="(region, i) in regions" v-bind:key="region + i +'label'">
-      <div class="label">
-        <div class="highlight">{{ region }}</div>
-        <p class="description">{{ Descriptions[i][element] }}</p>
+    <div v-for="(region, i) in regions" v-bind:key="region + i +'label'" class="single-region">
+      <div class="region_label" :class="region">
+        <div class="dotted">{{ region }}</div>
       </div>
-      <svg class="glob_strat" :class="region" :width="innerWidth" :height="groupHeight">
-      <g :transform="`translate(${margin.left}, 0)`">
-        <transition name="component-fade" mode="out-in">
-          <Strategy v-show="element > 2" :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years"/>
-        </transition>
-        <transition name="component-fade" mode="out-in">
-        <g v-show="element > 1">
-          <path class="reference_lines pol_emi" :d="reference[i].PolEmi"/>
-          <path class="reference_lines ref_emi" :d="reference[i].RefEmi"/>
-          <path class="reference_lines gross_emi" :d="reference[i].GrossEmi"/>
-        </g>
-      </transition>
-        <Bars v-show="element >= 1" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight"/>
-        <XAxis :years="years" :height="groupHeight" :margin="margin" :scale="scales.x"/>
-        <YAxis max="75000" :width="innerWidth" :margin="margin" :scale="scales.y"/>
-      </g>
+      <svg class="glob_strat" :class="region" :width="groupWidth" :height="groupHeight">
+          <g :transform="`translate(${margin.left}, ${margin.top * 2})`">
+              <transition name="component-fade" mode="out-in">
+                <Strategy v-show="currentElement > 2" :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years"/>
+              </transition>
+              <transition name="component-fade" mode="out-in">
+                <g v-show="currentElement > 1">
+                  <path class="reference_lines pol_emi" :d="reference[i].PolEmi"/>
+                  <path class="reference_lines ref_emi" :d="reference[i].RefEmi"/>
+                  <path class="reference_lines gross_emi" :d="reference[i].GrossEmi"/>
+                </g>
+              </transition>
+              <Bars v-show="currentElement >= 1" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight"/>
+              <YAxis max="75000" :width="groupWidth" :margin="margin" :scale="scales.y"/>
+          </g>
+          <XAxis :years="years" :height="groupHeight" :margin="margin" :scale="scales.x"/>
       </svg>
+    </div>
+    <div class="label">
+      <div class="description label_rows">
+        <Selector :descriptions="Descriptions"/>
+        <p class="text">{{ Descriptions.steps[currentElement] }}</p>
+      </div>
+      <div class="legend legend-row"><Legend :element="currentElement"/></div>
     </div>
   </div>
 </template>
@@ -30,6 +36,7 @@
 // Libraries
 import * as d3 from 'd3'
 import _ from 'lodash'
+import { mapState } from 'vuex'
 
 // Data
 import DecarbonStrategy from '../assets/data/GlobalStrategy.json'
@@ -37,7 +44,9 @@ import Descriptions from '../assets/data/descriptions.json'
 import XAxis from './subcomponents/XAxis.vue'
 import YAxis from './subcomponents/YAxis.vue'
 import Strategy from './Strategies.vue'
+import Selector from './subcomponents/Selector.vue'
 import Bars from './Bars.vue'
+import Legend from './Legend.vue'
 
 export default {
   name: 'GlobalStrategy',
@@ -45,7 +54,9 @@ export default {
     XAxis,
     YAxis,
     Strategy,
-    Bars
+    Bars,
+    Legend,
+    Selector
   },
   props: {
     width: {
@@ -78,8 +89,12 @@ export default {
     }
   },
   computed: {
+    ...mapState(['currentElement']),
     groupHeight () {
-      return this.innerHeight / (this.regions.length - 1)
+      return this.innerHeight - 220
+    },
+    groupWidth () {
+      return this.innerWidth / 5
     },
     regionFilter () {
       const reference = _.map(this.regions, r => { return _.filter(this.referenceFilter, (data, d) => { return data.region === r }) })
@@ -101,11 +116,11 @@ export default {
         x: d3
           .scaleLinear()
           .domain([2015, 2050])
-          .rangeRound([0, this.innerWidth - (this.margin.left + this.margin.right)]),
+          .rangeRound([0, this.groupWidth - (this.margin.left + this.margin.right)]),
         y: d3
           .scaleLinear()
           .domain([-1.5, 1.5])
-          .rangeRound([this.groupHeight - this.margin.bottom, 0])
+          .rangeRound([this.groupHeight, 0])
       }
     },
     linegenerator: function () {
@@ -159,21 +174,52 @@ export default {
 @import "library/src/style/variables.scss";
 
 .global-strategy {
-  height: 200vh;
+  height: 80vh;
   margin: 0 auto;
 
   .label {
-    border-bottom: 1px solid $color-violet;
-    padding: 10px;
+    margin: 0 auto;
+    padding: 0px;
+    display: flex;
+    height: 50%;
+
+    .label_rows {
+      margin: 0 20px;
+      width: 30%;
+    }
+
+    .legend-row {
+      margin-left: 10px;
+      width: 45%;
+    }
   }
 
   .description {
+    display: inline-flex;
     margin-top: 10px;
+    height: 100%;
+
+    p {
+      margin-left: 10px;
+      width: 90%;
+    }
   }
 }
 
+.single-region {
+  width: 25%;
+  display: inline-flex;
+  padding: 10px;
+  padding-left: 40px;
+
+  .region_label {
+    height: 5%;
+    position: absolute;
+  }
+
+}
+
 svg {
-  margin: 40px auto;
   text {
     font-family: $font-mono;
   }

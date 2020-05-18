@@ -1,6 +1,6 @@
 <template>
   <g class="chunks">
-    <path v-for="(path, i) in paths" :key="`${i}chunk`" :class="path.strategy" :d="path.path"/>
+    <path v-for="(path, i) in paths" :key="`${i}chunk`" :class="[path.strategy, currentStrategy === path.strategy ? '' : 'invisible']" :d="path.path"/>
     <path v-for="(path, i) in paths" :key="`${i}line`" class="border" :class="path.strategy" :d="path.line"/>
   </g>
 </template>
@@ -8,6 +8,7 @@
 <script>
 import * as d3 from 'd3'
 import { map, uniq, filter } from 'lodash'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Strategies',
@@ -19,6 +20,7 @@ export default {
     years: Array
   },
   computed: {
+    ...mapState(['currentStrategy']),
     strategies: function () {
       return uniq(map(this.data, d => d.variable))
     },
@@ -53,7 +55,6 @@ export default {
     },
     keys () { return map(this.nest, a => a.key) },
     stackData () {
-      // const sortedEl = this.sortedEl
       return d3.nest()
         .key(d => d.period)
         .rollup(function (d) {
@@ -89,36 +90,51 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 path {
-  fill-opacity: 0.2;
+  fill-opacity: 0.4;
+  transition: fill-opacity 0.5s;
+
+  &.invisible {
+    fill-opacity: 0.1;
+    transition: fill-opacity 0.5s;
+  }
 
   &.PolicyEmissions {
     fill: #dd5f84;
   }
-
+  &.ElectricityDecarbonization,
   &.Electrification {
     fill: #ffd89a;
   }
 
-  &.EnergyDemandReduction,
-  &.ElectricityDecarbonization,
-  &.Nonelectricitydecarbonization,
   &.LandUseChangeandCDR {
+    fill: #A3EAA6;
+  }
+  &.Nonelectricitydecarbonization,
+  &.EnergyDemandReduction {
     fill: #a3d1ea;
   }
 
   &.border {
     fill: none;
 
+    &.invisible {
+      stroke-opacity: 0.2;
+    }
+
     &.PolicyEmissions {
       stroke: #dd5f84;
     }
 
+    &.ElectricityDecarbonization,
     &.Electrification {
       stroke: #ffd89a;
     }
 
+    &.LandUseChangeandCDR {
+      stroke: #A3EAA6;
+    }
+
     &.EnergyDemandReduction,
-    &.ElectricityDecarbonization,
     &.Nonelectricitydecarbonization,
     &.LandUseChangeandCDR {
       stroke: #a3d1ea;

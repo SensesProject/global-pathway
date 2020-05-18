@@ -1,8 +1,8 @@
 <template>
-  <g class="x-axis">
-    <!-- <line x1="0" :x2="scale(2050)" :y1="height - margin.bottom" :y2="height - margin.bottom" /> -->
-    <rect v-for="year in yearsTicks" v-bind:key="year" :y="height - (margin.bottom * 8)" :x="scale(year)" width="2px" height="6px"/>
-    <text v-for="year in yearsTicks" v-bind:key="year + 'text'" :y="height - (margin.bottom * 6)" :x="scale(year)">{{year}}</text>
+  <g class="x-axis" :transform="`translate(0, ${height - (margin.bottom * 10)})`">
+    <line :x1="scale(2020)" :x2="scale(2050)" y1="0" y2="0" />
+    <rect v-for="year in yearsTicks" v-bind:key="year" y="0" :x="scale(year)" width="2px" height="6px"/>
+    <text v-for="year in yearsTicks" v-bind:key="year + 'text'" y="20" :x="scale(year)">{{year}}</text>
   </g>
 </template>
 
@@ -26,7 +26,8 @@ export default {
   },
   computed: {
     yearsTicks () {
-      return this.years.map(y => y)
+      // return this.years.map(y => y)
+      return [2020, 2050]
     }
   }
 }
@@ -38,6 +39,10 @@ export default {
 
 rect {
   fill: $color-gray;
+}
+
+line {
+  stroke: $color-gray;
 }
 
 text {

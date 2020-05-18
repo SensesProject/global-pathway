@@ -1,8 +1,14 @@
 <template>
   <div id="app" ref="container">
+    <SensesMenu/>
     <div class="wrapper">
-      <div class="paragraph">
-        <h1 class="title">Mitigation Strategies Tool</h1>
+      <div class="vis-body" ref="container">
+      <div class="vis-container">
+        <GlobalStrategy :width="width" :height="height" :element="element"/>
+      </div>
+      </div>
+    <div class="paragraph">
+        <h1 class="title">Global Mitigation Pathways</h1>
         <p>Renewable expansion and electrification are promising strategies for a
           successful future decarbonization of the energy system. However, other
           measures like energy efficiency improvements, the switch to low-carbon
@@ -11,22 +17,10 @@
           more detail how the interplay of these strategies can bring us to net-zero
           emissions, you can use the Global Pathway Tool.
         </p>
-      </div>
-      <div class="selector">
-        <div class="legend-row">
-          <span class="glyph-angle-left" v-on:click="element > 1 ? element -= 1 : element = 1"/>
-          <p class="build">Build {{ element }}</p>
+        <div class="meta">
+          <SensesMeta :id="'transition-path-1'" />
         </div>
-        <div class="legend-row">
-         <!-- <Legend class="legend-row" id="colorslegend" /> -->
-       </div>
-       <div class="legend-row">
-         <span class="glyph-angle-right" v-on:click="element < 3 ? element += 1 : element = 1"/>
-       </div>
-      </div>
-      <div class="vis-container">
-        <GlobalStrategy :width="width" :height="height" :element="element"/>
-      </div>
+    </div>
     </div>
   </div>
 </template>
@@ -34,10 +28,14 @@
 <script>
 import GlobalStrategy from './components/GlobalStrategy.vue'
 // import Legend from './components/Legend.vue'
+import SensesMenu from 'library/src/components/SensesMenu.vue'
+import SensesMeta from 'library/src/components/SensesMeta.vue'
 
 export default {
   name: 'App',
   components: {
+    SensesMenu,
+    SensesMeta,
     GlobalStrategy
     // Legend
   },
@@ -77,35 +75,54 @@ export default {
 
 #app {
   .wrapper {
-    max-width: 800px;
-    margin: 0 auto;
 
       .paragraph {
         padding-top: 100px;
+        height: 100vh;
+        width: 60%;
+        margin: 0 auto;
 
         .title {
-          margin-bottom: $spacing;
+            margin-bottom: $spacing;
+          }
+
+        .meta {
+          margin-top: 20px;
         }
       }
+      .vis-container {
+        margin: 0 auto;
+      }
+
     .selector {
-      margin: $spacing * 2 auto;
+      width: 100%;
+      margin: 0 auto;
       background-color: rgba(255, 255, 255, 0.8);
-      display: flex;
-      padding: $spacing 0;
-      top: 0px;
+      display: inline-flex;
+      padding: 1em 0;
+      top: 50px;
       position: sticky;
 
       .legend-row {
-        flex: 40%;
+        flex: 33%;
         margin-right: $spacing;
         align-content: center;
+        font-size: 1.5em;
+
+        &#last {
+          margin-right: 0;
+        }
+
+        .right {
+          text-align: right;
+        }
 
         .build {
           display: inline;
         }
 
         .glyph-angle-left, .glyph-angle-right {
-          font-size: 2em;
+          font-size: 1.5em;
         }
       }
     }

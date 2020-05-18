@@ -1,26 +1,9 @@
-[
-  {
-    "Region": "Australia",
-    "1": "Australia - Something about sectors",
-    "2": "Australia - Something about trendlines",
-    "3": "Australia - Something about chunks"
-  },
-  {
-    "Region": "EU28",
-    "1": "EU28 - Something about sectors",
-    "2": "EU28 - Something about trendlines",
-    "3": "EU28 - Something about chunks"
-  },
-  {
-    "Region": "Japan",
-    "1": "Japan - Something about sectors",
-    "2": "Japan - Something about trendlines",
-    "3": "Japan - Something about chunks"
-  },
-  {
-  "Region": "USA",
-  "1": "USA - Something about sectors",
-  "2": "USA - Something about trendlines",
-  "3": "USA - Something about chunks"
-  }
-]
+{
+  "steps": [
+    "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.",
+    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
+    "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?",
+    "Australia - Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?",
+    "Random Text"
+  ]
+}
