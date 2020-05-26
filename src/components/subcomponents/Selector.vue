@@ -1,30 +1,40 @@
 <template>
-  <svg height="100%" width="10%" ref="svg" :data="dotsPosition">
+  <svg height="10%" width="100%" ref="svg">
     <rect
-      :x="backgroundX"
-      :y="dotsPosition[0] - 5"
-      width="10"
-      :height="dotsPosition[4]"
-      rx="10"
+      :x="dotsPosition[0] - 5"
+      y="5"
+      :width="dotsPosition[13] - 8"
+      height="16"
+      rx="8"
     />
     <circle
       class="highlight-bg"
-      :cx="innerWidth / 2"
-      :cy="dotsPosition[element]"
-      r="10"
+      :cx="dotsPosition[element]"
+      :cy="innerHeight / 2"
+      r="12"
     />
-    <circle v-for="(d, i) in descriptions.steps" :key="`selector-${i}`"
-      v-on:click="changeChapter(i)"
-      :class="{highlight: element === (i)}"
-      r="5"
-      :cx="innerWidth / 2"
-      :cy="dotsPosition[i]"/>
+    <g v-for="(d, i) in descriptions.steps" :key="`selector-${i}`">
+      <circle
+        :class="{highlight: element === (i)}"
+        r="8"
+        :cx="dotsPosition[i]"
+        :cy="innerHeight / 2"/>
+      <rect
+        v-on:click="changeChapter(i)"
+        class="clickarea"
+        width="40"
+        height="40"
+        :x="dotsPosition[i] - 20"
+        :y="(innerHeight / 2) / 4"
+        />
+    </g>
+    <text :x="dotsPosition[currentElement]" y="13">{{ currentElement }}</text>
   </svg>
 </template>
 
 <script>
 import { map } from 'lodash'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Selector',
@@ -35,17 +45,17 @@ export default {
     return {
       innerWidth: 0,
       innerHeight: 0,
-      element: 1
+      element: 0
     }
   },
   computed: {
+    ...mapState(['currentElement']),
     dotsPosition () {
-      console.log(this.descriptions)
-      let initialY = 10
+      let initialX = 20
       return map(this.descriptions.steps, (pos, p, positions) => {
-        const y = initialY
-        initialY = y + (this.innerHeight / positions.length)
-        return y
+        const x = initialX
+        initialX = x + (this.innerWidth / positions.length)
+        return x
       })
     },
     backgroundX () {
@@ -58,6 +68,7 @@ export default {
       const { svg: el } = this.$refs
       const totalWidth = el.clientWidth
       const totalHeight = el.clientHeight || el.parentNode.clientHeight
+      console.log(totalWidth)
       this.innerWidth = totalWidth
       this.innerHeight = totalHeight
     },
@@ -84,7 +95,7 @@ export default {
 @import "library/src/style/variables.scss";
 
 svg {
-  display: inline-grid;
+  // display: block;
 
   circle {
    fill: getColor(violet, 40);
@@ -96,13 +107,18 @@ svg {
    &.highlight-bg {
      fill: $color-neon;
      fill-opacity: 0.5;
-     transition: cy 0.5s;
+     transition: cx 0.5s;
    }
 
   }
 
   rect {
     fill: getColor(violet, 100);
+    fill-opacity: 0.5;
+  }
+
+  .clickarea {
+    fill-opacity: 0;
   }
 }
 </style>

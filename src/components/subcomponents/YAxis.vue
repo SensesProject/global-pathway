@@ -1,7 +1,7 @@
 <template>
   <g class="y-axis">
-    <line v-for="(value, i) in valueTicks" :key="`${i}lines`" :y1="scale(value.value)" :y2="scale(value.value)" x1="0" :x2="width - (margin.right * 2)" />
-    <text v-for="(value, i) in valueTicks" :key="`${i}text`" :y="scale(value.value) - 10" x="-10">{{value.label}}%</text>
+    <line v-for="(value, i) in valueTicks" :key="`${i}lines`" :y1="scale(value.value)" :y2="scale(value.value)" x1="20" :x2="width - (margin.right * 2)" />
+    <text v-for="(value, i) in valueTicks" :key="`${i}text`" :y="scale(value.value)" x="15">{{value.label}}%</text>
   </g>
 </template>
 
@@ -48,7 +48,7 @@ line {
 }
 
 text {
-  text-anchor: start;
+  text-anchor: end;
   font-size: 10px;
   fill: $color-gray;
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="legend">
-  <svg width="904px" height="157px" viewBox="0 0 495 167" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <svg width="100%" height="100%" viewBox="-10 0 825 190" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <g id="Artboard" transform="translate(-21, -30)">
             <transition name="fade">
@@ -95,43 +95,43 @@
             </transition>
               <g id="sectors" transform="translate(18, 30)">
                   <g id="Industry" transform="translate(43, 1)">
-                      <rect id="Rectangle" stroke="#FCB69F" stroke-width="0.5" fill="#FFDBCF" x="0" y="0" width="14" height="15"></rect>
+                      <rect stroke-width="0.5" x="0" y="0" width="14" height="15"></rect>
                       <text font-size="12" font-weight="normal" letter-spacing="0.0669642" fill="#000000">
                           <tspan x="31" y="12">Industry</tspan>
                       </text>
                   </g>
                   <g id="Non-electric-Supply" transform="translate(43, 24)">
-                      <rect id="Rectangle-Copy" stroke="#F39172" stroke-width="0.5" fill-opacity="0.4" fill="#FCB69F" x="0" y="0" width="14" height="15"></rect>
+                      <rect stroke-width="0.5" fill-opacity="0.4" x="0" y="0" width="14" height="15"></rect>
                       <text font-size="12" font-weight="normal" letter-spacing="0.0669642" fill="#000000">
                           <tspan x="31" y="12">Non-electric Supply</tspan>
                       </text>
                   </g>
                   <g id="Electricity" transform="translate(43, 47)">
-                      <rect id="Rectangle-Copy-2" stroke="#A85036" stroke-width="0.5" fill-opacity="0.4" fill="#F39172" x="0" y="0" width="14" height="15"></rect>
+                      <rect stroke-width="0.5" fill-opacity="0.4" x="0" y="0" width="14" height="15"></rect>
                       <text font-size="12" font-weight="normal" letter-spacing="0.0669642" fill="#000000">
                           <tspan x="31" y="12">Electricity</tspan>
                       </text>
                   </g>
                   <g id="Buildings" transform="translate(43, 70)">
-                      <rect id="Rectangle-Copy-3" stroke="#6E3726" stroke-width="0.5" fill-opacity="0.4" fill="#A85036" x="0" y="0" width="14" height="15"></rect>
+                      <rect stroke-width="0.5" fill-opacity="0.4" x="0" y="0" width="14" height="15"></rect>
                       <text font-size="12" font-weight="normal" letter-spacing="0.0669642" fill="#000000">
                           <tspan x="31" y="12">Buildings</tspan>
                       </text>
                   </g>
                   <g id="Transport" transform="translate(43, 92)">
-                      <rect id="Rectangle-Copy-4" stroke="#381F17" stroke-width="0.5" fill-opacity="0.4" fill="#6E3726" x="0" y="0" width="14" height="15"></rect>
+                      <rect stroke-width="0.5" fill-opacity="0.4" x="0" y="0" width="14" height="15"></rect>
                       <text font-size="12" font-weight="normal" letter-spacing="0.0669642" fill="#000000">
                           <tspan x="31" y="12">Transport</tspan>
                       </text>
                   </g>
                   <g id="Land-Use-Change" transform="translate(43, 138)">
-                      <rect id="Rectangle-Copy-5" stroke="#1B9562" stroke-width="0.5" fill-opacity="0.4" fill="#A2E7C0" x="0" y="0" width="14" height="15"></rect>
+                      <rect stroke-width="0.5" fill-opacity="0.4" x="0" y="0" width="14" height="15"></rect>
                       <text font-size="12" font-weight="normal" letter-spacing="0.0669642" fill="#000000">
                           <tspan x="31" y="12">Land-Use Change</tspan>
                       </text>
                   </g>
                   <g id="BECCS" transform="translate(43, 115)">
-                      <rect id="Rectangle-Copy-6" stroke="#1D6141" stroke-width="0.5" fill-opacity="0.4" fill="#1B9562" x="0" y="0" width="14" height="15"></rect>
+                      <rect stroke-width="0.5" fill-opacity="0.4" x="0" y="0" width="14" height="15"></rect>
                       <text font-size="12" font-weight="normal" letter-spacing="0.0669642" fill="#000000">
                           <tspan x="31" y="12">BECCS</tspan>
                       </text>
@@ -176,13 +176,54 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+@import "../assets/style/pathways.scss";
+
+.legend {
+    width: 100%;
+}
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+svg {
+    #Non-electric-Supply rect {
+        fill: $non-electric;
+        stroke: $non-electric-stroke;
+    }
+
+    #Industry rect {
+        fill: $industry;
+        stroke: $industry-stroke;
+    }
+
+    #Electricity rect {
+        fill: $electricity;
+        stroke: $electricity-stroke;
+    }
+
+    #Buildings rect {
+        fill: $building;
+        stroke: $building-stroke;
+    }
+
+    #Transport rect {
+        fill: $transport;
+        stroke: $transport-stroke;
+    }
+
+    #Land-Use-Change rect {
+        fill: $landchange;
+        stroke: $landchange-stroke;
+    }
+
+    #BECCS rect {
+        fill: $BECCS;
+        stroke: $BECCS-stroke;
+    }
 }
 </style>

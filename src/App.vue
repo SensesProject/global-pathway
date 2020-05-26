@@ -3,24 +3,31 @@
     <SensesMenu/>
     <div class="wrapper">
       <div class="vis-body" ref="container">
-      <div class="vis-container">
-        <GlobalStrategy :width="width" :height="height" :element="element"/>
+        <div class="paragraph">
+            <h1 class="title">Global Mitigation Pathways</h1>
+            <p>Renewable expansion and electrification are promising strategies for a
+              successful future decarbonization of the energy system. However, other
+              measures like energy efficiency improvements, the switch to low-carbon
+              fuels like biofuels or hydrogen and the deployment of negative emissions
+              play a role in future decarbonization scenarios as well. To explore in
+              more detail how the interplay of these strategies can bring us to net-zero
+              emissions, you can use the Global Pathway Tool.
+            </p>
+            <p class="suggestions">
+              By scrolling down you will be presented with graphs for four regions:
+              Austarlia, EU28 (which includes ...),USA, Japan. The navigator on the
+              bottom left part of the screen will allow you to build the charts step by step.
+            </p>
       </div>
+        <div class="vis-container">
+          <GlobalStrategy :width="width" :height="height" :element="element"/>
+        </div>
       </div>
-    <div class="paragraph">
-        <h1 class="title">Global Mitigation Pathways</h1>
-        <p>Renewable expansion and electrification are promising strategies for a
-          successful future decarbonization of the energy system. However, other
-          measures like energy efficiency improvements, the switch to low-carbon
-          fuels like biofuels or hydrogen and the deployment of negative emissions
-          play a role in future decarbonization scenarios as well. To explore in
-          more detail how the interplay of these strategies can bring us to net-zero
-          emissions, you can use the Global Pathway Tool.
-        </p>
+    <!-- <div class="paragraph">
         <div class="meta">
           <SensesMeta :id="'transition-path-1'" />
         </div>
-    </div>
+    </div> -->
     </div>
   </div>
 </template>
@@ -29,13 +36,13 @@
 import GlobalStrategy from './components/GlobalStrategy.vue'
 // import Legend from './components/Legend.vue'
 import SensesMenu from 'library/src/components/SensesMenu.vue'
-import SensesMeta from 'library/src/components/SensesMeta.vue'
+// import SensesMeta from 'library/src/components/SensesMeta.vue'
 
 export default {
   name: 'App',
   components: {
     SensesMenu,
-    SensesMeta,
+    // SensesMeta,
     GlobalStrategy
     // Legend
   },
@@ -43,7 +50,7 @@ export default {
     return {
       width: 0,
       height: 0,
-      element: 1
+      element: 0
     }
   },
   methods: {
@@ -78,8 +85,8 @@ export default {
 
       .paragraph {
         padding-top: 100px;
-        height: 100vh;
-        width: 60%;
+        height: 60vh;
+        width: 50%;
         margin: 0 auto;
 
         .title {
@@ -93,7 +100,16 @@ export default {
       .vis-container {
         margin: 0 auto;
       }
-
+    .vis-body {
+      .suggestions {
+        font-size: 12px;
+        font-style: italic;
+        color: $color-gray;
+        margin: 20px auto;
+        padding-left: 1em;
+        border-left: 1px solid $color-gray;
+      }
+    }
     .selector {
       width: 100%;
       margin: 0 auto;

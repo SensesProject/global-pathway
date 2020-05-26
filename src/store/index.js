@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     currentStrategy: 'None',
-    currentElement: 1
+    currentElement: 0
   },
   mutations: {
     changeStrategy (state, strategy) {

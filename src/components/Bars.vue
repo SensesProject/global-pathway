@@ -2,17 +2,33 @@
   <g class="bars">
     <g v-for="(year, y) in years" :key="`${y}-group`">
       <rect v-for="(el, i) in year" :key="`${i}-rect`"
-      :class="el.variable"
+      :class="
+      [el.variable,
+      {
+        invisible: currentElement < 4 && el.period != 2020 ||
+        currentElement === 4 &&
+          el.period != 2020 &&
+            (el.variable === 'BECCS' || el.variable === 'Land-Use Change')
+      }
+      ]"
       width="10"
       :height="el.height"
-      :x="el.period === 2050 ? x(el.period) : x(el.period) - 10"
+      :x="el.period === 2050 ? x(el.period - 1.5) : x(el.period - 1.5)"
       :y="el.position"
       />
       <line v-for="(thick, t) in year" :key="`${t}-thick`"
       class="thick"
-      :class="thick.variable"
-      :x1="thick.period === 2050 ? x(thick.period) : x(thick.period) - 10"
-      :x2="thick.period === 2050 ? x(thick.period) + 10 : (x(thick.period) - 10) + 10"
+      :class="
+      [thick.variable,
+      {
+        invisible: currentElement < 4 && thick.period != 2020 ||
+        currentElement === 4 &&
+          thick.period != 2020 &&
+          (thick.variable === 'BECCS' || thick.variable === 'Land-Use Change')
+      }
+      ]"
+      :x1="thick.period === 2050 ? x(thick.period - 1.5) : x(thick.period - 1.5)"
+      :x2="thick.period === 2050 ? x(thick.period - 1.5) + 10 : x(thick.period - 1.5) + 10"
       :y1="thick.y"
       :y2="thick.y"
       />
@@ -23,6 +39,7 @@
 <script>
 import * as d3 from 'd3'
 import { map, filter } from 'lodash'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Bars',
@@ -35,11 +52,11 @@ export default {
   },
   data () {
     return {
-      // linea 265 nei dati ha un problema "-1.48E-06", temporaneamente cambiato a valore x simile
       positions: [2015, 2050]
     }
   },
   computed: {
+    ...mapState(['currentElement']),
     years () {
       return {
         firstYear: filter(this.ungroup, d => d.period === 2020),
@@ -92,36 +109,43 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import "library/src/style/variables.scss";
+@import "../assets/style/pathways.scss";
+
+svg {
+  .invisible {
+    visibility: hidden;
+  }
+}
 
 rect {
-  fill-opacity: 0.4;
+  fill-opacity: 0.7;
 
   &.Change {
-    fill: getColor(green, 80);
+    fill: $landchange;
   }
 
   &.BECCS {
-    fill: getColor(green, 40);
+    fill: $BECCS;
   }
 
   &.Transport {
-    fill: getColor(orange, 20);
+    fill: $transport;
   }
 
   &.Industry {
-    fill: getColor(orange, 100);
+    fill: $industry;
   }
 
   &.Electricity {
-    fill: getColor(orange, 60);
+    fill: $electricity;
   }
 
   &.Buildings {
-    fill: getColor(orange, 40);
+    fill: $building;
   }
 
   &.Non-electric {
-    fill: getColor(orange, 80);
+    fill: $non-electric;
   }
 
 }
@@ -130,31 +154,31 @@ line {
   stroke-width: 1.5px;
 
   &.Change {
-    stroke: getColor(green, 40);
+    stroke: $landchange-stroke;
   }
 
   &.BECCS {
-    stroke: getColor(green, 20);
+    stroke: $BECCS-stroke;
   }
 
   &.Transport {
-    stroke: getColor(orange, 0);
+    stroke: $transport-stroke;
   }
 
   &.Industry {
-    stroke: getColor(orange, 80);
+    stroke: $industry-stroke;
   }
 
   &.Electricity {
-    stroke: getColor(orange, 40);
+    stroke: $electricity-stroke;
   }
 
   &.Buildings {
-    stroke: getColor(orange, 20);
+    stroke: $building-stroke;
   }
 
   &.Non-electric {
-    stroke: getColor(orange, 60);
+    stroke: $non-electric-stroke;
   }
 
 }

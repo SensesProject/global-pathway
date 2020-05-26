@@ -1,7 +1,21 @@
 <template>
   <g class="chunks">
-    <path v-for="(path, i) in paths" :key="`${i}chunk`" :class="[path.strategy, currentStrategy === path.strategy ? '' : 'invisible']" :d="path.path"/>
-    <path v-for="(path, i) in paths" :key="`${i}line`" class="border" :class="path.strategy" :d="path.line"/>
+    <path
+    v-for="(path, i) in paths"
+    :key="`${i}chunk`"
+    :class="[
+    path.strategy,
+    {noselection: path.strategy != visible[i]}
+    ]"
+    :d="path.path"/>
+    <path
+    v-for="(path, i) in paths"
+    :key="`${i}line`"
+    class="border"
+    :class="[path.strategy,
+    {noselection: path.strategy != visible[i]}
+    ]"
+    :d="path.line"/>
   </g>
 </template>
 
@@ -20,7 +34,7 @@ export default {
     years: Array
   },
   computed: {
-    ...mapState(['currentStrategy']),
+    ...mapState(['currentStrategy', 'currentElement']),
     strategies: function () {
       return uniq(map(this.data, d => d.variable))
     },
@@ -83,6 +97,24 @@ export default {
           line: this.line(selData)
         }
       })
+    },
+    visible () {
+      const strategies = []
+      if (this.currentElement === 8) {
+        strategies.push('EnergyDemandReduction')
+        return strategies
+      } if (this.currentElement === 9) {
+        strategies.push('EnergyDemandReduction', 'ElectricityDecarbonization')
+      } if (this.currentElement === 10) {
+        strategies.push('EnergyDemandReduction', 'ElectricityDecarbonization', 'Electrification')
+      } if (this.currentElement === 11) {
+        strategies.push('EnergyDemandReduction', 'ElectricityDecarbonization', 'Electrification', 'Nonelectricitydecarbonization')
+      } if (this.currentElement === 12) {
+        strategies.push('EnergyDemandReduction', 'ElectricityDecarbonization', 'Electrification', 'Nonelectricitydecarbonization', 'LandUseChangeandCDR')
+      } if (this.currentElement >= 13) {
+        strategies.push('EnergyDemandReduction', 'ElectricityDecarbonization', 'Electrification', 'Nonelectricitydecarbonization', 'LandUseChangeandCDR', 'PolicyEmissions')
+      }
+      return strategies
     }
   }
 }
@@ -90,11 +122,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 path {
-  fill-opacity: 0.4;
-  transition: fill-opacity 0.5s;
+  fill-opacity: 0.2;
+  transition: visibility fill-opacity, 0.5s;
 
-  &.invisible {
-    fill-opacity: 0.1;
+  &.visible {
+    fill-opacity: 0.3;
     transition: fill-opacity 0.5s;
   }
 
@@ -141,6 +173,10 @@ path {
     }
 
   }
-
 }
+
+.noselection {
+  visibility: hidden;
+}
+
 </style>

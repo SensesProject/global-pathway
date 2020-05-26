@@ -5,21 +5,21 @@
         <div class="dotted">{{ region }}</div>
       </div>
       <svg class="glob_strat" :class="region" :width="groupWidth" :height="groupHeight">
+        <XAxis :years="years" :height="groupHeight" :margin="margin" :scale="scales.x"/>
           <g :transform="`translate(${margin.left}, ${margin.top * 2})`">
               <transition name="component-fade" mode="out-in">
-                <Strategy v-show="currentElement > 2" :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years"/>
+                <Strategy :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years"/>
               </transition>
               <transition name="component-fade" mode="out-in">
-                <g v-show="currentElement > 1">
-                  <path class="reference_lines pol_emi" :d="reference[i].PolEmi"/>
-                  <path class="reference_lines ref_emi" :d="reference[i].RefEmi"/>
-                  <path class="reference_lines gross_emi" :d="reference[i].GrossEmi"/>
+                <g>
+                  <path class="reference_lines pol_emi" :d="reference[i].PolEmi" v-show="currentElement >= 4"/>
+                  <path class="reference_lines ref_emi" :d="reference[i].RefEmi" v-show="currentElement >= 3"/>
+                  <path class="reference_lines gross_emi" :d="reference[i].GrossEmi" v-show="currentElement >= 4"/>
                 </g>
               </transition>
-              <Bars v-show="currentElement >= 1" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight"/>
+              <Bars v-show="currentElement >= 0" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight"/>
               <YAxis max="75000" :width="groupWidth" :margin="margin" :scale="scales.y"/>
           </g>
-          <XAxis :years="years" :height="groupHeight" :margin="margin" :scale="scales.x"/>
       </svg>
     </div>
     <div class="label">
@@ -91,7 +91,7 @@ export default {
   computed: {
     ...mapState(['currentElement']),
     groupHeight () {
-      return this.innerHeight - 220
+      return this.innerHeight - 200
     },
     groupWidth () {
       return this.innerWidth / 5
@@ -181,22 +181,25 @@ export default {
     margin: 0 auto;
     padding: 0px;
     display: flex;
-    height: 50%;
+    height: 40%;
 
     .label_rows {
-      margin: 0 20px;
-      width: 30%;
+      width: 45%;
+
+      .text {
+        width: 100%;
+      }
     }
 
     .legend-row {
-      margin-left: 10px;
-      width: 45%;
+      padding-left: 20px;
+      width: 55%;
     }
   }
 
   .description {
-    display: inline-flex;
-    margin-top: 10px;
+    // display: inline-flex;
+    padding: 0px 20px;
     height: 100%;
 
     p {

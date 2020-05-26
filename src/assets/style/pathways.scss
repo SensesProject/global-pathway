@@ -1,0 +1,19 @@
+@import "library/src/style/variables.scss";
+
+// Fills
+$landchange: getColor(green, 80);
+$BECCS: getColor(green, 40);
+$transport: getColor(violet, 100);
+$industry: getColor(gray, 70);
+$electricity: getColor(yellow, 80);
+$building: getColor(violet, 80);
+$non-electric: getColor(orange, 80);
+
+// Strokes
+$landchange-stroke: getColor(green, 40);
+$BECCS-stroke: getColor(green, 20);
+$transport-stroke: getColor(violet, 60);
+$industry-stroke: getColor(gray, 40);
+$electricity-stroke: getColor(yellow, 40);
+$building-stroke: getColor(violet, 40);
+$non-electric-stroke: getColor(orange, 40);
