@@ -33,7 +33,6 @@ export default {
   },
   computed: {
     yearsTicks () {
-      console.log(this.height)
       // return this.years.map(y => y)
       return [2020, 2050]
     }

@@ -131,7 +131,7 @@ path {
   }
 
   &.PolicyEmissions {
-    fill: #dd5f84;
+    fill: none;
   }
   &.ElectricityDecarbonization,
   &.Electrification {

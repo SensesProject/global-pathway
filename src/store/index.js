@@ -22,7 +22,7 @@ export default new Vuex.Store({
     },
     async newElement ({ commit }, element) {
       commit('changeElement', element)
-      console.log(element)
+      // console.log(element)
     }
   },
   modules: {

@@ -5,13 +5,15 @@
       <div class="vis-body" ref="container">
         <div class="paragraph">
             <h1 class="title">Global Mitigation Pathways</h1>
-            <p>Renewable expansion and electrification are promising strategies for a
-              successful future decarbonization of the energy system. However, other
-              measures like energy efficiency improvements, the switch to low-carbon
-              fuels like biofuels or hydrogen and the deployment of negative emissions
-              play a role in future decarbonization scenarios as well. To explore in
-              more detail how the interplay of these strategies can bring us to net-zero
-              emissions, you can use the Global Pathway Tool.
+            <p>To be in line with the Paris Goal of limiting global temperature
+              rise to 1.5-2°C, Industrialized Economies need to reach net-zero
+              CO2 emissions by 2050. This requires a major transition to a low-carbon
+              economy in only 30 years. But, how can they achieve this? Here,
+              we show simulation results that outline possible mitigation
+              pathways towards carbon neutrality by 2050 for the EU, Japan,
+              Australia and the US. With this tool, you will learn about how
+              different mitigation strategies could play together for bending
+              down the emission trajectories in the respective regions.
             </p>
             <p class="suggestions">
               By scrolling down you will be presented with graphs for four regions:
@@ -21,13 +23,20 @@
       </div>
         <div class="vis-container">
           <GlobalStrategy :width="width" :height="height" :element="element"/>
+          <div
+          class="meta-toggle"
+          @click="meta = !meta"
+          >
+          <p>Credits</p>
+        </div>
         </div>
       </div>
-    <!-- <div class="paragraph">
-        <div class="meta">
+    <div class="meta" v-if="meta === true">
+      <div class="meta-body">
           <SensesMeta :id="'transition-path-1'" />
-        </div>
-    </div> -->
+          <div @click="meta = !meta" class="meta-close">&#x3c; back to module</div>
+      </div>
+    </div>
     </div>
   </div>
 </template>
@@ -36,13 +45,13 @@
 import GlobalStrategy from './components/GlobalStrategy.vue'
 // import Legend from './components/Legend.vue'
 import SensesMenu from 'library/src/components/SensesMenu.vue'
-// import SensesMeta from 'library/src/components/SensesMeta.vue'
+import SensesMeta from 'library/src/components/SensesMeta.vue'
 
 export default {
   name: 'App',
   components: {
     SensesMenu,
-    // SensesMeta,
+    SensesMeta,
     GlobalStrategy
     // Legend
   },
@@ -50,7 +59,8 @@ export default {
     return {
       width: 0,
       height: 0,
-      element: 0
+      element: 0,
+      meta: false
     }
   },
   methods: {
@@ -58,8 +68,8 @@ export default {
       const { container: el } = this.$refs
       const totalWidth = el.clientWidth
       const totalHeight = el.clientHeight || el.parentNode.clientHeight
-      this.width = Math.max(totalWidth, 500)
-      this.height = Math.max(totalHeight, 500)
+      this.width = Math.min(totalWidth, 1500)
+      this.height = Math.min(totalHeight, 1000)
     }
   },
   mounted () {
@@ -83,6 +93,9 @@ export default {
 #app {
   .wrapper {
 
+    max-width: 1500px;
+    margin: 0 auto;
+
       .paragraph {
         padding-top: 100px;
         height: 60vh;
@@ -92,12 +105,9 @@ export default {
         .title {
             margin-bottom: $spacing;
           }
-
-        .meta {
-          margin-top: 20px;
-        }
       }
       .vis-container {
+        max-height: 900px;
         margin: 0 auto;
       }
     .vis-body {
@@ -108,6 +118,48 @@ export default {
         margin: 20px auto;
         padding-left: 1em;
         border-left: 1px solid $color-gray;
+      }
+
+      .meta-toggle {
+        position: absolute;
+        transform: rotate(-90deg);
+        cursor: pointer;
+        left: 97%;
+        top: 100%;
+        border: 1px solid getColor(neon, 100);
+        border-bottom: none;
+        border-radius: 4px 4px 0 0;
+        padding: 0px 4px 0px 4px;
+      }
+
+      .meta-toggle:hover {
+        color: $color-neon;
+        background-color: getColor(neon, 100);
+
+        transition: color 0.5s, background-color 0.5s;
+      }
+    }
+
+    .meta {
+      position: fixed;
+      top: 10%;
+      margin: 50px auto;
+      max-width: 1500px;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+
+      .meta-body {
+        margin: 0 auto;
+        width: 80%;
+        height: 50%;
+      }
+
+      .meta-close {
+        color: $color-neon;
+        font-size: 14px;
+        padding-top: 2px;
+        cursor: pointer;
       }
     }
     .selector {

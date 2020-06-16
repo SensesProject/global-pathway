@@ -28,7 +28,7 @@
         :y="(innerHeight / 2) / 4"
         />
     </g>
-    <text :x="dotsPosition[currentElement]" y="13">{{ currentElement }}</text>
+    <!-- <text :x="dotsPosition[currentElement]" y="13">{{ currentElement }}</text> -->
   </svg>
 </template>
 
@@ -68,7 +68,6 @@ export default {
       const { svg: el } = this.$refs
       const totalWidth = el.clientWidth
       const totalHeight = el.clientHeight || el.parentNode.clientHeight
-      console.log(totalWidth)
       this.innerWidth = totalWidth
       this.innerHeight = totalHeight
     },

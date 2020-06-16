@@ -1,37 +1,37 @@
 <template>
   <g class="bars">
     <g v-for="(year, y) in years" :key="`${y}-group`">
-      <rect v-for="(el, i) in year" :key="`${i}-rect`"
+      <g v-for="(el, i) in year" :key="`${i}-group`"
+      :class="{invisible: currentElement < 4 && el.period != 2020 || currentElement === 4 && el.period != 2020 && (el.variable === 'BECCS' || el.variable === 'Land-Use Change')}">
+      <rect
       :class="
       [el.variable,
-      {
-        invisible: currentElement < 4 && el.period != 2020 ||
-        currentElement === 4 &&
-          el.period != 2020 &&
-            (el.variable === 'BECCS' || el.variable === 'Land-Use Change')
-      }
+      {nostep: currentElement >= 3 | currentElement === 0 ? currentSector[i] != el.variable : currentSector != el.variable }
       ]"
       width="10"
       :height="el.height"
       :x="el.period === 2050 ? x(el.period - 1.5) : x(el.period - 1.5)"
       :y="el.position"
       />
-      <line v-for="(thick, t) in year" :key="`${t}-thick`"
-      class="thick"
+      <line class="thick"
       :class="
-      [thick.variable,
-      {
-        invisible: currentElement < 4 && thick.period != 2020 ||
-        currentElement === 4 &&
-          thick.period != 2020 &&
-          (thick.variable === 'BECCS' || thick.variable === 'Land-Use Change')
-      }
+      [el.variable,
+      {nostep: currentElement >= 3 | currentElement === 0 ? currentSector[i] != el.variable : currentSector != el.variable }
       ]"
-      :x1="thick.period === 2050 ? x(thick.period - 1.5) : x(thick.period - 1.5)"
-      :x2="thick.period === 2050 ? x(thick.period - 1.5) + 10 : x(thick.period - 1.5) + 10"
-      :y1="thick.y"
-      :y2="thick.y"
+      :x1="el.period === 2050 ? x(el.period - 1.5) : x(el.period - 1.5)"
+      :x2="el.period === 2050 ? x(el.period - 1.5) + 10 : x(el.period - 1.5) + 10"
+      :y1="el.y"
+      :y2="el.y"
       />
+      <text
+      :class="[el.variable,
+      {invisible: currentElement >= 3 | currentElement === 0 ? true : currentSector != el.variable }
+      ]"
+      :x="el.period === 2050 ? x(2043) : x(2022)"
+      :y="el.y">
+        {{el.roundvalue + '%'}}
+      </text>
+      </g>
     </g>
   </g>
 </template>
@@ -52,7 +52,8 @@ export default {
   },
   data () {
     return {
-      positions: [2015, 2050]
+      positions: [2015, 2050],
+      currentSector: ['Land-Use Change', 'BECCS', 'Transport', 'Buildings', 'Electricity', 'Non-electric Supply', 'Industry']
     }
   },
   computed: {
@@ -92,6 +93,7 @@ export default {
             return {
               variable: row.variable,
               value: row.value,
+              roundvalue: Math.round(row.value * 100),
               period: row.period,
               position: row.variable === 'Land-Use Change' ? y(sortedValues[1]) : y(ceiling),
               y: row.variable === 'Land-Use Change' ? y(sortedValues[1]) : y(ceiling),
@@ -102,6 +104,17 @@ export default {
         .entries(this.data)
     },
     ungroup () { return map(this.stackData, kv => kv.value).reduce((x, y) => x.concat(y)) }
+  },
+  watch: {
+    currentElement (current, previous) {
+      if (current === 1) {
+        this.currentSector = 'Electricity'
+      } else if (current === 2) {
+        this.currentSector = 'Transport'
+      } else {
+        this.currentSector = map(this.stackData[0].value, d => { return d.variable })
+      }
+    }
   }
 }
 </script>
@@ -114,6 +127,11 @@ export default {
 svg {
   .invisible {
     visibility: hidden;
+  }
+
+  .nostep {
+    fill-opacity: 0.1;
+    stroke-opacity: 0.1;
   }
 }
 
