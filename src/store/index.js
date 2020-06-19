@@ -6,7 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     currentStrategy: 'None',
-    currentElement: 0
+    currentElement: 0,
+    currentSector: 'None',
+    highlight: ''
   },
   mutations: {
     changeStrategy (state, strategy) {
@@ -14,6 +16,12 @@ export default new Vuex.Store({
     },
     changeElement (state, element) {
       state.currentElement = element
+    },
+    changeSector (state, sector) {
+      state.currentSector = sector
+    },
+    storeHighlight (state, highlight) {
+      state.highlight = highlight
     }
   },
   actions: {
@@ -23,6 +31,13 @@ export default new Vuex.Store({
     async newElement ({ commit }, element) {
       commit('changeElement', element)
       // console.log(element)
+    },
+    async newSector ({ commit }, sector) {
+      commit('changeSector', sector)
+      // console.log(element)
+    },
+    async newHighlight ({ commit }, highlight) {
+      commit('storeHighlight', highlight)
     }
   },
   modules: {

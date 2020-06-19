@@ -25,7 +25,10 @@
     <div class="label">
       <div class="description label_rows">
         <Selector :descriptions="Descriptions"/>
-        <p class="text">{{ Descriptions.steps[currentElement] }}</p>
+          <TextBlocks />
+        <!-- <p class="text">
+          {{ Descriptions.steps[currentElement] }}
+        </p> -->
       </div>
       <div class="legend legend-row"><Legend :element="currentElement"/></div>
     </div>
@@ -47,6 +50,7 @@ import Strategy from './Strategies.vue'
 import Selector from './subcomponents/Selector.vue'
 import Bars from './Bars.vue'
 import Legend from './Legend.vue'
+import TextBlocks from './TextBlocks.vue'
 
 export default {
   name: 'GlobalStrategy',
@@ -56,7 +60,8 @@ export default {
     Strategy,
     Bars,
     Legend,
-    Selector
+    Selector,
+    TextBlocks
   },
   props: {
     width: {

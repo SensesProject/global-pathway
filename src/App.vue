@@ -27,7 +27,7 @@
           class="meta-toggle"
           @click="meta = !meta"
           >
-          <p>Credits</p>
+          <p>References, downloads and explore</p>
         </div>
         </div>
       </div>
@@ -124,10 +124,12 @@ export default {
         position: absolute;
         transform: rotate(-90deg);
         cursor: pointer;
-        left: 97%;
+        left: 88.6%;
+        width: 300px;
         top: 100%;
         border: 1px solid getColor(neon, 100);
         border-bottom: none;
+        text-align: center;
         border-radius: 4px 4px 0 0;
         padding: 0px 4px 0px 4px;
       }
@@ -142,7 +144,7 @@ export default {
 
     .meta {
       position: fixed;
-      top: 10%;
+      top: 5%;
       margin: 50px auto;
       max-width: 1500px;
       width: 100%;

@@ -130,8 +130,8 @@ svg {
   }
 
   .nostep {
-    fill-opacity: 0.1;
-    stroke-opacity: 0.1;
+    fill-opacity: 0.2;
+    stroke-opacity: 0.2;
   }
 }
 
