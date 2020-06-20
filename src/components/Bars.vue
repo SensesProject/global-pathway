@@ -23,16 +23,37 @@
       :y1="el.y"
       :y2="el.y"
       />
-      <text
+      <g
       :class="[el.variable,
-      {invisible: currentElement >= 3 | currentElement === 0 ? true : currentSector != el.variable }
+      { invisible: currentElement >= 3 | currentElement === 0 ? true : currentSector != el.variable },
+      { textvis: currentElement === 0 ? highlight === el.variable && el.period === 2020 :  highlight === el.variable}
       ]"
+      >
+      <line
+      :class="el.variable"
+      :x1="el.period === 2050 ? x(2043) : x(2021)"
+      :x2="el.period === 2050 ? x(2043) : x(2020)"
+      :y1="el.y + el.textHeight - 5"
+      :y2="el.y + el.textHeight - 5"
+      />
+      <rect
+      :class="el.variable"
+      :x="el.period === 2050 ? x(2042) : x(2021)"
+      :y="el.y + el.textHeight - 20"
+      width="40"
+      height="30"
+      rx="5"
+      />
+      <text
+      :class="el.variable"
       :x="el.period === 2050 ? x(2043) : x(2022)"
-      :y="el.y">
+      :y="el.y + el.textHeight">
         {{el.roundvalue + '%'}}
       </text>
+    </g>
       </g>
     </g>
+    <circle class="circlemark" :cx="x(2050 - 1.5)" :cy="y(-0.2)" r="15" v-if="currentElement === 6"/>
   </g>
 </template>
 
@@ -57,7 +78,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentElement']),
+    ...mapState(['currentElement', 'highlight']),
     years () {
       return {
         firstYear: filter(this.ungroup, d => d.period === 2020),
@@ -90,6 +111,7 @@ export default {
 
             const floorH = i === 0 ? 0 : sortedValues.slice(0, i).reduce((a, b) => a + b)
             const ceilingH = sortedValues.slice(0, i + 1).reduce((a, b) => a + b)
+
             return {
               variable: row.variable,
               value: row.value,
@@ -97,7 +119,8 @@ export default {
               period: row.period,
               position: row.variable === 'Land-Use Change' ? y(sortedValues[1]) : y(ceiling),
               y: row.variable === 'Land-Use Change' ? y(sortedValues[1]) : y(ceiling),
-              height: Math.abs(y(ceilingH) - y(floorH))
+              height: Math.abs(y(ceilingH) - y(floorH)),
+              textHeight: (Math.abs(y(ceilingH) - y(floorH)) / 2) + 2
             }
           })
         })
@@ -132,6 +155,20 @@ svg {
   .nostep {
     fill-opacity: 0.2;
     stroke-opacity: 0.2;
+  }
+  .textvis {
+    visibility: visible;
+  }
+
+  .mark {
+    // fill: $color-violet;
+  }
+
+  .circlemark {
+    stroke-width: 2px;
+    fill: none;
+    stroke: $color-violet;
+    stroke-opacity: 1;
   }
 }
 
@@ -199,5 +236,35 @@ line {
     stroke: $non-electric-stroke;
   }
 
+}
+
+text {
+  &.Change {
+    fill: $landchange-stroke;
+  }
+
+  &.BECCS {
+    fill: $BECCS-stroke;
+  }
+
+  &.Transport {
+    fill: $transport-stroke;
+  }
+
+  &.Industry {
+    fill: $industry-stroke;
+  }
+
+  &.Electricity {
+    fill: $electricity-stroke;
+  }
+
+  &.Buildings {
+    fill: $building-stroke;
+  }
+
+  &.Non-electric {
+    fill: $non-electric-stroke;
+  }
 }
 </style>

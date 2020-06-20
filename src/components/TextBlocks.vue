@@ -4,13 +4,30 @@
       Across the four regions, the bulk of annual CO2 emissions currently comes
       from
       <span class="electricity"
-      @mouseover="onHover('electricity')"
+      @mouseover="onHover('Electricity')"
       @mouseleave="onHover('')"
       >electricity generation</span>,
-      <span class="transport">transport</span> and from
-      <span class="buildings">heating in buildings</span> and
-      <span class="industry">industry</span>.
-      The <span class="land">land sector</span> is a small carbon sink in
+      <span class="transport"
+      @mouseover="onHover('Transport')"
+      @mouseleave="onHover('')"
+      >transport</span>,
+      <span class="nonelectric"
+      @mouseover="onHover('Non-electric Supply')"
+      @mouseleave="onHover('')"
+      >non-electric supply</span> and from
+      <span class="buildings"
+      @mouseover="onHover('Buildings')"
+      @mouseleave="onHover('')"
+      >heating in buildings</span> and
+      <span class="industry"
+      @mouseover="onHover('Industry')"
+      @mouseleave="onHover('')"
+      >industry</span>.
+      The
+      <span class="land"
+      @mouseover="onHover('Land-Use Change')"
+      @mouseleave="onHover('')"
+      >land sector</span> is a small carbon sink in
       each of the regions as afforestation outweighs deforestation.
     </p>
     <p v-if="currentElement === 1">
@@ -38,7 +55,11 @@
       each of the regions reaches carbon neutrality by
       2050. Most importantly, emissions from the energy sector are strongly
       reduced up to 2050. The electricity generation is completely decarbonized,
-      yet some residual emissions remain in the <span class="transport">transport</span>
+      yet some residual emissions remain in the
+      <span class="transport"
+      @mouseover="onHover('Transport')"
+      @mouseleave="onHover('')"
+      >transport</span>
       and <span class="industry">industry sector</span>,
       which are more difficult to decarbonize.
     </p>
@@ -159,6 +180,10 @@ p {
     color: $building-stroke;
   }
 
+  .nonelectric {
+    color: $non-electric-stroke;
+  }
+
   .industry {
     color: $industry-stroke;
   }
@@ -174,7 +199,6 @@ p {
   .decarb {
     color: $color-yellow;
   }
-
 }
 
 </style>

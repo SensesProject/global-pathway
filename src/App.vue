@@ -107,7 +107,7 @@ export default {
           }
       }
       .vis-container {
-        max-height: 900px;
+        max-height: 1200px;
         margin: 0 auto;
       }
     .vis-body {
@@ -126,7 +126,7 @@ export default {
         cursor: pointer;
         left: 88.6%;
         width: 300px;
-        top: 100%;
+        top: 135vh;
         border: 1px solid getColor(neon, 100);
         border-bottom: none;
         text-align: center;

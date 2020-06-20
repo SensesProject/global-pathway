@@ -17,3 +17,15 @@ $industry-stroke: getColor(gray, 40);
 $electricity-stroke: getColor(yellow, 40);
 $building-stroke: getColor(violet, 40);
 $non-electric-stroke: getColor(orange, 40);
+
+//Animations
+@keyframes pulse {
+  0%, 100% {
+    stroke: $color-violet;
+    stroke-opacity: 0.1;
+  }
+  50% {
+    stroke: $color-violet;
+    stroke-opacity: 0.3;
+  }
+}
