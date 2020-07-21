@@ -18,6 +18,9 @@ $electricity-stroke: getColor(yellow, 40);
 $building-stroke: getColor(violet, 40);
 $non-electric-stroke: getColor(orange, 40);
 
+$gross-emi: getColor(blue, 40);
+$pol-emi: getColor(blue, 60);
+
 //Animations
 @keyframes pulse {
   0%, 100% {

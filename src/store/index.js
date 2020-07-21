@@ -8,7 +8,8 @@ export default new Vuex.Store({
     currentStrategy: 'None',
     currentElement: 0,
     currentSector: 'None',
-    highlight: ''
+    highlight: '',
+    meta: false
   },
   mutations: {
     changeStrategy (state, strategy) {
@@ -22,6 +23,9 @@ export default new Vuex.Store({
     },
     storeHighlight (state, highlight) {
       state.highlight = highlight
+    },
+    storeMeta (state, meta) {
+      state.meta = meta
     }
   },
   actions: {
@@ -38,6 +42,9 @@ export default new Vuex.Store({
     },
     async newHighlight ({ commit }, highlight) {
       commit('storeHighlight', highlight)
+    },
+    async metaToggle ({ commit }, meta) {
+      commit('storeMeta', meta)
     }
   },
   modules: {

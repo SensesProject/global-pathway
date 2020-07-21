@@ -1,20 +1,18 @@
 <template>
   <div class="global-strategy" ref="vis">
     <div v-for="(region, i) in regions" v-bind:key="region + i +'label'" class="single-region">
-      <div class="region_label" :class="region">
-        <div class="dotted">{{ region }}</div>
-      </div>
       <svg class="glob_strat" :class="region" :width="groupWidth" :height="groupHeight">
         <XAxis :years="years" :height="groupHeight" :margin="margin" :scale="scales.x"/>
+        <text class="region" :x="groupWidth / 2 + 10" :y="groupHeight -( groupHeight / 8)" text-anchor="middle">{{ region }}</text>
           <g :transform="`translate(${margin.left}, ${margin.top * 2})`">
               <transition name="component-fade" mode="out-in">
                 <Strategy :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years"/>
               </transition>
               <transition name="component-fade" mode="out-in">
                 <g>
-                  <path class="reference_lines pol_emi" :d="reference[i].PolEmi" v-show="currentElement >= 4"/>
-                  <path class="reference_lines ref_emi" :d="reference[i].RefEmi" v-show="currentElement >= 3"/>
-                  <path class="reference_lines gross_emi" :d="reference[i].GrossEmi" v-show="currentElement >= 4"/>
+                  <path class="reference_lines pol_emi" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].PolEmi" v-show="currentElement >= 4 && currentElement < 7 || currentElement === 13"/>
+                  <path class="reference_lines ref_emi" :class="{inactive: highlight !== 'No-Policy' && highlight !== ''}" :d="reference[i].RefEmi" v-show="currentElement >= 3"/>
+                  <path class="reference_lines gross_emi" :class="{inactive: highlight !== 'Gross-Policy' && highlight !== ''}" :d="reference[i].GrossEmi" v-show="currentElement >= 4 && currentElement < 7 || currentElement === 13"/>
                 </g>
               </transition>
               <Bars v-show="currentElement >= 0" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight"/>
@@ -26,9 +24,6 @@
       <div class="description label_rows">
         <Selector :descriptions="Descriptions"/>
           <TextBlocks />
-        <!-- <p class="text">
-          {{ Descriptions.steps[currentElement] }}
-        </p> -->
       </div>
       <div class="legend legend-row"><Legend :element="currentElement"/></div>
     </div>
@@ -94,12 +89,13 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentElement']),
+    ...mapState(['currentElement', 'highlight']),
     groupHeight () {
-      return this.innerHeight - 200
+      return this.innerHeight < 2000 ? this.innerHeight - (this.innerHeight / 4) : this.innerHeight / 2
     },
     groupWidth () {
-      return this.innerWidth / 5
+      const { innerWidth, margin } = this
+      return innerWidth < 600 ? innerWidth - (margin.left + margin.right) : innerWidth / 5
     },
     regionFilter () {
       const reference = _.map(this.regions, r => { return _.filter(this.referenceFilter, (data, d) => { return data.region === r }) })
@@ -157,7 +153,7 @@ export default {
       const { vis: el } = this.$refs
       const totalWidth = el.clientWidth
       const totalHeight = el.clientHeight || el.parentNode.clientHeight
-      this.innerWidth = Math.max(totalWidth, 500)
+      this.innerWidth = Math.max(totalWidth, 100)
       this.innerHeight = Math.max(totalHeight, 500)
     }
   },
@@ -200,6 +196,10 @@ export default {
       padding-left: 20px;
       width: 55%;
     }
+
+    .legend {
+      height: 90%;
+    }
   }
 
   .description {
@@ -216,15 +216,22 @@ export default {
 
 .single-region {
   width: 25%;
+  height: 80%;
   display: inline-flex;
   padding: 10px;
   padding-left: 40px;
 
   .region_label {
-    height: 5%;
+    width: 20%;
+    top: 100%;
     position: absolute;
-  }
 
+    .region {
+      font-size: 12px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+  }
 }
 
 svg {
@@ -240,6 +247,10 @@ svg {
     fill: none;
     stroke: $color-violet;
     stroke-width: 1.5px;
+
+    &.inactive {
+      stroke-opacity: 0.2;
+    }
 
   &.gross_emi {
     stroke: getColor(blue, 40);

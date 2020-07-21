@@ -153,10 +153,6 @@ path {
       stroke-opacity: 0.2;
     }
 
-    &.PolicyEmissions {
-      stroke: #dd5f84;
-    }
-
     &.ElectricityDecarbonization,
     &.Electrification {
       stroke: #ffd89a;

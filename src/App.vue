@@ -20,28 +20,29 @@
               Austarlia, EU28 (which includes ...),USA, Japan. The navigator on the
               bottom left part of the screen will allow you to build the charts step by step.
             </p>
+            <div
+              class="meta-toggle"
+              @click="toggleMeta(!meta)"
+              >
+              <p>References, downloads and explore</p>
+            </div>
       </div>
         <div class="vis-container">
           <GlobalStrategy :width="width" :height="height" :element="element"/>
-          <div
-          class="meta-toggle"
-          @click="meta = !meta"
-          >
-          <p>References, downloads and explore</p>
-        </div>
         </div>
       </div>
-    <div class="meta" v-if="meta === true">
-      <div class="meta-body">
-          <SensesMeta :id="'transition-path-1'" />
-          <div @click="meta = !meta" class="meta-close">&#x3c; back to module</div>
+      <div class="meta" v-if="meta === true">
+        <div class="meta-body">
+            <SensesMeta :id="'transition-path-1'" />
+            <div @click="toggleMeta(!meta)" class="meta-close">&#x3c; back to module</div>
+        </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import GlobalStrategy from './components/GlobalStrategy.vue'
 // import Legend from './components/Legend.vue'
 import SensesMenu from 'library/src/components/SensesMenu.vue'
@@ -51,17 +52,20 @@ export default {
   name: 'App',
   components: {
     SensesMenu,
-    SensesMeta,
-    GlobalStrategy
+    GlobalStrategy,
+    SensesMeta
     // Legend
   },
   data () {
     return {
       width: 0,
       height: 0,
-      element: 0,
-      meta: false
+      element: 0
     }
+  },
+  computed: {
+    ...mapState(['meta']),
+    ...mapActions(['storeMeta'])
   },
   methods: {
     calcSizes () {
@@ -70,6 +74,9 @@ export default {
       const totalHeight = el.clientHeight || el.parentNode.clientHeight
       this.width = Math.min(totalWidth, 1500)
       this.height = Math.min(totalHeight, 1000)
+    },
+    toggleMeta (meta) {
+      return this.$store.dispatch('metaToggle', meta)
     }
   },
   mounted () {
@@ -105,9 +112,17 @@ export default {
         .title {
             margin-bottom: $spacing;
           }
+
+        .meta-toggle {
+          text-transform: uppercase;
+          font-size: 12px;
+          text-decoration: underline;
+          color: $color-neon;
+          cursor: pointer;
+        }
       }
       .vis-container {
-        max-height: 1200px;
+        max-height: 900px;
         margin: 0 auto;
       }
     .vis-body {
@@ -118,27 +133,6 @@ export default {
         margin: 20px auto;
         padding-left: 1em;
         border-left: 1px solid $color-gray;
-      }
-
-      .meta-toggle {
-        position: absolute;
-        transform: rotate(-90deg);
-        cursor: pointer;
-        left: 88.6%;
-        width: 300px;
-        top: 135vh;
-        border: 1px solid getColor(neon, 100);
-        border-bottom: none;
-        text-align: center;
-        border-radius: 4px 4px 0 0;
-        padding: 0px 4px 0px 4px;
-      }
-
-      .meta-toggle:hover {
-        color: $color-neon;
-        background-color: getColor(neon, 100);
-
-        transition: color 0.5s, background-color 0.5s;
       }
     }
 
@@ -193,6 +187,52 @@ export default {
 
         .glyph-angle-left, .glyph-angle-right {
           font-size: 1.5em;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #app {
+    .wrapper {
+
+      .paragraph {
+        width: 80%;
+        height: 100vh;
+        margin-bottom: 20%;
+      }
+
+      .global-strategy {
+        .single-region {
+          display: inline-block;
+          width: 100%;
+          height: 10%;
+          margin: 0 auto;
+          padding: 10px;
+        }
+
+        .label {
+          display: block;
+          .label_rows {
+            width: 100%;
+
+            .textblock {
+              width: 90%;
+              margin: 0 auto;
+            }
+          }
+
+          .legend-row {
+            margin-top: 30px;
+            width: 100%;
+          }
+        }
+      }
+      .vis-body {
+        .meta-toggle {
+          position: relative;
+          left: 56%;
         }
       }
     }

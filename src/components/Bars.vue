@@ -3,6 +3,7 @@
     <g v-for="(year, y) in years" :key="`${y}-group`">
       <g v-for="(el, i) in year" :key="`${i}-group`"
       :class="{invisible: currentElement < 4 && el.period != 2020 || currentElement === 4 && el.period != 2020 && (el.variable === 'BECCS' || el.variable === 'Land-Use Change')}">
+      <circle class="circlemark" :cx="x(2050 - 1.5)" :cy="y(-0.2)" r="15" v-if="currentElement === 6"/>
       <rect
       :class="
       [el.variable,
@@ -53,7 +54,6 @@
     </g>
       </g>
     </g>
-    <circle class="circlemark" :cx="x(2050 - 1.5)" :cy="y(-0.2)" r="15" v-if="currentElement === 6"/>
   </g>
 </template>
 
@@ -167,8 +167,10 @@ svg {
   .circlemark {
     stroke-width: 2px;
     fill: none;
-    stroke: $color-violet;
-    stroke-opacity: 1;
+    fill: $color-violet;
+    fill-opacity: 0.2;
+    // animation-name: pulse;
+    // animation-duration: 2s;
   }
 }
 

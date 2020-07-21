@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="textblock">
     <p v-if="currentElement === 0">
       Across the four regions, the bulk of annual CO2 emissions currently comes
       from
