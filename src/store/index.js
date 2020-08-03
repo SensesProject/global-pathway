@@ -9,6 +9,7 @@ export default new Vuex.Store({
     currentElement: 0,
     currentSector: 'None',
     highlight: '',
+    country: '',
     meta: false
   },
   mutations: {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
     },
     changeSector (state, sector) {
       state.currentSector = sector
+    },
+    storeCountry (state, country) {
+      state.country = country
     },
     storeHighlight (state, highlight) {
       state.highlight = highlight
@@ -34,11 +38,12 @@ export default new Vuex.Store({
     },
     async newElement ({ commit }, element) {
       commit('changeElement', element)
-      // console.log(element)
     },
     async newSector ({ commit }, sector) {
       commit('changeSector', sector)
-      // console.log(element)
+    },
+    async newCountry ({ commit }, country) {
+      commit('storeCountry', country)
     },
     async newHighlight ({ commit }, highlight) {
       commit('storeHighlight', highlight)

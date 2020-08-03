@@ -4,21 +4,22 @@
     <div class="wrapper">
       <div class="vis-body" ref="container">
         <div class="paragraph">
-            <h1 class="title">Global Mitigation Pathways</h1>
-            <p>To be in line with the Paris Goal of limiting global temperature
-              rise to 1.5-2°C, Industrialized Economies need to reach net-zero
-              CO2 emissions by 2050. This requires a major transition to a low-carbon
-              economy in only 30 years. But, how can they achieve this? Here,
-              we show simulation results that outline possible mitigation
-              pathways towards carbon neutrality by 2050 for the EU, Japan,
+            <h1 class="title">Net-zero Pathways for Industrialized Economies</h1>
+            <p>
+              To be in line with the Paris goal of limiting global temperature
+              rise to 1.5 to 2°C, Industrialized Economies need to move towards
+              net-zero CO2 emissions by 2050. This requires a major transition
+              to a low-carbon economy in only 30 years. But, how can they achieve
+              this? Here, we show simulation results that outline possible mitigation
+              pathways towards net-zero CO2 emissions by 2050 for the EU, Japan,
               Australia and the US. With this tool, you will learn about how
               different mitigation strategies could play together for bending
-              down the emission trajectories in the respective regions.
+              down CO2 emission trajectories in the respective regions.
             </p>
             <p class="suggestions">
               By scrolling down you will be presented with graphs for four regions:
-              Austarlia, EU28 (which includes ...),USA, Japan. The navigator on the
-              bottom left part of the screen will allow you to build the charts step by step.
+              Australia, EU28, USA, Japan. The navigator on the bottom left part
+              of the screen will allow you to build the charts step by step.
             </p>
             <div
               class="meta-toggle"
@@ -33,7 +34,7 @@
       </div>
       <div class="meta" v-if="meta === true">
         <div class="meta-body">
-            <SensesMeta :id="'transition-path-1'" />
+            <SensesMeta :id="'countries-pathways'" />
             <div @click="toggleMeta(!meta)" class="meta-close">&#x3c; back to module</div>
         </div>
       </div>

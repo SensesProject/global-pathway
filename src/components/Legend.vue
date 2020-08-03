@@ -7,23 +7,23 @@
          <div class="highlight" :class="classes" id="Electricity" @mouseover="onClick('Electricity')" @mouseleave="onClick('')">Electricity</div>
          <div class="highlight" :class="classes" id="Buildings" @mouseover="onClick('Buildings')" @mouseleave="onClick('')">Heating</div>
          <div class="highlight" :class="classes" id="Transport" @mouseover="onClick('Transport')" @mouseleave="onClick('')">Transport</div>
-         <div class="highlight" :class="classes" id="Land-Use-Change" @mouseover="onClick('Land-Use Change')" @mouseleave="onClick('')">Land Use</div>
          <div class="highlight" :class="classes" id="BECCS" @mouseover="onClick('BECCS')" @mouseleave="onClick('')">BECCS</div>
+         <div class="highlight" :class="classes" id="Land-Use-Change" @mouseover="onClick('Land-Use Change')" @mouseleave="onClick('')">Land Use</div>
      </div>
-     <div class="legend-sections emissions" v-if="element > 4">
-         <h5>Strategies →</h5>
-         <div class="dotted-legend" :class="classes" id="No-Policy" @mouseover="onClick('No-Policy')" @mouseleave="onClick('')">No Policies</div>
-         <div class="dotted-legend" :class="classes" id="Gross-Policy" @mouseover="onClick('Gross-Policy')" @mouseleave="onClick('')">Gross Policies</div>
-         <div class="dotted-legend" :class="classes" id="Policy" @mouseover="onClick('Policy')" @mouseleave="onClick('')">Policies</div>
+     <div class="legend-sections emissions" v-if="element >= 3">
+         <h5>Emissions →</h5>
+         <div class="dotted-legend" :class="classes" id="No-Policy" @mouseover="onClick('No-Policy')" @mouseleave="onClick('')">Current Policies</div>
+         <div class="dotted-legend" :class="classes" id="Gross-Policy" @mouseover="onClick('Gross-Policy')" @mouseleave="onClick('')" v-show="element >= 11">Net Zero (Gross)</div>
+         <div class="dotted-legend" :class="classes" id="Policy" @mouseover="onClick('Policy')" @mouseleave="onClick('')" v-show="element >= 12">Net Zero</div>
      </div>
-     <div class="legend-sections strategies" v-if="element > 7">
+     <div class="legend-sections strategies" v-if="element > 4">
          <div>
              <h5>Strategies →</h5>
-             <span class="strategy" :class="classes" id="Demand-Reduction" @mouseover="onClick('Demand-Reduction')" @mouseleave="onClick('')"><span>●</span> Demand Reduction</span>
-             <span class="strategy" :class="classes" id="Ele-Decarbonization" @mouseover="onClick('Ele-Decarbonization')" @mouseleave="onClick('')"><span>●</span> Electricity Decarbonization</span>
+             <span class="strategy" :class="classes" id="Demand-Reduction" @mouseover="onClick('EnergyDemandReduction')" @mouseleave="onClick('')"><span>●</span> Demand Reduction</span>
+             <span class="strategy" :class="classes" id="Ele-Decarbonization" @mouseover="onClick('ElectricityDecarbonization')" @mouseleave="onClick('')"><span>●</span> Electricity Decarbonization</span>
              <span class="strategy" :class="classes" id="Electrification" @mouseover="onClick('Electrification')" @mouseleave="onClick('')"><span>●</span> Electrification</span>
-             <span class="strategy" :class="classes" id="No-Ele-Decarb" @mouseover="onClick('No-Ele-Decarb')" @mouseleave="onClick('')"><span>●</span> Non Electricity Decarbonization</span>
-             <span class="strategy" :class="classes" id="Land-Use" @mouseover="onClick('Land-Use')" @mouseleave="onClick('')"><span>●</span> Land Use change and CDR</span>
+             <span class="strategy" :class="classes" id="No-Ele-Decarb" @mouseover="onClick('Nonelectricitydecarbonization')" @mouseleave="onClick('')"><span>●</span> Non Electricity Decarbonization</span>
+             <span class="strategy" :class="classes" id="Land-Use" @mouseover="onClick('LandUseChangeandCDR')" @mouseleave="onClick('')"><span>●</span> Land Use change and CDR</span>
          </div>
      </div>
  </div>
@@ -159,37 +159,33 @@ export default {
 
         &#Demand-Reduction {
             span {
-                color: #4D8CAE;
+                color: #9295c3;
             }
         }
 
         &#Ele-Decarbonization {
             span {
-                color: $electricity-stroke;
+                color: #a26f6e;
             }
         }
 
         &#Electrification {
             span {
-                color: $electricity-stroke;
+                color: #d67d39;
             }
         }
 
         &#No-Ele-Decarb {
             span {
-                color: $non-electric-stroke;
+                color: #294c80;
             }
         }
 
         &#Land-Use {
             span {
-                color: $landchange-stroke;
+                color: #a9ac73;
             }
         }
     }
-}
-
-svg {
-    background-color: lightblue;
 }
 </style>

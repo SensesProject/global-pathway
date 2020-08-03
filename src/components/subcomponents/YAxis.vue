@@ -1,8 +1,18 @@
 <template>
+  <g>
+    <defs>
+    <linearGradient id="MyGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="red" stop-opacity="0.1" />
+      <stop offset="30%" stop-color="white" stop-opacity="0" />
+    </linearGradient>
+    </defs>
+    <text :transform="`rotate(-90,${scale(1)},80)`" :x="scale(0.75)" :y="width - 20" class="labelaxis">Emissions (% 2020)</text>
+    <rect x="20" :width="width - (margin.right * 2) - 20" height="50" :y="scale(0.31)"/>
   <g class="y-axis">
-    <line v-for="(value, i) in valueTicks" :key="`${i}lines`" :y1="scale(value.value)" :y2="scale(value.value)" x1="20" :x2="width - (margin.right * 2)" />
+    <line v-for="(value, i) in valueTicks" :key="`${i}lines`" :class="value.value === 0 ? 'zero' : ''" :y1="scale(value.value)" :y2="scale(value.value)" x1="20" :x2="width - (margin.right * 2)" />
     <text v-for="(value, i) in valueTicks" :key="`${i}text`" :y="scale(value.value)" x="15">{{value.label}}%</text>
   </g>
+</g>
 </template>
 
 <script>
@@ -45,11 +55,23 @@ export default {
 line {
   stroke: $color-gray;
   stroke-dasharray: 1 2;
+
+  &.zero {
+    stroke: $color-red;
+  }
+}
+
+rect {
+  fill: url(#MyGradient);
 }
 
 text {
   text-anchor: end;
   font-size: 10px;
   fill: $color-gray;
+
+  &.labelaxis {
+    // transform:  translateX(-50%) translateY(-50%) rotate(-90);
+  }
 }
 </style>

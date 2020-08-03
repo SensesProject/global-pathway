@@ -32,96 +32,95 @@
     </p>
     <p v-if="currentElement === 1">
       Looking at the fingerprint of current emissions, there are also some
-      differences across the regions: While about 50% of Australian CO2 emissions
+      differences across the regions: While about 50% of <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australian</span> CO2 emissions
       come from <span class="electricity">electricity generation</span>,
-      this share is only about a quarter in the EU. This is due to the extensive
-      use of coal power in Australia, while the EU uses a higher percentage of
-      nuclear and renewable power sources.
+      this share is only about a quarter in the
+      <span class="country" @mouseover="countryChange('EU28')" @mouseleave="countryChange('')">🇪🇺 EU</span>.
+      This is due to the extensive use of coal power in Australia, while the EU
+      uses a higher percentage of nuclear and renewable power sources.
     </p>
     <p v-if="currentElement === 2">
-      The dominance of road travel in the US lead to significant share of
+      The dominance of road travel in the <span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">🇺🇸 US</span> lead to significant share of
       <span class="transport">transport</span> emissions.
-      Japan, in contrast, has a relatively small share of transport
-      emission due to modern electric rail infrastructure.
+      <span class="country" @mouseover="countryChange('Japan')" @mouseleave="countryChange('')">🇯🇵 Japan</span>,
+      in contrast, has a relatively small share of transport emission due to
+      modern electric rail infrastructure.
     </p>
     <p v-if="currentElement === 3">
-      Without additional policies to promote the low-carbon transformation,
-      CO2 emissions will not reach net-zero by 2050.
-      Instead, emissions are projected to decrease only slightly across the four
-      regions under a <span class="emissions">current policies</span> scenario.
+      Without additional policies to promote a low-carbon transformation, CO2
+      emissions will not reach net-zero by 2050. Instead, emissions are projected
+      to decrease only slightly across the four regions under a
+      <span class="emissions">current policies</span>
+      scenario, leaving a significant emission gap to a carbon-neutral economy.
     </p>
     <p v-if="currentElement === 4">
-      In our <span class="netzero">net-zero scenario</span>,
-      each of the regions reaches carbon neutrality by
-      2050. Most importantly, emissions from the energy sector are strongly
-      reduced up to 2050. The electricity generation is completely decarbonized,
-      yet some residual emissions remain in the
-      <span class="transport"
-      @mouseover="onHover('Transport')"
-      @mouseleave="onHover('')"
-      >transport</span>
-      and <span class="industry">industry sector</span>,
-      which are more difficult to decarbonize.
+      What needs to happen to bend down the current emissions trajectory?
+      To answer this, we simulated regional pathways for net-zero CO2 emissions
+      in 2050. We find that an interplay of different mitigation strategies is
+      needed to close the emissions gap to net-zero.
     </p>
     <p v-if="currentElement === 5">
-      To attain net-zero, residual energy emissions are compensated by carbon
-      dioxide removal (CDR) from the atmosphere. The main methods to generate
-      such negative emissions are <span class="land">afforestation (land-use change)</span>
-      and the use of bioenergy with subsequent
-      <span class="BECCS">carbon capture and storage (BECCS)</span>.
+      <span class="EnergyDemandReduction">The first mitigation strategy is to simply use less energy.</span>
+      All regions achieve some emission reductions in the net-zero scenario relative to the
+      current policies scenario by energy demand reduction through energy
+      efficiency improvements and a shift to less energy-intensive consumption.
     </p>
     <p v-if="currentElement === 6">
-      The significance of carbon dioxide removal (CDR) options may differ across
-      regions. Australia, for example, has large land areas available for
-      afforestation and low population density. These are promising conditions
-      for scaling up negative emissions.
+      Next, <span class="ElectricityDecarbonization">the decarbonization of electricity saves a significant share of
+      emissions.</span> By completely phasing-out coal and gas power for renewable
+      electricity in the net-zero scenario, regions can bring down their emissions
+      relative to the current policies scenario by a quarter
+      (<span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">🇺🇸 US</span>)
+      to a third
+      (<span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
     </p>
     <p v-if="currentElement === 7">
-      What needs to happen to bend down the current emissions trajectory? To
-      better understand the transition, we will attribute the emissions
-      reductions between the current policy and the net-zero scenario to
-      different mitigation strategies.
+      <span class="Electrification">To reduce emissions beyond the power sector, electrification of energy
+      appliances is key.</span> This includes, for example, switching to electric vehicles
+      or using heat pumps in buildings and industry (more on electrification in our
+      module <a class="extern" href="https://climatescenarios.org/sector-transition/">Towards an Electric Future</a>).
     </p>
     <p v-if="currentElement === 8">
-      The first mitigation strategy is to simply use less energy than in the
-      current policies scenario. This can be achieved by shifting consumption
-      patterns to less energy-intensive goods and services or by increasing
-      the energy efficiency of, for example, cars or industrial processes. All
-      regions achieve some significant emission reductions in the net-zero scenario
-      relative to the current policies scenario only by energy demand reduction.
+      <span class="Nonelectricitydecarbonization">The remaining energy demand, which cannot be electrified, needs to be switched
+      to low-carbon fuels such as hydrogen or biofuels.</span> Moreover, this component
+      of non-electricity decarbonization also includes emissions reductions in
+      district heating plants and from reduced oil refining relative to the
+      current policy scenario.
     </p>
     <p v-if="currentElement === 9" class="stepnine">
-      An even larger abatement effect has the
-      <span class="decarb">decarbonization of the electricity sector</span>.
-      By completely phasing-out coal and gas power for renewable electricity
-      in the net-zero scenario, the regions can bring down their emissions relative
-      to the current policies scenario by a quarter (US) to a third (Australia).
+      <span class="LandUseChangeandCDR">To attain net-zero CO2, residual energy emissions are compensated by carbon
+      dioxide removal (CDR) from the atmosphere.</span> The main methods to generate CDR
+      are afforestation (<span class="land"
+      @mouseover="onHover('Land-Use Change')"
+      @mouseleave="onHover('')"
+      >land-use change</span>) and the use of bioenergy with subsequent
+      carbon capture and storage (<span class="BECCS"
+      @mouseover="onHover('BECCS')"
+      @mouseleave="onHover('')"
+      >BECCS</span>).
     </p>
     <p v-if="currentElement === 10">
-      To reduce emissions beyond the power sector, electrification of energy
-      appliances is key. This includes, for example, switching to electric
-      vehicles or using heat pumps in buildings and industry.
+      The significance CDR options may differ across regions. Australia, for
+      example, has large land areas available for afforestation and low population
+      density. These are promising conditions for scaling up negative emissions.
     </p>
     <p v-if="currentElement === 11">
-      The remaining energy demand, which cannot be electrified, needs to be
-      switched to low-carbon fuels such as hydrogen or biofuels. Moreover,
-      emissions from oil refineries and gas or coal-powered district heating
-      plants, that are not needed anymore are avoided. All those emission r
-      eductions are subsumed under non-electricity decarbonization.
+      It makes sense to differentiate between <span class="gross">gross emissions</span> which do not include
+      CDR and net emissions. Large-scale CDR may reduce the need to abate emissions
+      in the energy sector (see <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
+      However, as CDR options are uncertain, the near-term energy transition should not rely on anticipating future CDR.
     </p>
     <p v-if="currentElement === 12">
-      To reach net-zero the remaining gap needs to be filled by reducing
-      emissions from land-use change (halt deforestation) and deploying carbon
-      dioxide removal (CDR) options such as afforestation and bioenergy with
-      carbon capture and storage (BECCS).
+      In the <span class="netzero">net-zero scenario</span>, residual gross emissions remain in the transport
+      and industry sector, in particular, as these are difficult to decarbonize.
+      While in <span class="country" @mouseover="countryChange('Japan')" @mouseleave="countryChange('')">🇯🇵 Japan</span> the decarbonization of industry will be crucial, a key
+      challenge for Australia and the US is the low-carbon transition of transport.
     </p>
     <p v-if="currentElement === 13">
-      Carbon dioxide removal may reduce the need to abate emission in the energy
-      sector. While the EU and Japan reduce more emissions by electrification
-      and non-electricity decarbonization in our scenario, Australia uses more
-      carbon dioxide removal to get to net-zero. However, the future availability
-      of afforestation and BECCS is still uncertain. Hence, the energy transition
-      should not be postponed only by relying on CDR in the future.
+      Although CO2 represents the bulk of greenhouse gas (GHG) emissions,
+      the above pathways are not necessarily climate-neutral as methane and
+      nitrous oxide emissions are not included. To reach GHG neutrality in 2050
+      (the current <span class="country" @mouseover="countryChange('EU28')" @mouseleave="countryChange('')">🇪🇺 EU</span> target), CO2 emissions will likely need to be reduced even more.
     </p>
  </div>
 </template>
@@ -133,11 +132,14 @@ export default {
   name: 'TextBlocks',
   computed: {
     ...mapState(['currentElement']),
-    ...mapActions(['storeHighlight'])
+    ...mapActions(['storeHighlight', 'storeCountry'])
   },
   methods: {
     onHover (highlight) {
       return this.$store.dispatch('newHighlight', highlight)
+    },
+    countryChange (country) {
+      return this.$store.dispatch('newCountry', country)
     }
   }
 }
@@ -160,12 +162,22 @@ p {
     text-decoration-style: dashed;
   }
 
+  .country {
+    text-decoration: underline;
+  }
+
   .emissions {
     color: $color-red;
   }
 
-  .netzero {
+  .gross {
     color: getColor(blue, 40);
+  }
+
+  .netzero {
+    color: $pol-emi;
+    text-decoration: none;
+    border-bottom: 2px solid $pol-emi;
   }
 
   .electricity {
@@ -198,6 +210,31 @@ p {
 
   .decarb {
     color: $color-yellow;
+  }
+
+  .Nonelectricitydecarbonization {
+    text-decoration: none;
+    color: #294c80;
+  }
+
+  .EnergyDemandReduction {
+    text-decoration: none;
+    color: #9295c3;
+  }
+
+  .ElectricityDecarbonization {
+    text-decoration: none;
+    color: #a26f6e;
+  }
+
+  .Electrification {
+    text-decoration: none;
+    color: #d67d39;
+  }
+
+  .LandUseChangeandCDR {
+    text-decoration: none;
+    color: #a9ac73;
   }
 }
 

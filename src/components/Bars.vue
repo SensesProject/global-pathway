@@ -2,7 +2,7 @@
   <g class="bars">
     <g v-for="(year, y) in years" :key="`${y}-group`">
       <g v-for="(el, i) in year" :key="`${i}-group`"
-      :class="{invisible: currentElement < 4 && el.period != 2020 || currentElement === 4 && el.period != 2020 && (el.variable === 'BECCS' || el.variable === 'Land-Use Change')}">
+      :class="{invisible: currentElement < 3 && el.period != 2020 || currentElement < 9 && el.period != 2020 && (el.variable === 'BECCS' || el.variable === 'Land-Use Change')}">
       <circle class="circlemark" :cx="x(2050 - 1.5)" :cy="y(-0.2)" r="15" v-if="currentElement === 6"/>
       <rect
       :class="
@@ -32,23 +32,24 @@
       >
       <line
       :class="el.variable"
-      :x1="el.period === 2050 ? x(2043) : x(2021)"
-      :x2="el.period === 2050 ? x(2043) : x(2020)"
+      :x1="el.period === 2050 ? x(2047.5) : x(2021)"
+      :x2="el.period === 2050 ? x(2048.5) : x(2020)"
       :y1="el.y + el.textHeight - 5"
       :y2="el.y + el.textHeight - 5"
       />
-      <rect
-      :class="el.variable"
-      :x="el.period === 2050 ? x(2042) : x(2021)"
-      :y="el.y + el.textHeight - 20"
-      width="40"
-      height="30"
-      rx="5"
-      />
       <text
       :class="el.variable"
-      :x="el.period === 2050 ? x(2043) : x(2022)"
-      :y="el.y + el.textHeight">
+      class="shadow"
+      :text-anchor="el.period === 2050 ? 'end' : 'start'"
+      :x="el.period === 2050 ? x(2046.5) : x(2022)"
+      :y="el.y + el.textHeight - 4">
+        {{el.roundvalue + '%'}}
+      </text>
+      <text
+      :class="el.variable"
+      :text-anchor="el.period === 2050 ? 'end' : 'start'"
+      :x="el.period === 2050 ? x(2046.5) : x(2022)"
+      :y="el.y + el.textHeight - 4">
         {{el.roundvalue + '%'}}
       </text>
     </g>
@@ -149,7 +150,9 @@ export default {
 
 svg {
   .invisible {
+    fill-opacity: 0;
     visibility: hidden;
+    transition: fill-opacity 0.3s;
   }
 
   .nostep {
@@ -157,7 +160,9 @@ svg {
     stroke-opacity: 0.2;
   }
   .textvis {
+    transition: fill-opacity 0.3s;
     visibility: visible;
+    fill-opacity: 1;
   }
 
   .mark {
@@ -241,6 +246,12 @@ line {
 }
 
 text {
+  transition: fill-opacity 0.2s;
+  &.shadow {
+    fill: none;
+    stroke: white;
+    stroke-width: 2px;
+  }
   &.Change {
     fill: $landchange-stroke;
   }

@@ -5,17 +5,21 @@
     :key="`${i}chunk`"
     :class="[
     path.strategy,
-    {noselection: path.strategy != visible[i]}
+    {noselection: path.strategy != visible[i],
+    nohighlight: path.strategy !== highlight && highlight !== ''
+    }
     ]"
     :d="path.path"/>
-    <path
+    <!-- <path
     v-for="(path, i) in paths"
     :key="`${i}line`"
     class="border"
     :class="[path.strategy,
-    {noselection: path.strategy != visible[i]}
+    {noselection: path.strategy != visible[i],
+    nohighlight: path.strategy !== highlight && highlight !== ''
+    }
     ]"
-    :d="path.line"/>
+    :d="path.line"/> -->
   </g>
 </template>
 
@@ -34,7 +38,7 @@ export default {
     years: Array
   },
   computed: {
-    ...mapState(['currentStrategy', 'currentElement']),
+    ...mapState(['currentStrategy', 'currentElement', 'highlight']),
     strategies: function () {
       return uniq(map(this.data, d => d.variable))
     },
@@ -42,7 +46,7 @@ export default {
       const { x, y } = this
       return d3
         .area()
-        .x(d => x(d.period))
+        .x(d => x(d.period - 1))
         // .curve(d3.curveLinear)
         .y0(d => y(d.floor))
         .y1(d => y(d.ceiling))
@@ -51,7 +55,7 @@ export default {
       const { x, y } = this
       return d3
         .line()
-        .x(d => x(d.period))
+        .x(d => x(d.period - 1))
         .curve(d3.curveLinear)
         .y(d => y(d.ceiling))
     },
@@ -100,18 +104,18 @@ export default {
     },
     visible () {
       const strategies = []
-      if (this.currentElement === 8) {
+      if (this.currentElement === 5) {
         strategies.push('EnergyDemandReduction')
         return strategies
-      } if (this.currentElement === 9) {
+      } if (this.currentElement === 6) {
         strategies.push('EnergyDemandReduction', 'ElectricityDecarbonization')
-      } if (this.currentElement === 10) {
+      } if (this.currentElement === 7) {
         strategies.push('EnergyDemandReduction', 'ElectricityDecarbonization', 'Electrification')
-      } if (this.currentElement === 11) {
+      } if (this.currentElement === 8) {
         strategies.push('EnergyDemandReduction', 'ElectricityDecarbonization', 'Electrification', 'Nonelectricitydecarbonization')
-      } if (this.currentElement === 12) {
+      } if (this.currentElement === 9) {
         strategies.push('EnergyDemandReduction', 'ElectricityDecarbonization', 'Electrification', 'Nonelectricitydecarbonization', 'LandUseChangeandCDR')
-      } if (this.currentElement >= 13) {
+      } if (this.currentElement >= 10) {
         strategies.push('EnergyDemandReduction', 'ElectricityDecarbonization', 'Electrification', 'Nonelectricitydecarbonization', 'LandUseChangeandCDR', 'PolicyEmissions')
       }
       return strategies
@@ -122,57 +126,84 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 path {
-  fill-opacity: 0.2;
-  transition: visibility fill-opacity, 0.5s;
+  fill-opacity: 0.3;
+  transition: fill-opacity, 0.5s;
+  transition-delay: 0.5s;
 
   &.visible {
     fill-opacity: 0.3;
     transition: fill-opacity 0.5s;
+    transition-delay: 0.5s;
   }
 
   &.PolicyEmissions {
     fill: none;
   }
-  &.ElectricityDecarbonization,
+  &.ElectricityDecarbonization {
+    fill: #a26f6e;
+  }
+
   &.Electrification {
-    fill: #ffd89a;
+    fill: #d67d39;
   }
 
   &.LandUseChangeandCDR {
-    fill: #A3EAA6;
+    fill: #a9ac73;
   }
-  &.Nonelectricitydecarbonization,
+
+  &.Nonelectricitydecarbonization {
+    fill: #294c80;
+  }
+
   &.EnergyDemandReduction {
-    fill: #a3d1ea;
+    fill: #9295c3;
   }
 
   &.border {
+    transition: stroke-opacity 0.5s;
+    transition-delay: 0.5s;
     fill: none;
 
     &.invisible {
       stroke-opacity: 0.2;
     }
 
-    &.ElectricityDecarbonization,
+    &.ElectricityDecarbonization {
+      stroke: #a26f6e;
+    }
+
     &.Electrification {
-      stroke: #ffd89a;
+      stroke: #d67d39;
+      // stroke: #ffd89a;
     }
 
     &.LandUseChangeandCDR {
-      stroke: #A3EAA6;
+      stroke: #a9ac73;
+
+      // stroke: #A3EAA6;
     }
 
-    &.EnergyDemandReduction,
-    &.Nonelectricitydecarbonization,
+    &.EnergyDemandReduction {
+      stroke: #9295c3;
+    }
+
+    &.Nonelectricitydecarbonization {
+      stroke: #294c80;
+    }
+
     &.LandUseChangeandCDR {
-      stroke: #a3d1ea;
+      stroke: #a9ac73;
+      // stroke: #a3d1ea;
     }
 
   }
 }
 
-.noselection {
-  visibility: hidden;
+.noselection, .nohighlight {
+  fill-opacity: 0;
+  stroke-opacity: 0;
+  transition: fill-opacity stroke-opacity, 0.5s;
+  transition-delay: 0.5s;
 }
 
 </style>

@@ -1,8 +1,8 @@
 <template>
-  <svg height="10%" width="100%" ref="svg">
+  <svg height="20%" width="100%" ref="svg">
     <rect
       :x="dotsPosition[0] - 5"
-      y="5"
+      :y="innerHeight - (innerHeight / 2.5)"
       :width="dotsPosition[13] - 8"
       height="16"
       rx="8"
@@ -10,15 +10,23 @@
     <circle
       class="highlight-bg"
       :cx="dotsPosition[element]"
-      :cy="innerHeight / 2"
-      r="12"
+      :cy="innerHeight - (innerHeight / 4)"
+      r="13"
     />
     <g v-for="(d, i) in descriptions.steps" :key="`selector-${i}`">
       <circle
         :class="{highlight: element === (i)}"
         r="8"
         :cx="dotsPosition[i]"
-        :cy="innerHeight / 2"/>
+        :cy="innerHeight - (innerHeight / 4)"/>
+      <text
+      :class="{highlight: element === (i)}"
+      :x="dotsPosition[i]"
+      y="15"
+      :text-anchor="i < 10 ? 'start' : 'end'"
+      >
+        {{ title[i] }}
+      </text>
       <rect
         v-on:click="changeChapter(i)"
         class="clickarea"
@@ -45,7 +53,8 @@ export default {
     return {
       innerWidth: 0,
       innerHeight: 0,
-      element: 0
+      element: 0,
+      title: ['Current Emissions', 'Electricity', 'Transport', 'Current Pathway', 'Closing the Gap', 'Energy Demand Reduction', 'Electricity Decarbonization', 'Electrification', 'Non-electricity Decarbonization', 'CDR', 'CDR - Regional Perspective', 'Gross and Net Emissions', 'Residual Emissions', 'Climate-Neutral Pathways?']
     }
   },
   computed: {
@@ -73,6 +82,11 @@ export default {
     },
     changeChapter (el) {
       this.element = el
+      if (el === 10) {
+        this.$store.dispatch('newCountry', 'Australia')
+      } else {
+        this.$store.dispatch('newCountry', '')
+      }
       return this.$store.dispatch('newElement', el)
     }
   },
@@ -97,7 +111,8 @@ svg {
   // display: block;
 
   circle {
-   fill: getColor(violet, 40);
+   fill: white;
+   stroke: getColor(violet, 40);
 
    &.highlight {
      fill: $color-neon;
@@ -107,8 +122,18 @@ svg {
      fill: $color-neon;
      fill-opacity: 0.5;
      transition: cx 0.5s;
+     stroke: none;
    }
 
+  }
+
+  text {
+    fill: $color-neon;
+    text-transform: uppercase;
+    visibility: hidden;
+    &.highlight {
+      visibility:visible;
+    }
   }
 
   rect {

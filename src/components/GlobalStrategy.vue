@@ -3,20 +3,21 @@
     <div v-for="(region, i) in regions" v-bind:key="region + i +'label'" class="single-region">
       <svg class="glob_strat" :class="region" :width="groupWidth" :height="groupHeight">
         <XAxis :years="years" :height="groupHeight" :margin="margin" :scale="scales.x"/>
-        <text class="region" :x="groupWidth / 2 + 10" :y="groupHeight -( groupHeight / 8)" text-anchor="middle">{{ region }}</text>
-          <g :transform="`translate(${margin.left}, ${margin.top * 2})`">
+        <text class="region" :x="groupWidth / 2 + 10" :y="groupHeight -( groupHeight / 8)" text-anchor="middle">{{ icon[i] + ' ' + region }}</text>
+          <g :class="{visibleGraph: region !== country & country !== ''}" :transform="`translate(${margin.left}, ${margin.top * 2})`" >
               <transition name="component-fade" mode="out-in">
                 <Strategy :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years"/>
               </transition>
               <transition name="component-fade" mode="out-in">
                 <g>
-                  <path class="reference_lines pol_emi" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].PolEmi" v-show="currentElement >= 4 && currentElement < 7 || currentElement === 13"/>
+                  <path class="reference_lines area" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].RefArea" v-show="currentElement === 4"/>
+                  <path class="reference_lines pol_emi" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].PolEmi" v-show="currentElement >= 12"/>
                   <path class="reference_lines ref_emi" :class="{inactive: highlight !== 'No-Policy' && highlight !== ''}" :d="reference[i].RefEmi" v-show="currentElement >= 3"/>
-                  <path class="reference_lines gross_emi" :class="{inactive: highlight !== 'Gross-Policy' && highlight !== ''}" :d="reference[i].GrossEmi" v-show="currentElement >= 4 && currentElement < 7 || currentElement === 13"/>
+                  <path class="reference_lines gross_emi" :class="{inactive: highlight !== 'Gross-Policy' && highlight !== ''}" :d="reference[i].GrossEmi" v-show="currentElement >= 11"/>
                 </g>
               </transition>
-              <Bars v-show="currentElement >= 0" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight"/>
               <YAxis max="75000" :width="groupWidth" :margin="margin" :scale="scales.y"/>
+              <Bars v-show="currentElement >= 0" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight"/>
           </g>
       </svg>
     </div>
@@ -78,6 +79,7 @@ export default {
       Descriptions,
       regions: _.uniq(_.map(DecarbonStrategy, (s) => s.region)),
       years: _.uniq(_.map(DecarbonStrategy, (s) => s.period)),
+      icon: ['🇦🇺', '🇪🇺', '🇯🇵', '🇺🇸'],
       margin: {
         left: 15,
         top: 10,
@@ -89,7 +91,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentElement', 'highlight']),
+    ...mapState(['currentElement', 'highlight', 'country']),
     groupHeight () {
       return this.innerHeight < 2000 ? this.innerHeight - (this.innerHeight / 4) : this.innerHeight / 2
     },
@@ -129,9 +131,18 @@ export default {
       const years = this.years
       return d3
         .line()
-        .x((d, i) => x(years[i]))
+        .x((d, i) => x(years[i] - 1))
         .curve(d3.curveLinear)
         .y(d => (y(d)))
+    },
+    areagenerator: function () {
+      const { x, y } = this.scales
+      const years = this.years
+      return d3.area()
+        .x((d, i) => x(years[i] - 1))
+        .curve(d3.curveLinear)
+        .y0(d => (y(0)))
+        .y1(d => (y(d)))
     },
     reference () {
       const { references } = this.regionFilter
@@ -143,7 +154,8 @@ export default {
           variable: variables,
           GrossEmi: this.linegenerator(_.map(line[0], l => l.value)),
           PolEmi: this.linegenerator(_.map(line[1], l => l.value)),
-          RefEmi: this.linegenerator(_.map(line[2], l => l.value))
+          RefEmi: this.linegenerator(_.map(line[2], l => l.value)),
+          RefArea: this.areagenerator(_.map(line[2], l => l.value))
         }
       })
     }
@@ -226,17 +238,23 @@ export default {
     top: 100%;
     position: absolute;
 
-    .region {
-      font-size: 12px;
-      text-transform: uppercase;
-      text-align: center;
-    }
   }
 }
 
 svg {
+
+  g {
+    &.visibleGraph {
+      opacity: 0.4;
+    }
+  }
   text {
     font-family: $font-mono;
+
+    &.region {
+      font-size: 14px;
+      text-anchor: middle;
+    }
   }
 
   .graphic-line {
@@ -247,9 +265,13 @@ svg {
     fill: none;
     stroke: $color-violet;
     stroke-width: 1.5px;
+    transition: stroke-opacity 0.5s;
+    transition-delay: 0.5s;
 
     &.inactive {
-      stroke-opacity: 0.2;
+      stroke-opacity: 0;
+      transition: stroke-opacity 0.5s;
+      transition-delay: 0.5s;
     }
 
   &.gross_emi {
@@ -263,6 +285,12 @@ svg {
 
   &.ref_emi {
     stroke: $color-red;
+  }
+
+  &.area {
+    stroke: none;
+    fill: #FFE5F1;
+    fill-opacity: 0.5;
   }
   }
 }
