@@ -1,10 +1,10 @@
 <template>
   <div class="global-strategy" ref="vis">
-    <div v-for="(region, i) in regions" v-bind:key="region + i +'label'" class="single-region">
-      <svg class="glob_strat" :class="region" :width="groupWidth" :height="groupHeight">
+    <div v-for="(region, i) in regions" v-bind:key="region + i +'label'" class="single-region" :class="`${region}-region`">
+      <svg class="glob_strat" :class="region" :width="groupWidth" :height="svgHeight.height">
         <XAxis :years="years" :height="groupHeight" :margin="margin" :scale="scales.x"/>
-        <text class="region" :x="groupWidth / 2 + 10" :y="groupHeight -( groupHeight / 8)" text-anchor="middle">{{ icon[i] + ' ' + region }}</text>
-          <g :class="{visibleGraph: region !== country & country !== ''}" :transform="`translate(${margin.left}, ${margin.top * 2})`" >
+        <text class="region" :x="groupWidth / 2 + 10" :y="svgHeight.y" text-anchor="middle">{{ icon[i] + ' ' + region }}</text>
+          <g :class="{visibleGraph: region !== country & country !== ''}" :transform="transform" >
               <transition name="component-fade" mode="out-in">
                 <Strategy :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years"/>
               </transition>
@@ -21,12 +21,19 @@
           </g>
       </svg>
     </div>
-    <div class="label">
-      <div class="description label_rows">
-        <Selector :descriptions="Descriptions"/>
-          <TextBlocks />
+    <div class="label" :class="{storyinactive: open === false}">
+      <div class="mobile-togglers">
+        <p v-if="innerWidth < 600" class="togglenav" v-on:click="open = !open">{{ open === true ? 'close' : 'open'}}</p>
+        <p v-if="innerWidth < 600" class="togglestory" v-on:click="(story = true) & (legend = false)">Story</p>
+        <p v-if="innerWidth < 600" class="togglelegend" v-on:click="(legend = true) & (story = false)">Legend</p>
       </div>
-      <div class="legend legend-row"><Legend :element="currentElement"/></div>
+      <div class="description label_rows" :class="{showlegend: open === true}">
+        <Selector :descriptions="Descriptions"/>
+          <TextBlocks v-show="innerWidth < 600 ? legend === false & story === true : true"/>
+      </div>
+      <div class="legend legend-row" v-show="innerWidth < 600 ? open === true & legend === true & story === false : true">
+        <Legend :element="currentElement"/>
+      </div>
     </div>
   </div>
 </template>
@@ -87,17 +94,48 @@ export default {
         right: 15
       },
       innerWidth: 0,
-      innerHeight: 0
+      innerHeight: 0,
+      story: true,
+      legend: false,
+      open: true
     }
   },
   computed: {
     ...mapState(['currentElement', 'highlight', 'country']),
     groupHeight () {
-      return this.innerHeight < 2000 ? this.innerHeight - (this.innerHeight / 4) : this.innerHeight / 2
+      return this.innerHeight - (this.innerHeight / 3)
+    },
+    svgHeight () {
+      const { innerWidth, innerHeight, groupHeight } = this
+      let height = innerWidth
+      let y = groupHeight - (groupHeight / 8)
+
+      if (innerWidth < 600) {
+        height = innerHeight - groupHeight / 3
+      } else if (innerWidth >= 600 && innerWidth <= 1024) {
+        height = groupHeight - groupHeight / 5
+        y = groupHeight - groupHeight / 5
+      } else {
+        height = this.innerHeight - (this.innerHeight / 3)
+      }
+      return { height, y }
+    },
+    transform () {
+      const { margin } = this
+      return this.innerWidth < 600 ? 'translate(' + (margin.left + 4) + ',' + margin.top + ')' : 'translate(' + margin.left + ',' + margin.top + ')'
     },
     groupWidth () {
       const { innerWidth, margin } = this
-      return innerWidth < 600 ? innerWidth - (margin.left + margin.right) : innerWidth / 5
+      let width = innerWidth
+
+      if (innerWidth < 600) {
+        width = innerWidth - (margin.left + margin.right)
+      } else if (innerWidth >= 600 && innerWidth <= 1024) {
+        width = innerWidth / 2.5
+      } else {
+        width = innerWidth / 5
+      }
+      return width
     },
     regionFilter () {
       const reference = _.map(this.regions, r => { return _.filter(this.referenceFilter, (data, d) => { return data.region === r }) })
@@ -306,5 +344,60 @@ svg {
 .component-fade-enter, .component-fade-leave-to
 /* .component-fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+@media only screen and (max-width: 600px) {
+  .global-strategy {
+
+    .single-region {
+      height: 50%;
+    }
+
+    .US-region {
+      svg {
+        margin-bottom: 50% !important;
+      }
+    }
+
+    .label {
+      border-top: 1px solid $color-neon;
+      &.storyinactive {
+        width: 100%;
+        height: 180px !important;
+        transition: height 0.5s;
+      }
+
+    }
+
+    .showlegend {
+      height: 20% !important;
+    }
+
+    .mobile-togglers {
+      margin: 0 auto;
+      text-align: center;
+
+      .togglestory, .togglelegend, .togglenav {
+        display: inline-flex;
+        cursor: pointer;
+        padding-top: 5px;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 12px;
+        align-self: center;
+      }
+
+      .togglenav, .togglestory {
+        padding-right: 40px;
+      }
+    }
+    .description {
+      padding: 0 auto;
+
+      p {
+        margin: 0;
+      }
+    }
+  }
 }
 </style>

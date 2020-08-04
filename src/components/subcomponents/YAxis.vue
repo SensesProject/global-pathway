@@ -6,8 +6,8 @@
       <stop offset="30%" stop-color="white" stop-opacity="0" />
     </linearGradient>
     </defs>
-    <text :transform="`rotate(-90,${scale(1)},80)`" :x="scale(0.75)" :y="width - 20" class="labelaxis">Emissions (% 2020)</text>
-    <rect x="20" :width="width - (margin.right * 2) - 20" height="50" :y="scale(0.31)"/>
+    <text :transform="`rotate(-90,20,30)`" x="0" :y="width - 10" class="labelaxis">Emissions (% 2020)</text>
+    <rect x="20" :width="rectWidth" height="50" :y="scale(valueTicks[2].value) - 50"/>
   <g class="y-axis">
     <line v-for="(value, i) in valueTicks" :key="`${i}lines`" :class="value.value === 0 ? 'zero' : ''" :y1="scale(value.value)" :y2="scale(value.value)" x1="20" :x2="width - (margin.right * 2)" />
     <text v-for="(value, i) in valueTicks" :key="`${i}text`" :y="scale(value.value)" x="15">{{value.label}}%</text>
@@ -35,6 +35,7 @@ export default {
     }
   },
   computed: {
+    rectWidth () { return this.width - (this.margin.right * 2) - 20 },
     valueTicks () {
       const rangeNum = [-0.5, -0.25, 0, 0.25, 0.5, 0.75, 1]
       return map(rangeNum, r => {

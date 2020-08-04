@@ -1,24 +1,24 @@
 <template>
-  <svg height="20%" width="100%" ref="svg">
+  <svg height="55px" width="100%" ref="svg">
     <rect
       :x="dotsPosition[0] - 5"
       :y="innerHeight - (innerHeight / 2.5)"
       :width="dotsPosition[13] - 8"
-      height="16"
+      :height="rectheight"
       rx="8"
     />
     <circle
       class="highlight-bg"
       :cx="dotsPosition[element]"
-      :cy="innerHeight - (innerHeight / 4)"
-      r="13"
+      :cy="circlesposition"
+      :r="circleradius * 2"
     />
     <g v-for="(d, i) in descriptions.steps" :key="`selector-${i}`">
       <circle
         :class="{highlight: element === (i)}"
-        r="8"
+        :r="circleradius"
         :cx="dotsPosition[i]"
-        :cy="innerHeight - (innerHeight / 4)"/>
+        :cy="circlesposition"/>
       <text
       :class="{highlight: element === (i)}"
       :x="dotsPosition[i]"
@@ -59,8 +59,11 @@ export default {
   },
   computed: {
     ...mapState(['currentElement']),
+    circleradius () { return this.innerWidth < 600 ? 4 : 6 },
+    rectheight () { return this.circleradius * 2 },
+    circlesposition () { return this.innerWidth < 600 ? this.innerHeight - (this.innerHeight / 3) : this.innerHeight - (this.innerHeight / 3.5) },
     dotsPosition () {
-      let initialX = 20
+      let initialX = this.innerWidth < 600 ? 10 : 20
       return map(this.descriptions.steps, (pos, p, positions) => {
         const x = initialX
         initialX = x + (this.innerWidth / positions.length)
@@ -143,6 +146,15 @@ svg {
 
   .clickarea {
     fill-opacity: 0;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  svg {
+    transform: translate(15px,0);
+    padding-top: 10px;
+    border-top: 1px solid $color-neon;
+    width: 90%;
   }
 }
 </style>

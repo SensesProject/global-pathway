@@ -1,9 +1,8 @@
 <template>
   <g class="bars">
-    <g v-for="(year, y) in years" :key="`${y}-group`">
+    <g v-for="(year, ye) in years" :key="`${ye}-group`">
       <g v-for="(el, i) in year" :key="`${i}-group`"
       :class="{invisible: currentElement < 3 && el.period != 2020 || currentElement < 9 && el.period != 2020 && (el.variable === 'BECCS' || el.variable === 'Land-Use Change')}">
-      <circle class="circlemark" :cx="x(2050 - 1.5)" :cy="y(-0.2)" r="15" v-if="currentElement === 6"/>
       <rect
       :class="
       [el.variable,

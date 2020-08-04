@@ -188,4 +188,26 @@ export default {
         }
     }
 }
+
+@media only screen and (max-width: 600px) {
+    .legend-sections {
+        padding-right: 5px;
+    }
+    .highlight {
+        font-size: 14px;
+    }
+
+    .emissions {
+        div {
+            font-size: 14px;
+            display: inline;
+        }
+    }
+
+    .strategies {
+        div {
+            font-size: 14px;
+        }
+    }
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div id="app" ref="container">
-    <SensesMenu/>
+    <SensesMenu :id="'countries-pathways'" :disableScrollLock="true"/>
     <div class="wrapper">
       <div class="vis-body" ref="container">
         <div class="paragraph">
@@ -16,10 +16,15 @@
               different mitigation strategies could play together for bending
               down CO2 emission trajectories in the respective regions.
             </p>
-            <p class="suggestions">
+            <p class="suggestions" v-if="width > 600">
               By scrolling down you will be presented with graphs for four regions:
               Australia, EU28, USA, Japan. The navigator on the bottom left part
               of the screen will allow you to build the charts step by step.
+            </p>
+            <p class="suggestions" v-if="width < 600">
+              By scrolling down you will be presented with graphs for four regions:
+              Australia, EU28, USA, Japan. You can navigate through the steps by using the
+              navigator on demand by tapping on "story".
             </p>
             <div
               class="meta-toggle"
@@ -34,7 +39,7 @@
       </div>
       <div class="meta" v-if="meta === true">
         <div class="meta-body">
-            <SensesMeta :id="'countries-pathways'" />
+            <SensesMeta :id="'transition-risk'"/>
             <div @click="toggleMeta(!meta)" class="meta-close">&#x3c; back to module</div>
         </div>
       </div>
@@ -106,7 +111,7 @@ export default {
 
       .paragraph {
         padding-top: 100px;
-        height: 60vh;
+        height: 500px;
         width: 50%;
         margin: 0 auto;
 
@@ -194,13 +199,56 @@ export default {
   }
 }
 
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+  #app {
+    .wrapper {
+      .paragraph {
+        width: 80%;
+        height: 550px;
+      }
+      .global-strategy {
+        width: 100%;
+        .single-region {
+          padding-left: 25px;
+          width: 50%;
+          height: 45%;
+        }
+
+        .US-region, .Japan-region {
+          margin-bottom: 60%;
+        }
+
+        .label {
+          padding-top: 25px;
+          position: fixed;
+          bottom: 0;
+          background-color: rgba(255, 255, 255, 0.9);
+          height: 23%;
+
+          .legend-sections {
+            &.emissions {
+              div {
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 @media only screen and (max-width: 600px) {
   #app {
     .wrapper {
 
+      h1.title {
+        font-size: 25px;
+      }
+
       .paragraph {
         width: 80%;
-        height: 100vh;
+        height: 70%;
         margin-bottom: 20%;
       }
 
@@ -208,15 +256,22 @@ export default {
         .single-region {
           display: inline-block;
           width: 100%;
-          height: 10%;
           margin: 0 auto;
           padding: 10px;
         }
 
         .label {
           display: block;
+          position: fixed;
+          bottom: 0;
+          background-color: rgba(255, 255, 255, 0.9);
+          height: 50%;
+          transition: height 0.5s;
+
           .label_rows {
+            margin-top: 2%;
             width: 100%;
+            height: 100%;
 
             .textblock {
               width: 90%;
@@ -225,15 +280,14 @@ export default {
           }
 
           .legend-row {
-            margin-top: 30px;
             width: 100%;
+            height: 100%;
           }
         }
       }
       .vis-body {
         .meta-toggle {
           position: relative;
-          left: 56%;
         }
       }
     }
