@@ -5,10 +5,10 @@
     <text v-for="year in yearsTicks" v-bind:key="year + 'text'" y="20" :x="scale(year + 1.2)">{{year}}</text>
   </g>
   <rect v-for="year in yearsTicks" v-bind:key="year"
-  :y="0 + (margin.top * 7)"
+  :y="0 + (margin.top * 5)"
   :x="scale(year + 1.2)"
   width="1px"
-  :height="height - (height / 4) - (margin.top * 7)"
+  :height="height - (height / 4) - (margin.top * 5)"
   />
 </g>
 </template>

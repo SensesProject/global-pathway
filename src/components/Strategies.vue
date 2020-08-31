@@ -10,16 +10,6 @@
     }
     ]"
     :d="path.path"/>
-    <!-- <path
-    v-for="(path, i) in paths"
-    :key="`${i}line`"
-    class="border"
-    :class="[path.strategy,
-    {noselection: path.strategy != visible[i],
-    nohighlight: path.strategy !== highlight && highlight !== ''
-    }
-    ]"
-    :d="path.line"/> -->
   </g>
 </template>
 

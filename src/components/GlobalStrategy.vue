@@ -1,9 +1,23 @@
 <template>
   <div class="global-strategy" ref="vis">
+    <div class="label" :class="{storyinactive: open === false}">
+      <div class="mobile-togglers">
+        <p v-if="innerWidth < 600" class="togglenav" v-on:click="open = !open">{{ open === true ? 'close' : 'open'}}</p>
+        <p v-if="innerWidth < 600" class="togglestory" v-on:click="(story = true) & (legend = false)">Story</p>
+        <p v-if="innerWidth < 600" class="togglelegend" v-on:click="(legend = true) & (story = false)">Legend</p>
+      </div>
+      <div class="description label_rows" :class="{showlegend: open === true}">
+        <Selector :descriptions="Descriptions"/>
+          <TextBlocks v-show="innerWidth < 600 ? legend === false & story === true : true"/>
+      </div>
+      <div class="legend legend-row" v-show="innerWidth < 600 ? open === true & legend === true & story === false : true">
+        <Legend :element="currentElement"/>
+      </div>
+    </div>
     <div v-for="(region, i) in regions" v-bind:key="region + i +'label'" class="single-region" :class="`${region}-region`">
       <svg class="glob_strat" :class="region" :width="groupWidth" :height="svgHeight.height">
         <XAxis :years="years" :height="groupHeight" :margin="margin" :scale="scales.x"/>
-        <text class="region" :x="groupWidth / 2 + 10" :y="svgHeight.y" text-anchor="middle">{{ icon[i] + ' ' + region }}</text>
+        <text class="region" :x="groupWidth / 2 + 10" y="30" text-anchor="middle">{{ icon[i] + ' ' + region }}</text>
           <g :class="{visibleGraph: region !== country & country !== ''}" :transform="transform" >
               <transition name="component-fade" mode="out-in">
                 <Strategy :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years"/>
@@ -20,20 +34,6 @@
               <Bars v-show="currentElement >= 0" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight"/>
           </g>
       </svg>
-    </div>
-    <div class="label" :class="{storyinactive: open === false}">
-      <div class="mobile-togglers">
-        <p v-if="innerWidth < 600" class="togglenav" v-on:click="open = !open">{{ open === true ? 'close' : 'open'}}</p>
-        <p v-if="innerWidth < 600" class="togglestory" v-on:click="(story = true) & (legend = false)">Story</p>
-        <p v-if="innerWidth < 600" class="togglelegend" v-on:click="(legend = true) & (story = false)">Legend</p>
-      </div>
-      <div class="description label_rows" :class="{showlegend: open === true}">
-        <Selector :descriptions="Descriptions"/>
-          <TextBlocks v-show="innerWidth < 600 ? legend === false & story === true : true"/>
-      </div>
-      <div class="legend legend-row" v-show="innerWidth < 600 ? open === true & legend === true & story === false : true">
-        <Legend :element="currentElement"/>
-      </div>
     </div>
   </div>
 </template>
@@ -103,12 +103,12 @@ export default {
   computed: {
     ...mapState(['currentElement', 'highlight', 'country']),
     groupHeight () {
-      return this.innerHeight - (this.innerHeight / 3)
+      return this.innerHeight - (this.innerHeight / 6)
     },
     svgHeight () {
       const { innerWidth, innerHeight, groupHeight } = this
       let height = innerWidth
-      let y = groupHeight - (groupHeight / 8)
+      let y = groupHeight - (groupHeight / 6)
 
       if (innerWidth < 600) {
         height = innerHeight - groupHeight / 3
@@ -231,8 +231,10 @@ export default {
   .label {
     margin: 0 auto;
     padding: 0px;
+    padding-top: 50px;
     display: flex;
     height: 40%;
+    border-top: 1px solid black;
 
     .label_rows {
       width: 45%;

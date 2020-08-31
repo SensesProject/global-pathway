@@ -39,7 +39,7 @@
       </div>
       <div class="meta" v-if="meta === true">
         <div class="meta-body">
-            <SensesMeta :id="'transition-risk'"/>
+            <SensesMeta :id="'countries-pathways'"/>
             <div @click="toggleMeta(!meta)" class="meta-close">&#x3c; back to module</div>
         </div>
       </div>
@@ -114,6 +114,7 @@ export default {
         height: 500px;
         width: 50%;
         margin: 0 auto;
+        margin-bottom: 100px;
 
         .title {
             margin-bottom: $spacing;

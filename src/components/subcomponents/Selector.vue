@@ -2,7 +2,7 @@
   <svg height="55px" width="100%" ref="svg">
     <rect
       :x="dotsPosition[0] - 5"
-      :y="innerHeight - (innerHeight / 2.5)"
+      :y="innerHeight - (innerHeight / 1.3)"
       :width="dotsPosition[13] - 8"
       :height="rectheight"
       rx="8"
@@ -22,7 +22,7 @@
       <text
       :class="{highlight: element === (i)}"
       :x="dotsPosition[i]"
-      y="15"
+      y="50"
       :text-anchor="i < 10 ? 'start' : 'end'"
       >
         {{ title[i] }}
@@ -61,7 +61,7 @@ export default {
     ...mapState(['currentElement']),
     circleradius () { return this.innerWidth < 600 ? 4 : 6 },
     rectheight () { return this.circleradius * 2 },
-    circlesposition () { return this.innerWidth < 600 ? this.innerHeight - (this.innerHeight / 3) : this.innerHeight - (this.innerHeight / 3.5) },
+    circlesposition () { return this.innerWidth < 600 ? this.innerHeight - (this.innerHeight / 3) : this.innerHeight - (this.innerHeight / 1.5) },
     dotsPosition () {
       let initialX = this.innerWidth < 600 ? 10 : 20
       return map(this.descriptions.steps, (pos, p, positions) => {

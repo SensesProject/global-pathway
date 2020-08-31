@@ -156,6 +156,7 @@ p {
   width: 95%;
   margin: 0 auto;
   margin-top: 10px;
+  font-size: 16px;
 
   span {
     text-decoration: underline;
