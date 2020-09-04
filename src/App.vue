@@ -1,7 +1,6 @@
 <template>
   <div id="app" ref="container">
-    <SensesMenu :id="'countries-pathways'" :disableScrollLock="true"/>
-    <div class="wrapper">
+    <SensesMenu :id="'countries-pathways'"/>
       <div class="vis-body" ref="container">
         <div class="paragraph">
             <h1 class="title">Net-zero Pathways for Industrialized Economies</h1>
@@ -16,50 +15,24 @@
               different mitigation strategies could play together for bending
               down CO2 emission trajectories in the respective regions.
             </p>
-            <p class="suggestions" v-if="width > 600">
-              By scrolling down you will be presented with graphs for four regions:
-              Australia, EU28, USA, Japan. The navigator on the bottom left part
-              of the screen will allow you to build the charts step by step.
-            </p>
-            <p class="suggestions" v-if="width < 600">
-              By scrolling down you will be presented with graphs for four regions:
-              Australia, EU28, USA, Japan. You can navigate through the steps by using the
-              navigator on demand by tapping on "story".
-            </p>
-            <div
-              class="meta-toggle"
-              @click="toggleMeta(!meta)"
-              >
-              <p>References, downloads and explore</p>
-            </div>
       </div>
         <div class="vis-container">
           <GlobalStrategy :width="width" :height="height" :element="element"/>
         </div>
       </div>
-      <div class="meta" v-if="meta === true">
-        <div class="meta-body">
-            <SensesMeta :id="'countries-pathways'"/>
-            <div @click="toggleMeta(!meta)" class="meta-close">&#x3c; back to module</div>
-        </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
 import GlobalStrategy from './components/GlobalStrategy.vue'
 // import Legend from './components/Legend.vue'
 import SensesMenu from 'library/src/components/SensesMenu.vue'
-import SensesMeta from 'library/src/components/SensesMeta.vue'
 
 export default {
   name: 'App',
   components: {
     SensesMenu,
-    GlobalStrategy,
-    SensesMeta
+    GlobalStrategy
     // Legend
   },
   data () {
@@ -69,10 +42,6 @@ export default {
       element: 0
     }
   },
-  computed: {
-    ...mapState(['meta']),
-    ...mapActions(['storeMeta'])
-  },
   methods: {
     calcSizes () {
       const { container: el } = this.$refs
@@ -80,9 +49,6 @@ export default {
       const totalHeight = el.clientHeight || el.parentNode.clientHeight
       this.width = Math.min(totalWidth, 1500)
       this.height = Math.min(totalHeight, 1000)
-    },
-    toggleMeta (meta) {
-      return this.$store.dispatch('metaToggle', meta)
     }
   },
   mounted () {
@@ -104,11 +70,6 @@ export default {
 @import "library/src/style/variables.scss";
 
 #app {
-  .wrapper {
-
-    max-width: 1500px;
-    margin: 0 auto;
-
       .paragraph {
         padding-top: 100px;
         height: 500px;
@@ -119,18 +80,10 @@ export default {
         .title {
             margin-bottom: $spacing;
           }
-
-        .meta-toggle {
-          text-transform: uppercase;
-          font-size: 12px;
-          text-decoration: underline;
-          color: $color-neon;
-          cursor: pointer;
-        }
       }
       .vis-container {
-        max-height: 900px;
         margin: 0 auto;
+        height: 200vh;
       }
     .vis-body {
       .suggestions {
@@ -140,29 +93,6 @@ export default {
         margin: 20px auto;
         padding-left: 1em;
         border-left: 1px solid $color-gray;
-      }
-    }
-
-    .meta {
-      position: fixed;
-      top: 5%;
-      margin: 50px auto;
-      max-width: 1500px;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(255, 255, 255, 0.8);
-
-      .meta-body {
-        margin: 0 auto;
-        width: 80%;
-        height: 50%;
-      }
-
-      .meta-close {
-        color: $color-neon;
-        font-size: 14px;
-        padding-top: 2px;
-        cursor: pointer;
       }
     }
     .selector {
@@ -197,7 +127,6 @@ export default {
         }
       }
     }
-  }
 }
 
 @media only screen and (min-width: 601px) and (max-width: 1024px) {
@@ -287,9 +216,6 @@ export default {
         }
       }
       .vis-body {
-        .meta-toggle {
-          position: relative;
-        }
       }
     }
   }

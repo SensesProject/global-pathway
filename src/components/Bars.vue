@@ -69,7 +69,8 @@ export default {
     x: Function,
     y: Function,
     margin: Object,
-    height: Number
+    height: Number,
+    currentElement: Number
   },
   data () {
     return {
@@ -78,7 +79,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentElement', 'highlight']),
+    ...mapState(['highlight']),
     years () {
       return {
         firstYear: filter(this.ungroup, d => d.period === 2020),

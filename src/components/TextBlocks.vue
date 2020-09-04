@@ -1,6 +1,7 @@
 <template>
   <div class="textblock">
-    <p v-if="currentElement === 0">
+    <IntersectionObserver :step="0">
+    <p>
       Across the four regions, the bulk of annual CO2 emissions currently comes
       from
       <span class="electricity"
@@ -30,7 +31,8 @@
       >land sector</span> is a small carbon sink in
       each of the regions as afforestation outweighs deforestation.
     </p>
-    <p v-if="currentElement === 1">
+    </IntersectionObserver>
+    <p>
       Looking at the fingerprint of current emissions, there are also some
       differences across the regions: While about 50% of <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australian</span> CO2 emissions
       come from <span class="electricity">electricity generation</span>,
@@ -39,33 +41,33 @@
       This is due to the extensive use of coal power in Australia, while the EU
       uses a higher percentage of nuclear and renewable power sources.
     </p>
-    <p v-if="currentElement === 2">
+    <p>
       The dominance of road travel in the <span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">🇺🇸 US</span> lead to significant share of
       <span class="transport">transport</span> emissions.
       <span class="country" @mouseover="countryChange('Japan')" @mouseleave="countryChange('')">🇯🇵 Japan</span>,
       in contrast, has a relatively small share of transport emission due to
       modern electric rail infrastructure.
     </p>
-    <p v-if="currentElement === 3">
+    <p>
       Without additional policies to promote a low-carbon transformation, CO2
       emissions will not reach net-zero by 2050. Instead, emissions are projected
       to decrease only slightly across the four regions under a
       <span class="emissions">current policies</span>
       scenario, leaving a significant emission gap to a carbon-neutral economy.
     </p>
-    <p v-if="currentElement === 4">
+    <p>
       What needs to happen to bend down the current emissions trajectory?
       To answer this, we simulated regional pathways for net-zero CO2 emissions
       in 2050. We find that an interplay of different mitigation strategies is
       needed to close the emissions gap to net-zero.
     </p>
-    <p v-if="currentElement === 5">
+    <p>
       <span class="EnergyDemandReduction">The first mitigation strategy is to simply use less energy.</span>
       All regions achieve some emission reductions in the net-zero scenario relative to the
       current policies scenario by energy demand reduction through energy
       efficiency improvements and a shift to less energy-intensive consumption.
     </p>
-    <p v-if="currentElement === 6">
+    <p>
       Next, <span class="ElectricityDecarbonization">the decarbonization of electricity saves a significant share of
       emissions.</span> By completely phasing-out coal and gas power for renewable
       electricity in the net-zero scenario, regions can bring down their emissions
@@ -74,20 +76,20 @@
       to a third
       (<span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
     </p>
-    <p v-if="currentElement === 7">
+    <p>
       <span class="Electrification">To reduce emissions beyond the power sector, electrification of energy
       appliances is key.</span> This includes, for example, switching to electric vehicles
       or using heat pumps in buildings and industry (more on electrification in our
       module <a class="extern" href="https://climatescenarios.org/sector-transition/">Towards an Electric Future</a>).
     </p>
-    <p v-if="currentElement === 8">
+    <p>
       <span class="Nonelectricitydecarbonization">The remaining energy demand, which cannot be electrified, needs to be switched
       to low-carbon fuels such as hydrogen or biofuels.</span> Moreover, this component
       of non-electricity decarbonization also includes emissions reductions in
       district heating plants and from reduced oil refining relative to the
       current policy scenario.
     </p>
-    <p v-if="currentElement === 9" class="stepnine">
+    <p>
       <span class="LandUseChangeandCDR">To attain net-zero CO2, residual energy emissions are compensated by carbon
       dioxide removal (CDR) from the atmosphere.</span> The main methods to generate CDR
       are afforestation (<span class="land"
@@ -99,24 +101,24 @@
       @mouseleave="onHover('')"
       >BECCS</span>).
     </p>
-    <p v-if="currentElement === 10">
+    <p>
       The significance CDR options may differ across regions. Australia, for
       example, has large land areas available for afforestation and low population
       density. These are promising conditions for scaling up negative emissions.
     </p>
-    <p v-if="currentElement === 11">
+    <p>
       It makes sense to differentiate between <span class="gross">gross emissions</span> which do not include
       CDR and net emissions. Large-scale CDR may reduce the need to abate emissions
       in the energy sector (see <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
       However, as CDR options are uncertain, the near-term energy transition should not rely on anticipating future CDR.
     </p>
-    <p v-if="currentElement === 12">
+    <p>
       In the <span class="netzero">net-zero scenario</span>, residual gross emissions remain in the transport
       and industry sector, in particular, as these are difficult to decarbonize.
       While in <span class="country" @mouseover="countryChange('Japan')" @mouseleave="countryChange('')">🇯🇵 Japan</span> the decarbonization of industry will be crucial, a key
       challenge for Australia and the US is the low-carbon transition of transport.
     </p>
-    <p v-if="currentElement === 13">
+    <p>
       Although CO2 represents the bulk of greenhouse gas (GHG) emissions,
       the above pathways are not necessarily climate-neutral as methane and
       nitrous oxide emissions are not included. To reach GHG neutrality in 2050
@@ -127,9 +129,13 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import IntersectionObserver from 'library/src/components/IntersectionObserver.vue'
 
 export default {
   name: 'TextBlocks',
+  components: {
+    IntersectionObserver
+  },
   computed: {
     ...mapState(['currentElement']),
     ...mapActions(['storeHighlight', 'storeCountry'])

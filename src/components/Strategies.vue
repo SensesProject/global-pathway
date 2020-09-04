@@ -25,10 +25,11 @@ export default {
     x: Function,
     y: Function,
     margin: Object,
-    years: Array
+    years: Array,
+    currentElement: Number
   },
   computed: {
-    ...mapState(['currentStrategy', 'currentElement', 'highlight']),
+    ...mapState(['currentStrategy', 'highlight']),
     strategies: function () {
       return uniq(map(this.data, d => d.variable))
     },

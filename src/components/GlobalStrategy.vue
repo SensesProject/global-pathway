@@ -1,40 +1,189 @@
 <template>
   <div class="global-strategy" ref="vis">
-    <div class="label" :class="{storyinactive: open === false}">
-      <div class="mobile-togglers">
-        <p v-if="innerWidth < 600" class="togglenav" v-on:click="open = !open">{{ open === true ? 'close' : 'open'}}</p>
-        <p v-if="innerWidth < 600" class="togglestory" v-on:click="(story = true) & (legend = false)">Story</p>
-        <p v-if="innerWidth < 600" class="togglelegend" v-on:click="(legend = true) & (story = false)">Legend</p>
-      </div>
-      <div class="description label_rows" :class="{showlegend: open === true}">
-        <Selector :descriptions="Descriptions"/>
-          <TextBlocks v-show="innerWidth < 600 ? legend === false & story === true : true"/>
-      </div>
-      <div class="legend legend-row" v-show="innerWidth < 600 ? open === true & legend === true & story === false : true">
-        <Legend :element="currentElement"/>
-      </div>
+    <LayoutScrollytelling>
+            <template v-slot:vis="{ width, height, step }">
+            <div class="visualization-container">
+            <div v-for="(region, i) in regions" v-bind:key="region + i +'label'" class="single-region" :class="`${region}-region`">
+              <svg class="glob_strat" :class="region" :width="groupWidth" :height="svgHeight.height">
+                <XAxis :years="years" :height="groupHeight" :margin="margin" :scale="scales.x"/>
+                <text class="region" :x="groupWidth / 2 + 10" y="10" text-anchor="middle">{{ icon[i] + ' ' + region }}</text>
+                  <g :class="{visibleGraph: region !== country & country !== ''}" :transform="transform" >
+                      <transition name="component-fade" mode="out-in">
+                        <Strategy :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years" :currentElement="step"/>
+                      </transition>
+                      <transition name="component-fade" mode="out-in">
+                        <g>
+                          <path class="reference_lines area" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].RefArea" v-show="step === 4"/>
+                          <path class="reference_lines pol_emi" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].PolEmi" v-show="step >= 12"/>
+                          <path class="reference_lines ref_emi" :class="{inactive: highlight !== 'No-Policy' && highlight !== ''}" :d="reference[i].RefEmi" v-show="step >= 3"/>
+                          <path class="reference_lines gross_emi" :class="{inactive: highlight !== 'Gross-Policy' && highlight !== ''}" :d="reference[i].GrossEmi" v-show="step >= 11"/>
+                        </g>
+                      </transition>
+                      <YAxis max="75000" :width="groupWidth" :margin="margin" :scale="scales.y"/>
+                      <Bars v-show="step >= 0" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight" :currentElement="step"/>
+                  </g>
+              </svg>
+            </div>
+          </div>
+        </template>
+        <div slot="text" class="observer">
+        <IntersectionObserver :step="0" align="left">
+        <p>
+          Across the four regions, the bulk of annual CO2 emissions currently comes
+          from
+          <span class="electricity"
+          @mouseover="onHover('Electricity')"
+          @mouseleave="onHover('')"
+          >electricity generation</span>,
+          <span class="transport"
+          @mouseover="onHover('Transport')"
+          @mouseleave="onHover('')"
+          >transport</span>,
+          <span class="nonelectric"
+          @mouseover="onHover('Non-electric Supply')"
+          @mouseleave="onHover('')"
+          >non-electric supply</span> and from
+          <span class="buildings"
+          @mouseover="onHover('Buildings')"
+          @mouseleave="onHover('')"
+          >heating in buildings</span> and
+          <span class="industry"
+          @mouseover="onHover('Industry')"
+          @mouseleave="onHover('')"
+          >industry</span>.
+          The
+          <span class="land"
+          @mouseover="onHover('Land-Use Change')"
+          @mouseleave="onHover('')"
+          >land sector</span> is a small carbon sink in
+          each of the regions as afforestation outweighs deforestation.
+        </p>
+        </IntersectionObserver>
+        <IntersectionObserver :step="1" align="left">
+        <p>
+          Looking at the fingerprint of current emissions, there are also some
+          differences across the regions: While about 50% of <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australian</span> CO2 emissions
+          come from <span class="electricity">electricity generation</span>,
+          this share is only about a quarter in the
+          <span class="country" @mouseover="countryChange('EU28')" @mouseleave="countryChange('')">🇪🇺 EU</span>.
+          This is due to the extensive use of coal power in Australia, while the EU
+          uses a higher percentage of nuclear and renewable power sources.
+        </p>
+        </IntersectionObserver>
+        <IntersectionObserver :step="2" align="left">
+        <p>
+          The dominance of road travel in the <span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">🇺🇸 US</span> lead to significant share of
+          <span class="transport">transport</span> emissions.
+          <span class="country" @mouseover="countryChange('Japan')" @mouseleave="countryChange('')">🇯🇵 Japan</span>,
+          in contrast, has a relatively small share of transport emission due to
+          modern electric rail infrastructure.
+        </p>
+      </IntersectionObserver>
+      <IntersectionObserver :step="3" align="left">
+        <p>
+          Without additional policies to promote a low-carbon transformation, CO2
+          emissions will not reach net-zero by 2050. Instead, emissions are projected
+          to decrease only slightly across the four regions under a
+          <span class="emissions">current policies</span>
+          scenario, leaving a significant emission gap to a carbon-neutral economy.
+        </p>
+      </IntersectionObserver>
+      <IntersectionObserver :step="4" align="left">
+        <p>
+          What needs to happen to bend down the current emissions trajectory?
+          To answer this, we simulated regional pathways for net-zero CO2 emissions
+          in 2050. We find that an interplay of different mitigation strategies is
+          needed to close the emissions gap to net-zero.
+        </p>
+      </IntersectionObserver>
+      <IntersectionObserver :step="5" align="left">
+        <p>
+          <span class="EnergyDemandReduction">The first mitigation strategy is to simply use less energy.</span>
+          All regions achieve some emission reductions in the net-zero scenario relative to the
+          current policies scenario by energy demand reduction through energy
+          efficiency improvements and a shift to less energy-intensive consumption.
+        </p>
+      </IntersectionObserver>
+      <IntersectionObserver :step="6" align="left">
+        <p>
+          Next, <span class="ElectricityDecarbonization">the decarbonization of electricity saves a significant share of
+          emissions.</span> By completely phasing-out coal and gas power for renewable
+          electricity in the net-zero scenario, regions can bring down their emissions
+          relative to the current policies scenario by a quarter
+          (<span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">🇺🇸 US</span>)
+          to a third
+          (<span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
+        </p>
+      </IntersectionObserver>
+      <IntersectionObserver :step="7" align="left">
+        <p>
+          <span class="Electrification">To reduce emissions beyond the power sector, electrification of energy
+          appliances is key.</span> This includes, for example, switching to electric vehicles
+          or using heat pumps in buildings and industry (more on electrification in our
+          module <a class="extern" href="https://climatescenarios.org/sector-transition/">Towards an Electric Future</a>).
+        </p>
+      </IntersectionObserver>
+      <IntersectionObserver :step="8" align="left">
+        <p>
+          <span class="Nonelectricitydecarbonization">The remaining energy demand, which cannot be electrified, needs to be switched
+          to low-carbon fuels such as hydrogen or biofuels.</span> Moreover, this component
+          of non-electricity decarbonization also includes emissions reductions in
+          district heating plants and from reduced oil refining relative to the
+          current policy scenario.
+        </p>
+      </IntersectionObserver>
+      <IntersectionObserver :step="9" align="left">
+        <p>
+          <span class="LandUseChangeandCDR">To attain net-zero CO2, residual energy emissions are compensated by carbon
+          dioxide removal (CDR) from the atmosphere.</span> The main methods to generate CDR
+          are afforestation (<span class="land"
+          @mouseover="onHover('Land-Use Change')"
+          @mouseleave="onHover('')"
+          >land-use change</span>) and the use of bioenergy with subsequent
+          carbon capture and storage (<span class="BECCS"
+          @mouseover="onHover('BECCS')"
+          @mouseleave="onHover('')"
+          >BECCS</span>).
+        </p>
+      </IntersectionObserver>
+      <IntersectionObserver :step="10" align="left">
+        <p>
+          The significance CDR options may differ across regions. Australia, for
+          example, has large land areas available for afforestation and low population
+          density. These are promising conditions for scaling up negative emissions.
+        </p>
+      </IntersectionObserver>
+      <IntersectionObserver :step="11" align="left">
+        <p>
+          It makes sense to differentiate between <span class="gross">gross emissions</span> which do not include
+          CDR and net emissions. Large-scale CDR may reduce the need to abate emissions
+          in the energy sector (see <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
+          However, as CDR options are uncertain, the near-term energy transition should not rely on anticipating future CDR.
+        </p>
+      </IntersectionObserver>
+      <IntersectionObserver :step="12" align="left">
+        <p>
+          In the <span class="netzero">net-zero scenario</span>, residual gross emissions remain in the transport
+          and industry sector, in particular, as these are difficult to decarbonize.
+          While in <span class="country" @mouseover="countryChange('Japan')" @mouseleave="countryChange('')">🇯🇵 Japan</span> the decarbonization of industry will be crucial, a key
+          challenge for Australia and the US is the low-carbon transition of transport.
+        </p>
+      </IntersectionObserver>
+      <IntersectionObserver :step="13" align="left">
+        <p>
+          Although CO2 represents the bulk of greenhouse gas (GHG) emissions,
+          the above pathways are not necessarily climate-neutral as methane and
+          nitrous oxide emissions are not included. To reach GHG neutrality in 2050
+          (the current <span class="country" @mouseover="countryChange('EU28')" @mouseleave="countryChange('')">🇪🇺 EU</span> target), CO2 emissions will likely need to be reduced even more.
+        </p>
+      </IntersectionObserver>
+     </div>
+  </LayoutScrollytelling>
+  <div class="meta-component">
+    <div>
+      <SensesMeta :id="'countries-pathways'"/>
     </div>
-    <div v-for="(region, i) in regions" v-bind:key="region + i +'label'" class="single-region" :class="`${region}-region`">
-      <svg class="glob_strat" :class="region" :width="groupWidth" :height="svgHeight.height">
-        <XAxis :years="years" :height="groupHeight" :margin="margin" :scale="scales.x"/>
-        <text class="region" :x="groupWidth / 2 + 10" y="30" text-anchor="middle">{{ icon[i] + ' ' + region }}</text>
-          <g :class="{visibleGraph: region !== country & country !== ''}" :transform="transform" >
-              <transition name="component-fade" mode="out-in">
-                <Strategy :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years"/>
-              </transition>
-              <transition name="component-fade" mode="out-in">
-                <g>
-                  <path class="reference_lines area" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].RefArea" v-show="currentElement === 4"/>
-                  <path class="reference_lines pol_emi" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].PolEmi" v-show="currentElement >= 12"/>
-                  <path class="reference_lines ref_emi" :class="{inactive: highlight !== 'No-Policy' && highlight !== ''}" :d="reference[i].RefEmi" v-show="currentElement >= 3"/>
-                  <path class="reference_lines gross_emi" :class="{inactive: highlight !== 'Gross-Policy' && highlight !== ''}" :d="reference[i].GrossEmi" v-show="currentElement >= 11"/>
-                </g>
-              </transition>
-              <YAxis max="75000" :width="groupWidth" :margin="margin" :scale="scales.y"/>
-              <Bars v-show="currentElement >= 0" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight"/>
-          </g>
-      </svg>
-    </div>
+  </div>
   </div>
 </template>
 
@@ -42,7 +191,10 @@
 // Libraries
 import * as d3 from 'd3'
 import _ from 'lodash'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import LayoutScrollytelling from 'library/src/components/LayoutScrollytelling.vue'
+import IntersectionObserver from 'library/src/components/IntersectionObserver.vue'
+import SensesMeta from 'library/src/components/SensesMeta.vue'
 
 // Data
 import DecarbonStrategy from '../assets/data/GlobalStrategy.json'
@@ -50,10 +202,10 @@ import Descriptions from '../assets/data/descriptions.json'
 import XAxis from './subcomponents/XAxis.vue'
 import YAxis from './subcomponents/YAxis.vue'
 import Strategy from './Strategies.vue'
-import Selector from './subcomponents/Selector.vue'
+// import Selector from './subcomponents/Selector.vue'
 import Bars from './Bars.vue'
-import Legend from './Legend.vue'
-import TextBlocks from './TextBlocks.vue'
+// import Legend from './Legend.vue'
+// import TextBlocks from './TextBlocks.vue'
 
 export default {
   name: 'GlobalStrategy',
@@ -62,9 +214,12 @@ export default {
     YAxis,
     Strategy,
     Bars,
-    Legend,
-    Selector,
-    TextBlocks
+    // Legend,
+    // Selector,
+    // TextBlocks,
+    LayoutScrollytelling,
+    IntersectionObserver,
+    SensesMeta
   },
   props: {
     width: {
@@ -102,21 +257,22 @@ export default {
   },
   computed: {
     ...mapState(['currentElement', 'highlight', 'country']),
+    ...mapActions(['storeHighlight', 'storeCountry']),
     groupHeight () {
-      return this.innerHeight - (this.innerHeight / 6)
+      return this.innerHeight / 2
     },
     svgHeight () {
       const { innerWidth, innerHeight, groupHeight } = this
-      let height = innerWidth
-      let y = groupHeight - (groupHeight / 6)
+      let height = innerHeight / 2
+      let y = groupHeight / 5
 
       if (innerWidth < 600) {
         height = innerHeight - groupHeight / 3
       } else if (innerWidth >= 600 && innerWidth <= 1024) {
-        height = groupHeight - groupHeight / 5
+        height = groupHeight / 2
         y = groupHeight - groupHeight / 5
       } else {
-        height = this.innerHeight - (this.innerHeight / 3)
+        height = this.innerHeight / 2
       }
       return { height, y }
     },
@@ -125,15 +281,15 @@ export default {
       return this.innerWidth < 600 ? 'translate(' + (margin.left + 4) + ',' + margin.top + ')' : 'translate(' + margin.left + ',' + margin.top + ')'
     },
     groupWidth () {
-      const { innerWidth, margin } = this
+      const { innerWidth } = this
       let width = innerWidth
 
       if (innerWidth < 600) {
-        width = innerWidth - (margin.left + margin.right)
+        width = innerWidth
       } else if (innerWidth >= 600 && innerWidth <= 1024) {
-        width = innerWidth / 2.5
+        width = innerWidth / 2
       } else {
-        width = innerWidth / 5
+        width = innerWidth / 4
       }
       return width
     },
@@ -161,7 +317,7 @@ export default {
         y: d3
           .scaleLinear()
           .domain([-1.5, 1.5])
-          .rangeRound([this.groupHeight, 0])
+          .rangeRound([this.groupHeight, -20])
       }
     },
     linegenerator: function () {
@@ -205,6 +361,12 @@ export default {
       const totalHeight = el.clientHeight || el.parentNode.clientHeight
       this.innerWidth = Math.max(totalWidth, 100)
       this.innerHeight = Math.max(totalHeight, 500)
+    },
+    onHover (highlight) {
+      return this.$store.dispatch('newHighlight', highlight)
+    },
+    countryChange (country) {
+      return this.$store.dispatch('newCountry', country)
     }
   },
   mounted () {
@@ -225,19 +387,31 @@ export default {
 @import "library/src/style/variables.scss";
 
 .global-strategy {
-  height: 80vh;
+  max-width: 1300px;
+  height: 90vh;
   margin: 0 auto;
+
+  .meta-component {
+    width: 1200px;
+    height: 500px;
+    margin: 5% auto;
+  }
+  .visualization-container {
+    width: 60%;
+    padding-top: 20px;
+    position: absolute;
+    right: 0;
+  }
 
   .label {
     margin: 0 auto;
     padding: 0px;
     padding-top: 50px;
-    display: flex;
-    height: 40%;
-    border-top: 1px solid black;
+    border-right: 1px solid black;
 
     .label_rows {
-      width: 45%;
+      width: 100%;
+      height: 60%;
 
       .text {
         width: 100%;
@@ -246,11 +420,11 @@ export default {
 
     .legend-row {
       padding-left: 20px;
-      width: 55%;
+      width: 100%;
     }
 
     .legend {
-      height: 90%;
+      height: 40%;
     }
   }
 
@@ -267,11 +441,11 @@ export default {
 }
 
 .single-region {
-  width: 25%;
-  height: 80%;
+  // width: 50%;
+  // height: 40%;
   display: inline-flex;
-  padding: 10px;
-  padding-left: 40px;
+  padding: 0px;
+  padding-left: 50px;
 
   .region_label {
     width: 20%;
