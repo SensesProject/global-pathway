@@ -2,13 +2,14 @@
   <g class="bars">
     <g v-for="(year, ye) in years" :key="`${ye}-group`">
       <g v-for="(el, i) in year" :key="`${i}-group`"
-      :class="{invisible: currentElement < 3 && el.period != 2020 || currentElement < 9 && el.period != 2020 && (el.variable === 'BECCS' || el.variable === 'Land-Use Change')}">
+      :transform="`translate(2, 0)`"
+      :class="{invisible: currentElement < 10 && el.period != 2020 || currentElement < 9 && el.period != 2020 && (el.variable != 'BECCS' || el.variable != 'Land-Use Change')}">
       <rect
       :class="
       [el.variable,
       {nostep: currentElement >= 3 | currentElement === 0 ? currentSector[i] != el.variable : currentSector != el.variable }
       ]"
-      width="10"
+      :width="currentElement >= 3 || currentElement < 1 ? 10 : 20"
       :height="el.height"
       :x="el.period === 2050 ? x(el.period - 1.5) : x(el.period - 1.5)"
       :y="el.position"
@@ -18,8 +19,8 @@
       [el.variable,
       {nostep: currentElement >= 3 | currentElement === 0 ? currentSector[i] != el.variable : currentSector != el.variable }
       ]"
-      :x1="el.period === 2050 ? x(el.period - 1.5) : x(el.period - 1.5)"
-      :x2="el.period === 2050 ? x(el.period - 1.5) + 10 : x(el.period - 1.5) + 10"
+      :x1="x(el.period - 1.5)"
+      :x2="currentElement >= 3 || currentElement < 1 ? x(el.period - 1.5) + 10 : x(el.period - 1.5) + 20"
       :y1="el.y"
       :y2="el.y"
       />
@@ -181,6 +182,7 @@ svg {
 
 rect {
   fill-opacity: 0.7;
+  transition: width 0.3s;
 
   &.Change {
     fill: $landchange;

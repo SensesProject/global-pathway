@@ -2,20 +2,6 @@
   <div id="app" ref="container">
     <SensesMenu :id="'countries-pathways'"/>
       <div class="vis-body" ref="container">
-        <div class="paragraph">
-            <h1 class="title">Net-zero Pathways for Industrialized Economies</h1>
-            <p>
-              To be in line with the Paris goal of limiting global temperature
-              rise to 1.5 to 2°C, Industrialized Economies need to move towards
-              net-zero CO2 emissions by 2050. This requires a major transition
-              to a low-carbon economy in only 30 years. But, how can they achieve
-              this? Here, we show simulation results that outline possible mitigation
-              pathways towards net-zero CO2 emissions by 2050 for the EU, Japan,
-              Australia and the US. With this tool, you will learn about how
-              different mitigation strategies could play together for bending
-              down CO2 emission trajectories in the respective regions.
-            </p>
-      </div>
         <div class="vis-container">
           <GlobalStrategy :width="width" :height="height" :element="element"/>
         </div>
@@ -70,31 +56,36 @@ export default {
 @import "library/src/style/variables.scss";
 
 #app {
-      .paragraph {
-        padding-top: 100px;
-        height: 500px;
-        width: 50%;
-        margin: 0 auto;
-        margin-bottom: 100px;
+  .vis-body {
+    display: inline-flex;
+    // max-width: 1300px;
+    margin: 0 auto;
 
-        .title {
-            margin-bottom: $spacing;
-          }
-      }
-      .vis-container {
-        margin: 0 auto;
-        height: 200vh;
-      }
-    .vis-body {
-      .suggestions {
-        font-size: 12px;
-        font-style: italic;
-        color: $color-gray;
-        margin: 20px auto;
-        padding-left: 1em;
-        border-left: 1px solid $color-gray;
-      }
+    .suggestions {
+      font-size: 12px;
+      font-style: italic;
+      color: $color-gray;
+      margin: 40px auto;
+      padding-left: 1em;
+      border-left: 1px solid $color-gray;
     }
+  }
+
+    .paragraph {
+      padding-top: 100px;
+      // height: 500px;
+      width: 38%;
+      padding: 250px 3rem;
+      // margin-bottom: 100px;
+
+      .title {
+          margin-bottom: $spacing;
+        }
+    }
+    .vis-container {
+      margin: 0 auto;
+    }
+
     .selector {
       width: 100%;
       margin: 0 auto;

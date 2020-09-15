@@ -37,7 +37,7 @@ export default {
       const { x, y } = this
       return d3
         .area()
-        .x(d => x(d.period - 1))
+        .x(d => x(d.period - 0.6))
         // .curve(d3.curveLinear)
         .y0(d => y(d.floor))
         .y1(d => y(d.ceiling))

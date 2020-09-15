@@ -2,31 +2,50 @@
   <div class="global-strategy" ref="vis">
     <LayoutScrollytelling>
             <template v-slot:vis="{ width, height, step }">
+            <div class="background">
+            <div class="legend-cont">
+              <Legend v-if="step === 13"/>
+            </div>
             <div class="visualization-container">
             <div v-for="(region, i) in regions" v-bind:key="region + i +'label'" class="single-region" :class="`${region}-region`">
               <svg class="glob_strat" :class="region" :width="groupWidth" :height="svgHeight.height">
                 <XAxis :years="years" :height="groupHeight" :margin="margin" :scale="scales.x"/>
-                <text class="region" :x="groupWidth / 2 + 10" y="10" text-anchor="middle">{{ icon[i] + ' ' + region }}</text>
                   <g :class="{visibleGraph: region !== country & country !== ''}" :transform="transform" >
-                      <transition name="component-fade" mode="out-in">
-                        <Strategy :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years" :currentElement="step"/>
-                      </transition>
-                      <transition name="component-fade" mode="out-in">
-                        <g>
-                          <path class="reference_lines area" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].RefArea" v-show="step === 4"/>
-                          <path class="reference_lines pol_emi" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].PolEmi" v-show="step >= 12"/>
-                          <path class="reference_lines ref_emi" :class="{inactive: highlight !== 'No-Policy' && highlight !== ''}" :d="reference[i].RefEmi" v-show="step >= 3"/>
-                          <path class="reference_lines gross_emi" :class="{inactive: highlight !== 'Gross-Policy' && highlight !== ''}" :d="reference[i].GrossEmi" v-show="step >= 11"/>
-                        </g>
-                      </transition>
-                      <YAxis max="75000" :width="groupWidth" :margin="margin" :scale="scales.y"/>
-                      <Bars v-show="step >= 0" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight" :currentElement="step"/>
-                  </g>
+                  <text class="region" :x="groupWidth / 2" y="10" text-anchor="middle">{{ icon[i] + ' ' + region }}</text>
+                        <transition name="component-fade" mode="out-in">
+                          <Strategy :data="regionFilter.strategies[i]" :margin="margin" :x="scales.x" :y="scales.y" :years="years" :currentElement="step"/>
+                        </transition>
+                        <transition name="component-fade" mode="out-in">
+                          <g>
+                            <path class="reference_lines area" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].RefArea" v-show="step === 4"/>
+                            <path class="reference_lines pol_emi" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].PolEmi" v-show="step >= 12"/>
+                            <path class="reference_lines ref_emi" :class="{inactive: highlight !== 'No-Policy' && highlight !== ''}" :d="reference[i].RefEmi" v-show="step >= 3"/>
+                            <path class="reference_lines gross_emi" :class="{inactive: highlight !== 'Gross-Policy' && highlight !== ''}" :d="reference[i].GrossEmi" v-show="step >= 11"/>
+                          </g>
+                        </transition>
+                        <YAxis max="75000" :width="groupWidth" :margin="margin" :scale="scales.y" :step="step"/>
+                        <Bars v-show="step >= 0" :data="regionFilter.sectors[i]" :margin="margin" :x="scales.x" :y="scales.y" :height="groupHeight" :currentElement="step"/>
+                    </g>
               </svg>
             </div>
           </div>
+          </div>
         </template>
         <div slot="text" class="observer">
+          <div class="paragraph">
+              <h1 class="title">Net-zero Pathways for Industrialized Economies</h1>
+              <p>
+                To be in line with the Paris goal of limiting global temperature
+                rise to 1.5 to 2°C, Industrialized Economies need to move towards
+                net-zero CO2 emissions by 2050. This requires a major transition
+                to a low-carbon economy in only 30 years. But, how can they achieve
+                this? Here, we show simulation results that outline possible mitigation
+                pathways towards net-zero CO2 emissions by 2050 for the EU, Japan,
+                Australia and the US. With this tool, you will learn about how
+                different mitigation strategies could play together for bending
+                down CO2 emission trajectories in the respective regions.
+              </p>
+        </div>
         <IntersectionObserver :step="0" align="left">
         <p>
           Across the four regions, the bulk of annual CO2 emissions currently comes
@@ -169,7 +188,7 @@
           challenge for Australia and the US is the low-carbon transition of transport.
         </p>
       </IntersectionObserver>
-      <IntersectionObserver :step="13" align="left">
+      <IntersectionObserver :step="13" align="left" class="last-step">
         <p>
           Although CO2 represents the bulk of greenhouse gas (GHG) emissions,
           the above pathways are not necessarily climate-neutral as methane and
@@ -202,10 +221,8 @@ import Descriptions from '../assets/data/descriptions.json'
 import XAxis from './subcomponents/XAxis.vue'
 import YAxis from './subcomponents/YAxis.vue'
 import Strategy from './Strategies.vue'
-// import Selector from './subcomponents/Selector.vue'
 import Bars from './Bars.vue'
-// import Legend from './Legend.vue'
-// import TextBlocks from './TextBlocks.vue'
+import Legend from './Legend.vue'
 
 export default {
   name: 'GlobalStrategy',
@@ -214,9 +231,7 @@ export default {
     YAxis,
     Strategy,
     Bars,
-    // Legend,
-    // Selector,
-    // TextBlocks,
+    Legend,
     LayoutScrollytelling,
     IntersectionObserver,
     SensesMeta
@@ -325,7 +340,7 @@ export default {
       const years = this.years
       return d3
         .line()
-        .x((d, i) => x(years[i] - 1))
+        .x((d, i) => x(years[i] - 0.6))
         .curve(d3.curveLinear)
         .y(d => (y(d)))
     },
@@ -333,7 +348,7 @@ export default {
       const { x, y } = this.scales
       const years = this.years
       return d3.area()
-        .x((d, i) => x(years[i] - 1))
+        .x((d, i) => x(years[i] - 0.6))
         .curve(d3.curveLinear)
         .y0(d => (y(0)))
         .y1(d => (y(d)))
@@ -385,17 +400,34 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import "library/src/style/variables.scss";
+@import "../assets/style/pathways.scss";
 
 .global-strategy {
-  max-width: 1300px;
-  height: 90vh;
+  // max-width: 1300px;
+  height: 95vh;
   margin: 0 auto;
 
   .meta-component {
     width: 1200px;
     height: 500px;
-    margin: 5% auto;
+    margin: 10% auto;
   }
+
+  .legend-cont {
+    width: 35%;
+    // height: 90%;
+    padding-top: 20px;
+    padding-left: 2rem;
+    position: absolute;
+    bottom: 30px;
+    }
+
+  .background {
+    display: inline-flex;
+    width: 100%;
+    height: 100%;
+  }
+
   .visualization-container {
     width: 60%;
     padding-top: 20px;
@@ -422,10 +454,6 @@ export default {
       padding-left: 20px;
       width: 100%;
     }
-
-    .legend {
-      height: 40%;
-    }
   }
 
   .description {
@@ -437,6 +465,88 @@ export default {
       margin-left: 10px;
       width: 90%;
     }
+  }
+
+  .intersection-observer {
+    padding: 10vh 2rem 20vh;
+
+    &.last-step {
+      padding-bottom: 150vh;
+    }
+  }
+  .country {
+    text-decoration: underline;
+  }
+
+  .emissions {
+    color: $color-red;
+  }
+
+  .gross {
+    color: getColor(blue, 40);
+  }
+
+  .netzero {
+    color: $pol-emi;
+    text-decoration: none;
+    border-bottom: 2px solid $pol-emi;
+  }
+
+  .electricity {
+    color: $electricity-stroke;
+  }
+
+  .transport {
+    color: $transport-stroke;
+  }
+
+  .buildings {
+    color: $building-stroke;
+  }
+
+  .nonelectric {
+    color: $non-electric-stroke;
+  }
+
+  .industry {
+    color: $industry-stroke;
+  }
+
+  .land {
+    color: $landchange-stroke;
+  }
+
+  .BECCS {
+    color: $BECCS-stroke;
+  }
+
+  .decarb {
+    color: $color-yellow;
+  }
+
+  .Nonelectricitydecarbonization {
+    text-decoration: none;
+    color: #294c80;
+  }
+
+  .EnergyDemandReduction {
+    text-decoration: none;
+    color: #9295c3;
+  }
+
+  .ElectricityDecarbonization {
+    text-decoration: none;
+    color: #a26f6e;
+  }
+
+  .Electrification {
+    text-decoration: none;
+    color: #d67d39;
+  }
+
+  .LandUseChangeandCDR {
+    text-decoration: none;
+    color: #a9ac73;
   }
 }
 
@@ -468,6 +578,10 @@ svg {
     &.region {
       font-size: 14px;
       text-anchor: middle;
+
+      &.inactive {
+        opacity: 0.8;
+      }
     }
   }
 

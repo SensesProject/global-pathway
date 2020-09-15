@@ -6,7 +6,7 @@
       <stop offset="30%" stop-color="white" stop-opacity="0" />
     </linearGradient>
     </defs>
-    <text :transform="`rotate(-90,20,30)`" x="0" :y="width - 10" class="labelaxis">Emissions (% 2020)</text>
+    <text :transform="`rotate(-90,20,30)`" x="35" :y="width - 10" class="labelaxis" v-show="step >= 3">Emissions (% 2020)</text>
     <rect x="20" :width="rectWidth" height="50" :y="scale(valueTicks[2].value) - 50"/>
   <g class="y-axis">
     <line v-for="(value, i) in valueTicks" :key="`${i}lines`" :class="value.value === 0 ? 'zero' : ''" :y1="scale(value.value)" :y2="scale(value.value)" x1="20" :x2="width - (margin.right * 2)" />
@@ -32,6 +32,9 @@ export default {
     },
     max: {
       type: String
+    },
+    step: {
+      type: Number
     }
   },
   computed: {
