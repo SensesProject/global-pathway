@@ -1,6 +1,6 @@
 <template>
   <div id="app" ref="container">
-    <SensesMenu :id="'countries-pathways'"/>
+    <SensesMenu :id="'countries-pathways'" :minWidth="900"/>
       <div class="vis-body" ref="container">
         <div class="vis-container">
           <GlobalStrategy :width="width" :height="height" :element="element"/>

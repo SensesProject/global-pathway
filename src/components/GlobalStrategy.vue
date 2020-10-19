@@ -117,7 +117,7 @@
       </IntersectionObserver>
       <IntersectionObserver :step="5" align="left">
         <p>
-          <span class="EnergyDemandReduction">The first mitigation strategy is to simply use less energy.</span>
+          <span class="EnergyDemandReduction" @mouseover="strategyChange('EnergyDemandReduction')" @mouseleave="strategyChange('')">The first mitigation strategy is to simply use less energy.</span>
           All regions achieve some emission reductions in the net-zero scenario relative to the
           current policies scenario by energy demand reduction through energy
           efficiency improvements and a shift to less energy-intensive consumption.
@@ -125,7 +125,7 @@
       </IntersectionObserver>
       <IntersectionObserver :step="6" align="left">
         <p>
-          Next, <span class="ElectricityDecarbonization">the decarbonization of electricity saves a significant share of
+          Next, <span class="ElectricityDecarbonization" @mouseover="strategyChange('ElectricityDecarbonization')" @mouseleave="strategyChange('')">the decarbonization of electricity saves a significant share of
           emissions.</span> By completely phasing-out coal and gas power for renewable
           electricity in the net-zero scenario, regions can bring down their emissions
           relative to the current policies scenario by a quarter
@@ -136,7 +136,7 @@
       </IntersectionObserver>
       <IntersectionObserver :step="7" align="left">
         <p>
-          <span class="Electrification">To reduce emissions beyond the power sector, electrification of energy
+          <span class="Electrification" @mouseover="strategyChange('Electrification')" @mouseleave="strategyChange('')">To reduce emissions beyond the power sector, electrification of energy
           appliances is key.</span> This includes, for example, switching to electric vehicles
           or using heat pumps in buildings and industry (more on electrification in our
           module <a class="extern" href="https://climatescenarios.org/sector-transition/">Towards an Electric Future</a>).
@@ -144,7 +144,7 @@
       </IntersectionObserver>
       <IntersectionObserver :step="8" align="left">
         <p>
-          <span class="Nonelectricitydecarbonization">The remaining energy demand, which cannot be electrified, needs to be switched
+          <span class="Nonelectricitydecarbonization" @mouseover="strategyChange('Nonelectricitydecarbonization')" @mouseleave="strategyChange('')">The remaining energy demand, which cannot be electrified, needs to be switched
           to low-carbon fuels such as hydrogen or biofuels.</span> Moreover, this component
           of non-electricity decarbonization also includes emissions reductions in
           district heating plants and from reduced oil refining relative to the
@@ -153,16 +153,10 @@
       </IntersectionObserver>
       <IntersectionObserver :step="9" align="left">
         <p>
-          <span class="LandUseChangeandCDR">To attain net-zero CO2, residual energy emissions are compensated by carbon
+          <span class="LandUseChangeandCDR" @mouseover="strategyChange('LandUseChangeandCDR')" @mouseleave="strategyChange('')">To attain net-zero CO2, residual energy emissions are compensated by carbon
           dioxide removal (CDR) from the atmosphere.</span> The main methods to generate CDR
-          are afforestation (<span class="land"
-          @mouseover="onHover('Land-Use Change')"
-          @mouseleave="onHover('')"
-          >land-use change</span>) and the use of bioenergy with subsequent
-          carbon capture and storage (<span class="BECCS"
-          @mouseover="onHover('BECCS')"
-          @mouseleave="onHover('')"
-          >BECCS</span>).
+          are afforestation (land-use change) and the use of bioenergy with subsequent
+          carbon capture and storage (BECCS).
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="10" align="left">
@@ -356,11 +350,10 @@ export default {
     reference () {
       const { references } = this.regionFilter
       const variables = this.referenceVariables
-
       return _.map(references, (data, d) => {
         const line = _.map(variables, v => { return _.filter(data, vari => { return vari.variable === v }) })
         return {
-          variable: variables,
+          variable: variables[d],
           GrossEmi: this.linegenerator(_.map(line[0], l => l.value)),
           PolEmi: this.linegenerator(_.map(line[1], l => l.value)),
           RefEmi: this.linegenerator(_.map(line[2], l => l.value)),
@@ -382,11 +375,22 @@ export default {
     },
     countryChange (country) {
       return this.$store.dispatch('newCountry', country)
+    },
+    strategyChange (strategy) {
+      return this.$store.dispatch('newStrategy', strategy)
+    },
+    getStepsPos () {
+      const divs = document.getElementsByClassName('intersection-observer')
+      const steps = []
+      _.map(divs, (div, d) => {
+        steps.push(div.offsetTop)
+      })
     }
   },
   mounted () {
     this.innerSizes()
     window.addEventListener('resize', this.innerSizes, false)
+    this.getStepsPos()
   },
   updated () {
     this.innerSizes()
@@ -587,6 +591,10 @@ svg {
 
   .graphic-line {
     stroke-width: 1px;
+  }
+
+  .reference-labels {
+    font-size: 10px;
   }
 
   .reference_lines {

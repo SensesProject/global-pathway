@@ -84,7 +84,8 @@ export default {
 }
 
 .sectors {
-    width: 65%;
+    width: 100%;
+    font-size: 20px;
     .highlight {
         margin: 4px;
     }
@@ -130,7 +131,8 @@ export default {
 }
 
 .emissions {
-    width: 35%;
+    width: 100%;
+    font-size: 20px;
 
     .notselected {
         opacity: 0.5;
@@ -162,6 +164,7 @@ export default {
     width: 100%;
     margin-bottom: 0;
     .strategy {
+        font-size: 20px;
         margin: 4px;
 
         &#Demand-Reduction {
