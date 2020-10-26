@@ -1,5 +1,5 @@
-# Net-Zero Pathways for Industrialized Economies
-This repository contains the code for [*Transition Risks – Net-Zero Pathways for Industrialized Economies*](https://climatescenarios.org/countries-pathways), a learn module focusing on possible decarbonization strategies for a selection of economies. It is part of the [SENSES Toolkit](https://climatescenarios.org/).
+# Net-Zero Pathways for Industrialized Countries
+This repository contains the code for [*Transition Risks – Net-Zero Pathways for Industrialized Countries*](https://climatescenarios.org/countries-pathways), a learn module focusing on possible decarbonization strategies for a selection of economies. It is part of the [SENSES Toolkit](https://climatescenarios.org/).
 
 ![screenshot of the module](./module.png)
 

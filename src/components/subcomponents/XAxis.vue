@@ -5,10 +5,12 @@
     <text v-for="year in yearsTicks" v-bind:key="year + 'text'" y="20" :x="scale(year)">{{year}}</text>
   </g>
   <rect v-for="year in yearsTicks" v-bind:key="year"
+  :class="`axis-${year}`"
+  :transform="`translate(0, ${margin.top})`"
   :y="0 + (margin.top * 2)"
   :x="scale(year)"
   width="1px"
-  :height="height - (height / 4) - (margin.top * 2)"
+  :height="height - (height / 4) - (margin.top * 3)"
   />
 </g>
 </template>
@@ -34,7 +36,7 @@ export default {
   computed: {
     yearsTicks () {
       // return this.years.map(y => y)
-      return [2020, 2050]
+      return [2020, 2030, 2040, 2050]
     }
   }
 }
@@ -46,6 +48,10 @@ export default {
 
 rect {
   fill: $color-gray;
+
+  &.axis-2030, &.axis-2040 {
+    fill: getColor(gray, 70);
+  }
 }
 
 line {

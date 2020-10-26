@@ -1,4 +1,4 @@
-<template>
+#5c8c5f<template>
   <div class="global-strategy" ref="vis">
     <LayoutScrollytelling>
             <template v-slot:vis="{ width, height, step }">
@@ -17,10 +17,10 @@
                         </transition>
                         <transition name="component-fade" mode="out-in">
                           <g>
-                            <path class="reference_lines area" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].RefArea" v-show="step === 4"/>
-                            <path class="reference_lines pol_emi" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].PolEmi" v-show="step >= 12"/>
-                            <path class="reference_lines ref_emi" :class="{inactive: highlight !== 'No-Policy' && highlight !== ''}" :d="reference[i].RefEmi" v-show="step >= 3"/>
-                            <path class="reference_lines gross_emi" :class="{inactive: highlight !== 'Gross-Policy' && highlight !== ''}" :d="reference[i].GrossEmi" v-show="step >= 11"/>
+                            <!-- <path class="reference_lines area" :class="{inactive: highlight !== 'Policy' && highlight !== ''}" :d="reference[i].RefArea" v-show="step === 4"/> -->
+                            <path class="reference_lines pol_emi" :class="{inactive: highlight !== 'Policy' && highlight !== '' && highlight !== 'net-zero'}" :d="reference[i].PolEmi" v-show="step >= 4"/>
+                            <path class="reference_lines ref_emi" :class="{inactive: highlight !== 'No-Policy' && highlight !== '' && highlight !== 'pol-emi'}" :d="reference[i].RefEmi" v-show="step >= 3"/>
+                            <path class="reference_lines gross_emi" :class="{inactive: highlight !== 'Gross-Policy' && highlight !== '' && highlight !== 'gross-emi'}" :d="reference[i].GrossEmi" v-show="step >= 11"/>
                           </g>
                         </transition>
                         <YAxis max="75000" :width="groupWidth" :margin="margin" :scale="scales.y" :step="step"/>
@@ -33,22 +33,23 @@
         </template>
         <div slot="text" class="observer">
           <div class="paragraph">
-              <h1 class="title">Net-zero Pathways for Industrialized Economies</h1>
+              <h1 class="title">Net-zero Pathways for Industrialized Countries</h1>
               <p>
                 To be in line with the Paris goal of limiting global temperature
-                rise to 1.5 to 2°C, Industrialized Economies need to move towards
-                net-zero CO2 emissions by 2050. This requires a major transition
-                to a low-carbon economy in only 30 years. But, how can they achieve
-                this? Here, we show simulation results that outline possible mitigation
-                pathways towards net-zero CO2 emissions by 2050 for the EU, Japan,
+                rise to 1.5-2°C, Industrialized Countries need to move towards
+                net-zero CO<span class="sub">2</span> emissions by 2050. This requires a major transition
+                to a low-carbon economy in only 30 years. But, how can they achieve this?
+                Here, we show simulation results that outline possible mitigation
+                pathways towards net-zero CO<span class="sub">2</span> emissions by 2050 for the EU, Japan,
                 Australia and the US. With this tool, you will learn about how
                 different mitigation strategies could play together for bending
-                down CO2 emission trajectories in the respective regions.
+                down CO<span class="sub">2</span> emission trajectories in the respective regions.
               </p>
+              <p class="navigation-aid">While reading, highlights on text can be used as visualization filters.</p>
         </div>
         <IntersectionObserver :step="0" align="left">
         <p>
-          Across the four regions, the bulk of annual CO2 emissions currently comes
+          <span class="text-highlight">Across the four regions, the bulk of annual CO<span class="sub">2</span> emissions currently comes
           from
           <span class="electricity"
           @mouseover="onHover('Electricity')"
@@ -69,125 +70,160 @@
           <span class="industry"
           @mouseover="onHover('Industry')"
           @mouseleave="onHover('')"
-          >industry</span>.
-          The
-          <span class="land"
+          >industry</span>.</span>
+          Non-electric energy supply emissions mainly refer to emissions from refineries
+          and district heating. In addition, <span class="land"
           @mouseover="onHover('Land-Use Change')"
           @mouseleave="onHover('')"
-          >land sector</span> is a small carbon sink in
-          each of the regions as afforestation outweighs deforestation.
+          >afforestation</span> slightly outweighs deforestation
+          which creates a small net CO<span class="sub">2</span> sink.
         </p>
         </IntersectionObserver>
         <IntersectionObserver :step="1" align="left">
         <p>
-          Looking at the fingerprint of current emissions, there are also some
-          differences across the regions: While about 50% of <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australian</span> CO2 emissions
-          come from <span class="electricity">electricity generation</span>,
-          this share is only about a quarter in the
-          <span class="country" @mouseover="countryChange('EU28')" @mouseleave="countryChange('')">🇪🇺 EU</span>.
-          This is due to the extensive use of coal power in Australia, while the EU
-          uses a higher percentage of nuclear and renewable power sources.
+          <span class="text-highlight">The four regions show different shares of emissions sources.</span> While
+          about 50% of <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺Australian</span> CO<span class="sub">2</span> emissions come from electricity generation,
+          electricity emissions in the EU only represent about a quarter of total
+          emissions. This is due to the extensive use of coal power in Australia,
+          while the <span class="country" @mouseover="countryChange('EU28')" @mouseleave="countryChange('')">🇪🇺EU</span> uses a higher percentage of nuclear and renewable power sources.
         </p>
         </IntersectionObserver>
         <IntersectionObserver :step="2" align="left">
         <p>
-          The dominance of road travel in the <span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">🇺🇸 US</span> lead to significant share of
-          <span class="transport">transport</span> emissions.
-          <span class="country" @mouseover="countryChange('Japan')" @mouseleave="countryChange('')">🇯🇵 Japan</span>,
-          in contrast, has a relatively small share of transport emission due to
-          modern electric rail infrastructure.
+          <span class="text-highlight">The significance of transport also depends on regional characteristics.</span>
+          The dominance of road travel in the
+          <span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">
+            🇺🇸US
+          </span> leads to a significant share of
+          <span class="transport">transport</span> emissions from total emissions.
+          <span class="country" @mouseover="countryChange('Japan')" @mouseleave="countryChange('')">
+            🇯Japan
+          </span>, in contrast, has a
+          relatively small share of transport emission due to modern electric
+          rail infrastructure. The depicted data show domestic transport emissions,
+          which exclude international shipping and aviation.
+
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="3" align="left">
         <p>
-          Without additional policies to promote a low-carbon transformation, CO2
-          emissions will not reach net-zero by 2050. Instead, emissions are projected
-          to decrease only slightly across the four regions under a
-          <span class="emissions">current policies</span>
-          scenario, leaving a significant emission gap to a carbon-neutral economy.
+          <span class="text-highlight">Without additional policies to promote a low-carbon transformation,
+          CO<span class="sub">2</span> emissions will not reach net-zero by 2050.</span> The red line shows a
+          <SensesTooltip :tooltip="tooltips.weakpolicy" class="emissions" @mouseover="onHover('pol-emi')" @mouseleave="onHover('')">weak policy scenario</SensesTooltip>.
+          Here, emissions are projected to decrease only slightly across the four
+          regions, leaving a significant emission gap to a carbon-neutral society.
         </p>
+        <p class="navigation-aid">2020 emissions represent modeled average values for the time period 2017-2022</p>
       </IntersectionObserver>
       <IntersectionObserver :step="4" align="left">
         <p>
-          What needs to happen to bend down the current emissions trajectory?
-          To answer this, we simulated regional pathways for net-zero CO2 emissions
-          in 2050. We find that an interplay of different mitigation strategies is
-          needed to close the emissions gap to net-zero.
+          <span class="text-highlight">What needs to happen to bend down the current emissions trajectory?</span>
+          To answer this, we simulated a
+          <SensesTooltip :tooltip="tooltips.netzero" class="netzero">net-zero 2050 scenario</SensesTooltip>.
+          We find that an interplay of different mitigation strategies is needed to close the emissions
+          gap to net-zero. In the following, we will display the contributions
+          of each mitigation strategy to total emissions reduction as shaded areas in the plots.
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="5" align="left">
         <p>
-          <span class="EnergyDemandReduction" @mouseover="strategyChange('EnergyDemandReduction')" @mouseleave="strategyChange('')">The first mitigation strategy is to simply use less energy.</span>
-          All regions achieve some emission reductions in the net-zero scenario relative to the
-          current policies scenario by energy demand reduction through energy
-          efficiency improvements and a shift to less energy-intensive consumption.
+          <span class="text-highlight">The first mitigation strategy is to simply use less energy.</span>
+          All regions achieve some emission reductions in the net-zero scenario relative to the <span @mouseover="onHover('pol-emi')" @mouseleave="onHover('')"><SensesTooltip :tooltip="tooltips.weakpolicy" class="emissions">weak policy scenario</SensesTooltip></span>
+          by <span class="EnergyDemandReduction" @mouseover="strategyChange('EnergyDemandReduction')" @mouseleave="strategyChange('')">energy demand reduction</span> through energy efficiency improvements
+          and a shift to less energy-intensive consumption.
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="6" align="left">
         <p>
-          Next, <span class="ElectricityDecarbonization" @mouseover="strategyChange('ElectricityDecarbonization')" @mouseleave="strategyChange('')">the decarbonization of electricity saves a significant share of
-          emissions.</span> By completely phasing-out coal and gas power for renewable
-          electricity in the net-zero scenario, regions can bring down their emissions
-          relative to the current policies scenario by a quarter
-          (<span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">🇺🇸 US</span>)
-          to a third
-          (<span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
+          <span class="text-highlight">Next, the
+          <span class="ElectricityDecarbonization" @mouseover="strategyChange('ElectricityDecarbonization')" @mouseleave="strategyChange('')">decarbonization of electricity</span> can save a significant share
+          of emissions.</span> By completely phasing-out coal and gas power for renewable
+          electricity in the net-zero 2050 scenario, regions can bring down
+          their emissions relative to the current policies scenario by a quarter
+          (<span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">🇺🇸 US</span>) to a third (<span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="7" align="left">
         <p>
-          <span class="Electrification" @mouseover="strategyChange('Electrification')" @mouseleave="strategyChange('')">To reduce emissions beyond the power sector, electrification of energy
-          appliances is key.</span> This includes, for example, switching to electric vehicles
-          or using heat pumps in buildings and industry (more on electrification in our
+          <span class="text-highlight">To reduce emissions beyond the power sector,
+          <span class="Electrification" @mouseover="strategyChange('Electrification')" @mouseleave="strategyChange('')">electrification</span>
+          of energy appliances is key.</span> This includes, for example, switching to
+          electric vehicles or using heat pumps in buildings and industry (more on electrification in our
           module <a class="extern" href="https://climatescenarios.org/sector-transition/">Towards an Electric Future</a>).
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="8" align="left">
         <p>
-          <span class="Nonelectricitydecarbonization" @mouseover="strategyChange('Nonelectricitydecarbonization')" @mouseleave="strategyChange('')">The remaining energy demand, which cannot be electrified, needs to be switched
-          to low-carbon fuels such as hydrogen or biofuels.</span> Moreover, this component
-          of non-electricity decarbonization also includes emissions reductions in
-          district heating plants and from reduced oil refining relative to the
-          current policy scenario.
+          <span class="text-highlight">The remaining non-electric energy demand requires low-carbon alternatives
+          as well.</span> We refer to this broadly as
+          <span class="Nonelectricitydecarbonization" @mouseover="strategyChange('Nonelectricitydecarbonization')" @mouseleave="strategyChange('')">non-electricity decarbonization</span>.
+          This includes using low-carbon fuels such as biofuels or hydrogen and
+          the deployment of carbon capture and storage options in industry plants.
+          Moreover, this component contains emissions reductions in district heating
+          plants and from reduced oil refining.
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="9" align="left">
         <p>
-          <span class="LandUseChangeandCDR" @mouseover="strategyChange('LandUseChangeandCDR')" @mouseleave="strategyChange('')">To attain net-zero CO2, residual energy emissions are compensated by carbon
-          dioxide removal (CDR) from the atmosphere.</span> The main methods to generate CDR
-          are afforestation (land-use change) and the use of bioenergy with subsequent
-          carbon capture and storage (BECCS).
+          <span class="text-highlight">To attain net-zero CO<span class="sub">2</span>, residual energy emissions are compensated by
+          <span class="LandUseChangeandCDR" @mouseover="strategyChange('')" @mouseleave="strategyChange('')">carbon dioxide removal (CDR)</span>
+          from the atmosphere.</span> In our <span @mouseover="onHover('net-zero')" @mouseleave="onHover('')"><SensesTooltip :tooltip="tooltips.netzero" class="netzero" @mouseover="onHover('net-zero')" @mouseleave="onHover('')">net-zero 2050 scenario</SensesTooltip></span>,
+          the methods to generate CDR are afforestation (land-use change)
+          and the use of bioenergy with subsequent carbon capture and storage (BECCS).
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="10" align="left">
         <p>
-          The significance CDR options may differ across regions. Australia, for
-          example, has large land areas available for afforestation and low population
-          density. These are promising conditions for scaling up negative emissions.
+          <span class="text-highlight">The significance <span class="LandUseChangeandCDR" @mouseover="strategyChange('')" @mouseleave="strategyChange('')">CDR
+          options</span> may differ across regions.</span><span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺Australia</span>,
+          for example, has large land areas available for afforestation and low
+          population density. These are promising conditions for scaling up
+          negative emissions. However, there are concerns over environmental
+          side effects as well as the permanence of CO<span class="sub">2</span> storage for both,
+          <span class="BECCS"
+          @mouseover="onHover('BECCS')"
+          @mouseleave="onHover('')"
+          >BECCS and afforestation</span>, which would need to be addressed before
+          scaling up CDR options.
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="11" align="left">
         <p>
-          It makes sense to differentiate between <span class="gross">gross emissions</span> which do not include
-          CDR and net emissions. Large-scale CDR may reduce the need to abate emissions
-          in the energy sector (see <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
-          However, as CDR options are uncertain, the near-term energy transition should not rely on anticipating future CDR.
+          <span class="text-highlight">To separate the special role of negative emissions, it makes sense to
+          differentiate between <span class="gross" @mouseover="onHover('gross-emi')" @mouseleave="onHover('')">gross emissions</span> and
+          <span @mouseover="onHover('net-zero')" @mouseleave="onHover('')"><SensesTooltip :tooltip="tooltips.netzero" class="netzero">net emissions</SensesTooltip></span>. </span>
+          <span class="LandUseChangeandCDR" @mouseover="strategyChange('Land-Use Change')" @mouseleave="strategyChange('')">Large-scale CDR</span> may reduce the need to abate emissions in the energy
+          sector (see <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
+          However, as <span class="LandUseChangeandCDR" @mouseover="strategyChange('')" @mouseleave="strategyChange('')">CDR options</span> are uncertain, the near-term energy transition should not rely on anticipating future CDR.
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="12" align="left">
         <p>
-          In the <span class="netzero">net-zero scenario</span>, residual gross emissions remain in the transport
-          and industry sector, in particular, as these are difficult to decarbonize.
-          While in <span class="country" @mouseover="countryChange('Japan')" @mouseleave="countryChange('')">🇯🇵 Japan</span> the decarbonization of industry will be crucial, a key
-          challenge for Australia and the US is the low-carbon transition of transport.
+          <span class="text-highlight">In
+          <span class="industry"
+          @mouseover="onHover('Industry')"
+          @mouseleave="onHover('')"
+          >industry</span> and
+          <span class="transport"
+          @mouseover="onHover('Transport')"
+          @mouseleave="onHover('')"
+          >transport</span>, residual gross emissions remain as these
+          sectors are difficult to decarbonize.</span> While in Japan the decarbonization
+          of industry will be crucial, a key challenge for
+          <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺Australia</span>
+          and the <span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">🇺🇸 US</span>
+          is the low-carbon transition of transport.
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="13" align="left" class="last-step">
         <p>
-          Although CO2 represents the bulk of greenhouse gas (GHG) emissions,
-          the above pathways are not necessarily climate-neutral as methane and
-          nitrous oxide emissions are not included. To reach GHG neutrality in 2050
-          (the current <span class="country" @mouseover="countryChange('EU28')" @mouseleave="countryChange('')">🇪🇺 EU</span> target), CO2 emissions will likely need to be reduced even more.
+          <span class="text-highlight">
+            However, CO<span class="sub">2</span>-neutrality is not sufficient to stop climate change.
+          </span> Although CO<span class="sub">2</span> represents the bulk of greenhouse gas (GHG) emissions,
+          the above pathways are not necessarily climate-neutral as methane
+          and nitrous oxide emissions are not included. To reach GHG neutrality
+          in 2050 (the current <span class="country" @mouseover="countryChange('EU28')"
+          @mouseleave="countryChange('')">🇪🇺 EU</span> target), CO<span class="sub">2</span> emissions will need to be reduced even more.
         </p>
       </IntersectionObserver>
      </div>
@@ -208,6 +244,7 @@ import { mapState, mapActions } from 'vuex'
 import LayoutScrollytelling from 'library/src/components/LayoutScrollytelling.vue'
 import IntersectionObserver from 'library/src/components/IntersectionObserver.vue'
 import SensesMeta from 'library/src/components/SensesMeta.vue'
+import SensesTooltip from 'library/src/components/SensesTooltip.vue'
 
 // Data
 import DecarbonStrategy from '../assets/data/GlobalStrategy.json'
@@ -228,7 +265,8 @@ export default {
     Legend,
     LayoutScrollytelling,
     IntersectionObserver,
-    SensesMeta
+    SensesMeta,
+    SensesTooltip
   },
   props: {
     width: {
@@ -250,6 +288,10 @@ export default {
       Descriptions,
       regions: _.uniq(_.map(DecarbonStrategy, (s) => s.region)),
       years: _.uniq(_.map(DecarbonStrategy, (s) => s.period)),
+      tooltips: {
+        weakpolicy: 'near-term climate policy ambitions remain below the Paris NDC targets',
+        netzero: 'reaches net-zero CO2 emissions by 2050 in each of the four regions'
+      },
       icon: ['🇦🇺', '🇪🇺', '🇯🇵', '🇺🇸'],
       margin: {
         left: 15,
@@ -411,6 +453,14 @@ export default {
   height: 95vh;
   margin: 0 auto;
 
+  .navigation-aid {
+    margin-top: 20px;
+    border-left: 1px solid grey;
+    color: gray;
+    font-style: italic;
+    padding-left: 10px;
+  }
+
   .meta-component {
     width: 1200px;
     height: 500px;
@@ -474,6 +524,15 @@ export default {
   .intersection-observer {
     padding: 10vh 2rem 20vh;
 
+    .sub {
+      vertical-align: sub;
+      font-size: 10px;
+    }
+
+    .text-highlight {
+      font-weight: bold;
+    }
+
     &.last-step {
       padding-bottom: 150vh;
     }
@@ -484,16 +543,17 @@ export default {
 
   .emissions {
     color: $color-red;
+    display: inline-flex;
   }
 
   .gross {
     color: getColor(blue, 40);
+    border-bottom: 2px dashed $gross-emi;
   }
 
   .netzero {
     color: $pol-emi;
-    text-decoration: none;
-    border-bottom: 2px solid $pol-emi;
+    display: inline-flex;
   }
 
   .electricity {
@@ -550,7 +610,7 @@ export default {
 
   .LandUseChangeandCDR {
     text-decoration: none;
-    color: #a9ac73;
+    color: #5c8c5f;
   }
 }
 

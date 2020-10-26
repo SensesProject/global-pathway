@@ -1,14 +1,12 @@
 <template>
   <div class="legend">
       <div class="legend-sections strategies">
-          <div>
-              <h5>Strategies →</h5>
-              <span class="strategy" :class="classes" id="Demand-Reduction" @mouseover="onClick('EnergyDemandReduction')" @mouseleave="onClick('')"><span>●</span> Demand Reduction</span>
-              <span class="strategy" :class="classes" id="Ele-Decarbonization" @mouseover="onClick('ElectricityDecarbonization')" @mouseleave="onClick('')"><span>●</span> Electricity Decarbonization</span>
-              <span class="strategy" :class="classes" id="Electrification" @mouseover="onClick('Electrification')" @mouseleave="onClick('')"><span>●</span> Electrification</span>
-              <span class="strategy" :class="classes" id="No-Ele-Decarb" @mouseover="onClick('Nonelectricitydecarbonization')" @mouseleave="onClick('')"><span>●</span> Non Electricity Decarbonization</span>
-              <span class="strategy" :class="classes" id="Land-Use" @mouseover="onClick('LandUseChangeandCDR')" @mouseleave="onClick('')"><span>●</span> Land Use change and CDR</span>
-          </div>
+          <h5>Strategies →</h5>
+          <span class="strategy" :class="classes" id="Demand-Reduction" @mouseover="onClick('EnergyDemandReduction')" @mouseleave="onClick('')"><span>●</span> Demand Reduction</span>
+          <span class="strategy" :class="classes" id="Ele-Decarbonization" @mouseover="onClick('ElectricityDecarbonization')" @mouseleave="onClick('')"><span>●</span> Electricity Decarbonization</span>
+          <span class="strategy" :class="classes" id="Electrification" @mouseover="onClick('Electrification')" @mouseleave="onClick('')"><span>●</span> Electrification</span>
+          <span class="strategy" :class="classes" id="No-Ele-Decarb" @mouseover="onClick('Nonelectricitydecarbonization')" @mouseleave="onClick('')"><span>●</span> Non Electricity Decarbonization</span>
+          <span class="strategy" :class="classes" id="Land-Use" @mouseover="onClick('LandUseChangeandCDR')" @mouseleave="onClick('')"><span>●</span> Land Use change and CDR</span>
       </div>
      <div class="legend-sections sectors">
          <h5>Sectors →</h5>
@@ -162,9 +160,13 @@ export default {
 
 .strategies {
     width: 100%;
-    margin-bottom: 0;
+    h5 {
+        font-size: 16px;
+    }
     .strategy {
+        width: 100%;
         font-size: 20px;
+        display: inline-block;
         margin: 4px;
 
         &#Demand-Reduction {
@@ -193,7 +195,7 @@ export default {
 
         &#Land-Use {
             span {
-                color: #a9ac73;
+                color: #5c8c5f;
             }
         }
     }

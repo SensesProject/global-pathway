@@ -11,7 +11,6 @@
 
 <script>
 import GlobalStrategy from './components/GlobalStrategy.vue'
-// import Legend from './components/Legend.vue'
 import SensesMenu from 'library/src/components/SensesMenu.vue'
 
 export default {
@@ -19,7 +18,6 @@ export default {
   components: {
     SensesMenu,
     GlobalStrategy
-    // Legend
   },
   data () {
     return {
@@ -73,10 +71,8 @@ export default {
 
     .paragraph {
       padding-top: 100px;
-      // height: 500px;
       width: 38%;
       padding: 250px 3rem;
-      // margin-bottom: 100px;
 
       .title {
           margin-bottom: $spacing;

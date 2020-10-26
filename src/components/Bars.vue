@@ -136,6 +136,8 @@ export default {
         this.currentSector = 'Electricity'
       } else if (current === 2) {
         this.currentSector = 'Transport'
+      } else if (current === 12) {
+        this.currentSector = ['Transport', 'Industry']
       } else {
         this.currentSector = map(this.stackData[0].value, d => { return d.variable })
       }

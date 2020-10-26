@@ -139,7 +139,7 @@ path {
   }
 
   &.LandUseChangeandCDR {
-    fill: #a9ac73;
+    fill: #5c8c5f;
   }
 
   &.Nonelectricitydecarbonization {
@@ -169,9 +169,7 @@ path {
     }
 
     &.LandUseChangeandCDR {
-      stroke: #a9ac73;
-
-      // stroke: #A3EAA6;
+      stroke: #5c8c5f;
     }
 
     &.EnergyDemandReduction {
@@ -183,7 +181,7 @@ path {
     }
 
     &.LandUseChangeandCDR {
-      stroke: #a9ac73;
+      stroke: #5c8c5f;
       // stroke: #a3d1ea;
     }
 
