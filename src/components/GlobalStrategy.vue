@@ -4,7 +4,9 @@
             <template v-slot:vis="{ width, height, step }">
             <div class="background">
             <div class="legend-cont">
-              <Legend v-if="step === 13"/>
+              <transition name="fade">
+                <Legend v-if="step === 13"/>
+              </transition>
             </div>
             <div class="visualization-container">
             <div v-for="(region, i) in regions" v-bind:key="region + i +'label'" class="single-region" :class="`${region}-region`">
@@ -97,7 +99,7 @@
           </span> leads to a significant share of
           <span class="transport">transport</span> emissions from total emissions.
           <span class="country" @mouseover="countryChange('Japan')" @mouseleave="countryChange('')">
-            🇯Japan
+            🇯🇵Japan
           </span>, in contrast, has a
           relatively small share of transport emission due to modern electric
           rail infrastructure. The depicted data show domestic transport emissions,
@@ -137,10 +139,11 @@
         <p>
           <span class="text-highlight">Next, the
           <span class="ElectricityDecarbonization" @mouseover="strategyChange('ElectricityDecarbonization')" @mouseleave="strategyChange('')">decarbonization of electricity</span> can save a significant share
-          of emissions.</span> By completely phasing-out coal and gas power for renewable
-          electricity in the net-zero 2050 scenario, regions can bring down
-          their emissions relative to the current policies scenario by a quarter
-          (<span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">🇺🇸 US</span>) to a third (<span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
+          of emissions.</span> By completely phasing-out coal and gas power for
+          renewable electricity in the net-zero 2050 scenario, regions can reduce
+          their total emissions relative to the current policies scenario by about 10%
+          (<span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">🇺🇸 US</span>)
+          to 25% (<span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="7" align="left">
@@ -194,7 +197,7 @@
           <span @mouseover="onHover('net-zero')" @mouseleave="onHover('')"><SensesTooltip :tooltip="tooltips.netzero" class="netzero">net emissions</SensesTooltip></span>. </span>
           <span class="LandUseChangeandCDR" @mouseover="strategyChange('Land-Use Change')" @mouseleave="strategyChange('')">Large-scale CDR</span> may reduce the need to abate emissions in the energy
           sector (see <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺 Australia</span>).
-          However, as <span class="LandUseChangeandCDR" @mouseover="strategyChange('')" @mouseleave="strategyChange('')">CDR options</span> are uncertain, the near-term energy transition should not rely on anticipating future CDR.
+          However, as <span class="LandUseChangeandCDR" @mouseover="strategyChange('')" @mouseleave="strategyChange('')">CDR options</span> are uncertain, the near-term energy transition should always aim to rely only on minimal amounts of CDR.
         </p>
       </IntersectionObserver>
       <IntersectionObserver :step="12" align="left">
@@ -208,7 +211,7 @@
           @mouseover="onHover('Transport')"
           @mouseleave="onHover('')"
           >transport</span>, residual gross emissions remain as these
-          sectors are difficult to decarbonize.</span> While in Japan the decarbonization
+          sectors are difficult to decarbonize.</span> While in <span class="country" @mouseover="countryChange('Japan')" @mouseleave="countryChange('')">🇯🇵 Japan</span> the decarbonization
           of industry will be crucial, a key challenge for
           <span class="country" @mouseover="countryChange('Australia')" @mouseleave="countryChange('')">🇦🇺Australia</span>
           and the <span class="country" @mouseover="countryChange('US')" @mouseleave="countryChange('')">🇺🇸 US</span>
@@ -221,7 +224,7 @@
             However, CO<span class="sub">2</span>-neutrality is not sufficient to stop climate change.
           </span> Although CO<span class="sub">2</span> represents the bulk of greenhouse gas (GHG) emissions,
           the above pathways are not necessarily climate-neutral as methane
-          and nitrous oxide emissions are not included. To reach GHG neutrality
+          and nitrous oxide emissions are not included. To reach regional GHG neutrality
           in 2050 (the current <span class="country" @mouseover="countryChange('EU28')"
           @mouseleave="countryChange('')">🇪🇺 EU</span> target), CO<span class="sub">2</span> emissions will need to be reduced even more.
         </p>
@@ -701,6 +704,13 @@ svg {
 }
 .component-fade-enter, .component-fade-leave-to
 /* .component-fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .8s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
 
