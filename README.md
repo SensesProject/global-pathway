@@ -11,7 +11,7 @@ The source code is licensed under the [ISC license](LICENSE.md). Text and graphi
 
 Data sources and if applicable licenses are listed below on a per-file basis.
 
-- `src/assets/data/GlobalStrategy.json` [CD-LINKS Scenario and Data hosted by IIASA]( https://data.ene.iiasa.ac.at/cd-links/); [Licence for the CD-LINKS scenario ensemble data](https://data.ene.iiasa.ac.at/cd-links/#/license)
+- `src/assets/data/GlobalStrategy.json` No license applicable Source: [Schreyer, F., Luderer, G., Rodrigues, R., Pietzcker, R. C., Baumstark, L., Sugiyama, M., Brecha, R. J., & Ueckerdt, F. (2020). Common but differentiated leadership: Strategies and challenges for carbon neutrality by 2050 across industrialized economies. Environmental Research Letters, 15(11), 114016.](https://iopscience.iop.org/article/10.1088/1748-9326/abb852)
 
 ## Project setup
 ```
